@@ -4,7 +4,7 @@ package ca.mcgill.ecse223.block.model;
 
 
 
-// line 58 "Block223.ump"
+// line 74 "Block223.ump"
 public class Paddle
 {
 
@@ -14,23 +14,19 @@ public class Paddle
 
   //Paddle Attributes
   private int length;
+  private int width;
 
   //Paddle Associations
-  private Block223 block223;
   private Game game;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Paddle(Block223 aBlock223, Game aGame)
+  public Paddle(int aLength, Game aGame)
   {
-    length = 5;
-    boolean didAddBlock223 = setBlock223(aBlock223);
-    if (!didAddBlock223)
-    {
-      throw new RuntimeException("Unable to create paddle due to block223");
-    }
+    length = aLength;
+    width = 5;
     if (aGame == null || aGame.getPaddle() != null)
     {
       throw new RuntimeException("Unable to create Paddle due to aGame");
@@ -38,14 +34,10 @@ public class Paddle
     game = aGame;
   }
 
-  public Paddle(Block223 aBlock223, String aNameForGame, int aMinSpeedForGame, int aMaxSpeedForGame, int aMinLengthForGame, int aMaxLengthForGame, float aSpeedFactorForGame, int aHeightForGame, int aWidthForGame, int aNumLevelsForGame, Admin aAdminForGame, Ball aBallForGame, HallOfFame aHallOfFameForGame, Block223 aBlock223ForGame)
+  public Paddle(int aLength, String aNameForGame, int aMinSpeedForGame, int aMaxSpeedForGame, int aMinLengthForGame, int aMaxLengthForGame, float aSpeedFactorForGame, int aHeightForGame, int aWidthForGame, int aNumLevelsForGame, Admin aAdminForGame, Ball aBallForGame, HallOfFame aHallOfFameForGame, Block223 aBlock223ForGame)
   {
-    length = 5;
-    boolean didAddBlock223 = setBlock223(aBlock223);
-    if (!didAddBlock223)
-    {
-      throw new RuntimeException("Unable to create paddle due to block223");
-    }
+    length = aLength;
+    width = 5;
     game = new Game(aNameForGame, aMinSpeedForGame, aMaxSpeedForGame, aMinLengthForGame, aMaxLengthForGame, aSpeedFactorForGame, aHeightForGame, aWidthForGame, aNumLevelsForGame, aAdminForGame, aBallForGame, this, aHallOfFameForGame, aBlock223ForGame);
   }
 
@@ -61,48 +53,31 @@ public class Paddle
     return wasSet;
   }
 
+  public boolean setWidth(int aWidth)
+  {
+    boolean wasSet = false;
+    width = aWidth;
+    wasSet = true;
+    return wasSet;
+  }
+
   public int getLength()
   {
     return length;
   }
-  /* Code from template association_GetOne */
-  public Block223 getBlock223()
+
+  public int getWidth()
   {
-    return block223;
+    return width;
   }
   /* Code from template association_GetOne */
   public Game getGame()
   {
     return game;
   }
-  /* Code from template association_SetOneToMany */
-  public boolean setBlock223(Block223 aBlock223)
-  {
-    boolean wasSet = false;
-    if (aBlock223 == null)
-    {
-      return wasSet;
-    }
-
-    Block223 existingBlock223 = block223;
-    block223 = aBlock223;
-    if (existingBlock223 != null && !existingBlock223.equals(aBlock223))
-    {
-      existingBlock223.removePaddle(this);
-    }
-    block223.addPaddle(this);
-    wasSet = true;
-    return wasSet;
-  }
 
   public void delete()
   {
-    Block223 placeholderBlock223 = block223;
-    this.block223 = null;
-    if(placeholderBlock223 != null)
-    {
-      placeholderBlock223.removePaddle(this);
-    }
     Game existingGame = game;
     game = null;
     if (existingGame != null)
@@ -115,8 +90,8 @@ public class Paddle
   public String toString()
   {
     return super.toString() + "["+
-            "length" + ":" + getLength()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "block223 = "+(getBlock223()!=null?Integer.toHexString(System.identityHashCode(getBlock223())):"null") + System.getProperties().getProperty("line.separator") +
+            "length" + ":" + getLength()+ "," +
+            "width" + ":" + getWidth()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "game = "+(getGame()!=null?Integer.toHexString(System.identityHashCode(getGame())):"null");
   }
 }

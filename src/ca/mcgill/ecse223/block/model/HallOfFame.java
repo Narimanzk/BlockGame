@@ -5,7 +5,7 @@ package ca.mcgill.ecse223.block.model;
 
 import java.util.*;
 
-// line 62 "Block223.ump"
+// line 79 "Block223.ump"
 public class HallOfFame
 {
 
@@ -13,23 +13,21 @@ public class HallOfFame
   // MEMBER VARIABLES
   //------------------------
 
+  //HallOfFame Attributes
+  private String name;
+
   //HallOfFame Associations
   private List<Player> players;
-  private Block223 block223;
   private Game game;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public HallOfFame(Block223 aBlock223, Game aGame)
+  public HallOfFame(String aName, Game aGame)
   {
+    name = aName;
     players = new ArrayList<Player>();
-    boolean didAddBlock223 = setBlock223(aBlock223);
-    if (!didAddBlock223)
-    {
-      throw new RuntimeException("Unable to create hallOfFame due to block223");
-    }
     if (aGame == null || aGame.getHallOfFame() != null)
     {
       throw new RuntimeException("Unable to create HallOfFame due to aGame");
@@ -37,20 +35,29 @@ public class HallOfFame
     game = aGame;
   }
 
-  public HallOfFame(Block223 aBlock223, String aNameForGame, int aMinSpeedForGame, int aMaxSpeedForGame, int aMinLengthForGame, int aMaxLengthForGame, float aSpeedFactorForGame, int aHeightForGame, int aWidthForGame, int aNumLevelsForGame, Admin aAdminForGame, Ball aBallForGame, Paddle aPaddleForGame, Block223 aBlock223ForGame)
+  public HallOfFame(String aName, String aNameForGame, int aMinSpeedForGame, int aMaxSpeedForGame, int aMinLengthForGame, int aMaxLengthForGame, float aSpeedFactorForGame, int aHeightForGame, int aWidthForGame, int aNumLevelsForGame, Admin aAdminForGame, Ball aBallForGame, Paddle aPaddleForGame, Block223 aBlock223ForGame)
   {
+    name = aName;
     players = new ArrayList<Player>();
-    boolean didAddBlock223 = setBlock223(aBlock223);
-    if (!didAddBlock223)
-    {
-      throw new RuntimeException("Unable to create hallOfFame due to block223");
-    }
     game = new Game(aNameForGame, aMinSpeedForGame, aMaxSpeedForGame, aMinLengthForGame, aMaxLengthForGame, aSpeedFactorForGame, aHeightForGame, aWidthForGame, aNumLevelsForGame, aAdminForGame, aBallForGame, aPaddleForGame, this, aBlock223ForGame);
   }
 
   //------------------------
   // INTERFACE
   //------------------------
+
+  public boolean setName(String aName)
+  {
+    boolean wasSet = false;
+    name = aName;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public String getName()
+  {
+    return name;
+  }
   /* Code from template association_GetMany */
   public Player getPlayer(int index)
   {
@@ -80,11 +87,6 @@ public class HallOfFame
   {
     int index = players.indexOf(aPlayer);
     return index;
-  }
-  /* Code from template association_GetOne */
-  public Block223 getBlock223()
-  {
-    return block223;
   }
   /* Code from template association_GetOne */
   public Game getGame()
@@ -173,25 +175,6 @@ public class HallOfFame
     }
     return wasAdded;
   }
-  /* Code from template association_SetOneToMany */
-  public boolean setBlock223(Block223 aBlock223)
-  {
-    boolean wasSet = false;
-    if (aBlock223 == null)
-    {
-      return wasSet;
-    }
-
-    Block223 existingBlock223 = block223;
-    block223 = aBlock223;
-    if (existingBlock223 != null && !existingBlock223.equals(aBlock223))
-    {
-      existingBlock223.removeHallOfFame(this);
-    }
-    block223.addHallOfFame(this);
-    wasSet = true;
-    return wasSet;
-  }
 
   public void delete()
   {
@@ -201,12 +184,6 @@ public class HallOfFame
     {
       aPlayer.removeHallOfFame(this);
     }
-    Block223 placeholderBlock223 = block223;
-    this.block223 = null;
-    if(placeholderBlock223 != null)
-    {
-      placeholderBlock223.removeHallOfFame(this);
-    }
     Game existingGame = game;
     game = null;
     if (existingGame != null)
@@ -215,4 +192,11 @@ public class HallOfFame
     }
   }
 
+
+  public String toString()
+  {
+    return super.toString() + "["+
+            "name" + ":" + getName()+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "game = "+(getGame()!=null?Integer.toHexString(System.identityHashCode(getGame())):"null");
+  }
 }

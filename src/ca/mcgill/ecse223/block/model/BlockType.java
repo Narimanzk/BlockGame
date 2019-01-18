@@ -5,19 +5,20 @@ package ca.mcgill.ecse223.block.model;
 
 import java.util.*;
 
-// line 84 "Block223.ump"
-public class Level
+// line 61 "Block223.ump"
+public class BlockType
 {
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
-  //Level Attributes
-  private int number;
-  private boolean isRandom;
+  //BlockType Attributes
+  private int points;
+  private int colour;
+  private int sideLength;
 
-  //Level Associations
+  //BlockType Associations
   private List<Block> blocks;
   private Game game;
 
@@ -25,15 +26,16 @@ public class Level
   // CONSTRUCTOR
   //------------------------
 
-  public Level(int aNumber, boolean aIsRandom, Game aGame)
+  public BlockType(int aPoints, int aColour, Game aGame)
   {
-    number = aNumber;
-    isRandom = aIsRandom;
+    points = aPoints;
+    colour = aColour;
+    sideLength = 20;
     blocks = new ArrayList<Block>();
     boolean didAddGame = setGame(aGame);
     if (!didAddGame)
     {
-      throw new RuntimeException("Unable to create level due to game");
+      throw new RuntimeException("Unable to create blockType due to game");
     }
   }
 
@@ -41,30 +43,46 @@ public class Level
   // INTERFACE
   //------------------------
 
-  public boolean setNumber(int aNumber)
+  public boolean setPoints(int aPoints)
   {
     boolean wasSet = false;
-    number = aNumber;
+    points = aPoints;
     wasSet = true;
     return wasSet;
   }
 
-  public boolean setIsRandom(boolean aIsRandom)
+  public boolean setColour(int aColour)
   {
     boolean wasSet = false;
-    isRandom = aIsRandom;
+    colour = aColour;
     wasSet = true;
     return wasSet;
   }
 
-  public int getNumber()
+  public boolean setSideLength(int aSideLength)
   {
-    return number;
+    boolean wasSet = false;
+    sideLength = aSideLength;
+    wasSet = true;
+    return wasSet;
   }
 
-  public boolean getIsRandom()
+  public int getPoints()
   {
-    return isRandom;
+    return points;
+  }
+
+  /**
+   * data type to be changed later
+   */
+  public int getColour()
+  {
+    return colour;
+  }
+
+  public int getSideLength()
+  {
+    return sideLength;
   }
   /* Code from template association_GetMany */
   public Block getBlock(int index)
@@ -107,20 +125,20 @@ public class Level
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Block addBlock(int aX, int aY, Game aGame, BlockType aBlockType)
+  public Block addBlock(int aX, int aY, Game aGame, Level aLevel)
   {
-    return new Block(aX, aY, aGame, aBlockType, this);
+    return new Block(aX, aY, aGame, this, aLevel);
   }
 
   public boolean addBlock(Block aBlock)
   {
     boolean wasAdded = false;
     if (blocks.contains(aBlock)) { return false; }
-    Level existingLevel = aBlock.getLevel();
-    boolean isNewLevel = existingLevel != null && !this.equals(existingLevel);
-    if (isNewLevel)
+    BlockType existingBlockType = aBlock.getBlockType();
+    boolean isNewBlockType = existingBlockType != null && !this.equals(existingBlockType);
+    if (isNewBlockType)
     {
-      aBlock.setLevel(this);
+      aBlock.setBlockType(this);
     }
     else
     {
@@ -133,8 +151,8 @@ public class Level
   public boolean removeBlock(Block aBlock)
   {
     boolean wasRemoved = false;
-    //Unable to remove aBlock, as it must always have a level
-    if (!this.equals(aBlock.getLevel()))
+    //Unable to remove aBlock, as it must always have a blockType
+    if (!this.equals(aBlock.getBlockType()))
     {
       blocks.remove(aBlock);
       wasRemoved = true;
@@ -186,9 +204,9 @@ public class Level
     game = aGame;
     if (existingGame != null && !existingGame.equals(aGame))
     {
-      existingGame.removeLevel(this);
+      existingGame.removeBlockType(this);
     }
-    game.addLevel(this);
+    game.addBlockType(this);
     wasSet = true;
     return wasSet;
   }
@@ -204,7 +222,7 @@ public class Level
     this.game = null;
     if(placeholderGame != null)
     {
-      placeholderGame.removeLevel(this);
+      placeholderGame.removeBlockType(this);
     }
   }
 
@@ -212,8 +230,9 @@ public class Level
   public String toString()
   {
     return super.toString() + "["+
-            "number" + ":" + getNumber()+ "," +
-            "isRandom" + ":" + getIsRandom()+ "]" + System.getProperties().getProperty("line.separator") +
+            "points" + ":" + getPoints()+ "," +
+            "colour" + ":" + getColour()+ "," +
+            "sideLength" + ":" + getSideLength()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "game = "+(getGame()!=null?Integer.toHexString(System.identityHashCode(getGame())):"null");
   }
 }

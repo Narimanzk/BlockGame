@@ -5,8 +5,8 @@ package ca.mcgill.ecse223.block.model;
 
 import java.util.*;
 
-// line 12 "Block223.ump"
-public class Player
+// line 23 "Block223.ump"
+public class Player extends PersonRole
 {
 
   //------------------------
@@ -15,29 +15,20 @@ public class Player
 
   //Player Attributes
   private int points;
-  private String name;
   private int lives;
-  private String password;
 
   //Player Associations
-  private Block223 block223;
   private List<HallOfFame> hallOfFames;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Player(int aPoints, String aName, int aLives, String aPassword, Block223 aBlock223)
+  public Player(String aPassword, Block223 aBlock223, int aPoints, int aLives)
   {
+    super(aPassword, aBlock223);
     points = aPoints;
-    name = aName;
     lives = aLives;
-    password = aPassword;
-    boolean didAddBlock223 = setBlock223(aBlock223);
-    if (!didAddBlock223)
-    {
-      throw new RuntimeException("Unable to create player due to block223");
-    }
     hallOfFames = new ArrayList<HallOfFame>();
   }
 
@@ -53,26 +44,10 @@ public class Player
     return wasSet;
   }
 
-  public boolean setName(String aName)
-  {
-    boolean wasSet = false;
-    name = aName;
-    wasSet = true;
-    return wasSet;
-  }
-
   public boolean setLives(int aLives)
   {
     boolean wasSet = false;
     lives = aLives;
-    wasSet = true;
-    return wasSet;
-  }
-
-  public boolean setPassword(String aPassword)
-  {
-    boolean wasSet = false;
-    password = aPassword;
     wasSet = true;
     return wasSet;
   }
@@ -82,24 +57,9 @@ public class Player
     return points;
   }
 
-  public String getName()
-  {
-    return name;
-  }
-
   public int getLives()
   {
     return lives;
-  }
-
-  public String getPassword()
-  {
-    return password;
-  }
-  /* Code from template association_GetOne */
-  public Block223 getBlock223()
-  {
-    return block223;
   }
   /* Code from template association_GetMany */
   public HallOfFame getHallOfFame(int index)
@@ -130,25 +90,6 @@ public class Player
   {
     int index = hallOfFames.indexOf(aHallOfFame);
     return index;
-  }
-  /* Code from template association_SetOneToMany */
-  public boolean setBlock223(Block223 aBlock223)
-  {
-    boolean wasSet = false;
-    if (aBlock223 == null)
-    {
-      return wasSet;
-    }
-
-    Block223 existingBlock223 = block223;
-    block223 = aBlock223;
-    if (existingBlock223 != null && !existingBlock223.equals(aBlock223))
-    {
-      existingBlock223.removePlayer(this);
-    }
-    block223.addPlayer(this);
-    wasSet = true;
-    return wasSet;
   }
   /* Code from template association_MinimumNumberOfMethod */
   public static int minimumNumberOfHallOfFames()
@@ -235,18 +176,13 @@ public class Player
 
   public void delete()
   {
-    Block223 placeholderBlock223 = block223;
-    this.block223 = null;
-    if(placeholderBlock223 != null)
-    {
-      placeholderBlock223.removePlayer(this);
-    }
     ArrayList<HallOfFame> copyOfHallOfFames = new ArrayList<HallOfFame>(hallOfFames);
     hallOfFames.clear();
     for(HallOfFame aHallOfFame : copyOfHallOfFames)
     {
       aHallOfFame.removePlayer(this);
     }
+    super.delete();
   }
 
 
@@ -254,9 +190,6 @@ public class Player
   {
     return super.toString() + "["+
             "points" + ":" + getPoints()+ "," +
-            "name" + ":" + getName()+ "," +
-            "lives" + ":" + getLives()+ "," +
-            "password" + ":" + getPassword()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "block223 = "+(getBlock223()!=null?Integer.toHexString(System.identityHashCode(getBlock223())):"null");
+            "lives" + ":" + getLives()+ "]";
   }
 }

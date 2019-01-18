@@ -1,24 +1,33 @@
-
 class Block223{
-    1 <@>-* Player;
-    1 <@>-* HallOfFame;
-    1 <@>-* Ball;
-    1 <@>-* Block;
-    1 <@>-* Paddle;
+    1 <@>-* Person;
+    //1 <@>-* HallOfFame;
+    //1 <@>-* Ball;
+    //1 <@>-* BlockType;
+    //1 <@>-* Block;
+    //1 <@>-* Paddle;
     1 <@>-* Game;
-    1 <@>-* Level;
+    //1 <@>-* Level;
+    1 <@>-* PersonRole;
+}
+
+class Person{
+    String name;
+ * -- 1..2 PersonRole;
+}
+
+class PersonRole{
+  String password;
+
 }
 
 class Player{
+  isA PersonRole;
    int points;
-   String name;
    int lives;
-   String password;
 }
 
 class Admin{
-  isA Player;
- // String password;
+  isA PersonRole;
 }
 
 class Game{
@@ -28,19 +37,20 @@ class Game{
   int minLength;
   int maxLength;
   float speedFactor;
-  int minHeight = 200;
-  int minWidth = 200;
-  int maxHeight = 500;
-  int maxWidth = 500;
+  //int minHeight = 200;
+  //int minWidth = 200;
+  //int maxHeight = 500;
+  //int maxWidth = 500;
   int height;
   int width;
   int numLevels;
   * -- 1 Admin;
-  //1 -- * Block;
-  1 -- * Level;
-  1 -- 1 Ball;
-  1 -- 1 Paddle;
-  1 -- 1 HallOfFame;
+  1 <@>- * BlockType;
+  1 <@>- * Block;
+  1 <@>- * Level;
+  1 <@>- 1 Ball;
+  1 <@>- 1 Paddle;
+  1 <@>- 1 HallOfFame;
 }
 
 class Ball{
@@ -48,24 +58,32 @@ class Ball{
   int diameter = 10;
 }
 
-class Block{
+class BlockType{
   int points;
   int colour; //data type to be changed later
   int sideLength = 20;
+  1 -- * Block;
+  
+}
+class Block{
+  int x;
+  int y; 
   
 }
 
 class Paddle{
-   int length = 5;
+   int length;
+  int width = 5;
 }
 
 class HallOfFame{
   * -- * Player;
+  String name;
 }
 
 class Level{
   int number;
   boolean isRandom;
-  * -- * Block;
+  1 -- * Block;
 }
   

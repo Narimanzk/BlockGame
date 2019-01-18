@@ -3,9 +3,8 @@ package ca.mcgill.ecse223.block.model;
 /*This code was generated using the UMPLE 1.29.0.4181.a593105a9 modeling language!*/
 
 
-import java.util.*;
 
-// line 51 "Block223.ump"
+// line 68 "Block223.ump"
 public class Block
 {
 
@@ -14,226 +13,160 @@ public class Block
   //------------------------
 
   //Block Attributes
-  private int points;
-  private int colour;
-  private int sideLength;
+  private int x;
+  private int y;
 
   //Block Associations
-  private Block223 block223;
-  private List<Level> levels;
+  private Game game;
+  private BlockType blockType;
+  private Level level;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Block(int aPoints, int aColour, Block223 aBlock223)
+  public Block(int aX, int aY, Game aGame, BlockType aBlockType, Level aLevel)
   {
-    points = aPoints;
-    colour = aColour;
-    sideLength = 20;
-    boolean didAddBlock223 = setBlock223(aBlock223);
-    if (!didAddBlock223)
+    x = aX;
+    y = aY;
+    boolean didAddGame = setGame(aGame);
+    if (!didAddGame)
     {
-      throw new RuntimeException("Unable to create block due to block223");
+      throw new RuntimeException("Unable to create block due to game");
     }
-    levels = new ArrayList<Level>();
+    boolean didAddBlockType = setBlockType(aBlockType);
+    if (!didAddBlockType)
+    {
+      throw new RuntimeException("Unable to create block due to blockType");
+    }
+    boolean didAddLevel = setLevel(aLevel);
+    if (!didAddLevel)
+    {
+      throw new RuntimeException("Unable to create block due to level");
+    }
   }
 
   //------------------------
   // INTERFACE
   //------------------------
 
-  public boolean setPoints(int aPoints)
+  public boolean setX(int aX)
   {
     boolean wasSet = false;
-    points = aPoints;
+    x = aX;
     wasSet = true;
     return wasSet;
   }
 
-  public boolean setColour(int aColour)
+  public boolean setY(int aY)
   {
     boolean wasSet = false;
-    colour = aColour;
+    y = aY;
     wasSet = true;
     return wasSet;
   }
 
-  public boolean setSideLength(int aSideLength)
+  public int getX()
   {
-    boolean wasSet = false;
-    sideLength = aSideLength;
-    wasSet = true;
-    return wasSet;
+    return x;
   }
 
-  public int getPoints()
+  public int getY()
   {
-    return points;
-  }
-
-  /**
-   * data type to be changed later
-   */
-  public int getColour()
-  {
-    return colour;
-  }
-
-  public int getSideLength()
-  {
-    return sideLength;
+    return y;
   }
   /* Code from template association_GetOne */
-  public Block223 getBlock223()
+  public Game getGame()
   {
-    return block223;
+    return game;
   }
-  /* Code from template association_GetMany */
-  public Level getLevel(int index)
+  /* Code from template association_GetOne */
+  public BlockType getBlockType()
   {
-    Level aLevel = levels.get(index);
-    return aLevel;
+    return blockType;
   }
-
-  public List<Level> getLevels()
+  /* Code from template association_GetOne */
+  public Level getLevel()
   {
-    List<Level> newLevels = Collections.unmodifiableList(levels);
-    return newLevels;
-  }
-
-  public int numberOfLevels()
-  {
-    int number = levels.size();
-    return number;
-  }
-
-  public boolean hasLevels()
-  {
-    boolean has = levels.size() > 0;
-    return has;
-  }
-
-  public int indexOfLevel(Level aLevel)
-  {
-    int index = levels.indexOf(aLevel);
-    return index;
+    return level;
   }
   /* Code from template association_SetOneToMany */
-  public boolean setBlock223(Block223 aBlock223)
+  public boolean setGame(Game aGame)
   {
     boolean wasSet = false;
-    if (aBlock223 == null)
+    if (aGame == null)
     {
       return wasSet;
     }
 
-    Block223 existingBlock223 = block223;
-    block223 = aBlock223;
-    if (existingBlock223 != null && !existingBlock223.equals(aBlock223))
+    Game existingGame = game;
+    game = aGame;
+    if (existingGame != null && !existingGame.equals(aGame))
     {
-      existingBlock223.removeBlock(this);
+      existingGame.removeBlock(this);
     }
-    block223.addBlock(this);
+    game.addBlock(this);
     wasSet = true;
     return wasSet;
   }
-  /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfLevels()
+  /* Code from template association_SetOneToMany */
+  public boolean setBlockType(BlockType aBlockType)
   {
-    return 0;
-  }
-  /* Code from template association_AddManyToManyMethod */
-  public boolean addLevel(Level aLevel)
-  {
-    boolean wasAdded = false;
-    if (levels.contains(aLevel)) { return false; }
-    levels.add(aLevel);
-    if (aLevel.indexOfBlock(this) != -1)
+    boolean wasSet = false;
+    if (aBlockType == null)
     {
-      wasAdded = true;
-    }
-    else
-    {
-      wasAdded = aLevel.addBlock(this);
-      if (!wasAdded)
-      {
-        levels.remove(aLevel);
-      }
-    }
-    return wasAdded;
-  }
-  /* Code from template association_RemoveMany */
-  public boolean removeLevel(Level aLevel)
-  {
-    boolean wasRemoved = false;
-    if (!levels.contains(aLevel))
-    {
-      return wasRemoved;
+      return wasSet;
     }
 
-    int oldIndex = levels.indexOf(aLevel);
-    levels.remove(oldIndex);
-    if (aLevel.indexOfBlock(this) == -1)
+    BlockType existingBlockType = blockType;
+    blockType = aBlockType;
+    if (existingBlockType != null && !existingBlockType.equals(aBlockType))
     {
-      wasRemoved = true;
+      existingBlockType.removeBlock(this);
     }
-    else
-    {
-      wasRemoved = aLevel.removeBlock(this);
-      if (!wasRemoved)
-      {
-        levels.add(oldIndex,aLevel);
-      }
-    }
-    return wasRemoved;
+    blockType.addBlock(this);
+    wasSet = true;
+    return wasSet;
   }
-  /* Code from template association_AddIndexControlFunctions */
-  public boolean addLevelAt(Level aLevel, int index)
-  {  
-    boolean wasAdded = false;
-    if(addLevel(aLevel))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfLevels()) { index = numberOfLevels() - 1; }
-      levels.remove(aLevel);
-      levels.add(index, aLevel);
-      wasAdded = true;
-    }
-    return wasAdded;
-  }
-
-  public boolean addOrMoveLevelAt(Level aLevel, int index)
+  /* Code from template association_SetOneToMany */
+  public boolean setLevel(Level aLevel)
   {
-    boolean wasAdded = false;
-    if(levels.contains(aLevel))
+    boolean wasSet = false;
+    if (aLevel == null)
     {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfLevels()) { index = numberOfLevels() - 1; }
-      levels.remove(aLevel);
-      levels.add(index, aLevel);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addLevelAt(aLevel, index);
+      return wasSet;
     }
-    return wasAdded;
+
+    Level existingLevel = level;
+    level = aLevel;
+    if (existingLevel != null && !existingLevel.equals(aLevel))
+    {
+      existingLevel.removeBlock(this);
+    }
+    level.addBlock(this);
+    wasSet = true;
+    return wasSet;
   }
 
   public void delete()
   {
-    Block223 placeholderBlock223 = block223;
-    this.block223 = null;
-    if(placeholderBlock223 != null)
+    Game placeholderGame = game;
+    this.game = null;
+    if(placeholderGame != null)
     {
-      placeholderBlock223.removeBlock(this);
+      placeholderGame.removeBlock(this);
     }
-    ArrayList<Level> copyOfLevels = new ArrayList<Level>(levels);
-    levels.clear();
-    for(Level aLevel : copyOfLevels)
+    BlockType placeholderBlockType = blockType;
+    this.blockType = null;
+    if(placeholderBlockType != null)
     {
-      aLevel.removeBlock(this);
+      placeholderBlockType.removeBlock(this);
+    }
+    Level placeholderLevel = level;
+    this.level = null;
+    if(placeholderLevel != null)
+    {
+      placeholderLevel.removeBlock(this);
     }
   }
 
@@ -241,9 +174,10 @@ public class Block
   public String toString()
   {
     return super.toString() + "["+
-            "points" + ":" + getPoints()+ "," +
-            "colour" + ":" + getColour()+ "," +
-            "sideLength" + ":" + getSideLength()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "block223 = "+(getBlock223()!=null?Integer.toHexString(System.identityHashCode(getBlock223())):"null");
+            "x" + ":" + getX()+ "," +
+            "y" + ":" + getY()+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "game = "+(getGame()!=null?Integer.toHexString(System.identityHashCode(getGame())):"null") + System.getProperties().getProperty("line.separator") +
+            "  " + "blockType = "+(getBlockType()!=null?Integer.toHexString(System.identityHashCode(getBlockType())):"null") + System.getProperties().getProperty("line.separator") +
+            "  " + "level = "+(getLevel()!=null?Integer.toHexString(System.identityHashCode(getLevel())):"null");
   }
 }

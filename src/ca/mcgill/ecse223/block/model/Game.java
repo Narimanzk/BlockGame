@@ -5,7 +5,7 @@ package ca.mcgill.ecse223.block.model;
 
 import java.util.*;
 
-// line 24 "Block223.ump"
+// line 33 "Block223.ump"
 public class Game
 {
 
@@ -20,16 +20,14 @@ public class Game
   private int minLength;
   private int maxLength;
   private float speedFactor;
-  private int minHeight;
-  private int minWidth;
-  private int maxHeight;
-  private int maxWidth;
   private int height;
   private int width;
   private int numLevels;
 
   //Game Associations
   private Admin admin;
+  private List<BlockType> blockTypes;
+  private List<Block> blocks;
   private List<Level> levels;
   private Ball ball;
   private Paddle paddle;
@@ -48,10 +46,6 @@ public class Game
     minLength = aMinLength;
     maxLength = aMaxLength;
     speedFactor = aSpeedFactor;
-    minHeight = 200;
-    minWidth = 200;
-    maxHeight = 500;
-    maxWidth = 500;
     height = aHeight;
     width = aWidth;
     numLevels = aNumLevels;
@@ -60,6 +54,8 @@ public class Game
     {
       throw new RuntimeException("Unable to create game due to admin");
     }
+    blockTypes = new ArrayList<BlockType>();
+    blocks = new ArrayList<Block>();
     levels = new ArrayList<Level>();
     if (aBall == null || aBall.getGame() != null)
     {
@@ -83,7 +79,7 @@ public class Game
     }
   }
 
-  public Game(String aName, int aMinSpeed, int aMaxSpeed, int aMinLength, int aMaxLength, float aSpeedFactor, int aHeight, int aWidth, int aNumLevels, Admin aAdmin, int aCurrentSpeedForBall, Block223 aBlock223ForBall, Block223 aBlock223ForPaddle, Block223 aBlock223ForHallOfFame, Block223 aBlock223)
+  public Game(String aName, int aMinSpeed, int aMaxSpeed, int aMinLength, int aMaxLength, float aSpeedFactor, int aHeight, int aWidth, int aNumLevels, Admin aAdmin, int aCurrentSpeedForBall, int aLengthForPaddle, String aNameForHallOfFame, Block223 aBlock223)
   {
     name = aName;
     minSpeed = aMinSpeed;
@@ -91,10 +87,6 @@ public class Game
     minLength = aMinLength;
     maxLength = aMaxLength;
     speedFactor = aSpeedFactor;
-    minHeight = 200;
-    minWidth = 200;
-    maxHeight = 500;
-    maxWidth = 500;
     height = aHeight;
     width = aWidth;
     numLevels = aNumLevels;
@@ -103,10 +95,12 @@ public class Game
     {
       throw new RuntimeException("Unable to create game due to admin");
     }
+    blockTypes = new ArrayList<BlockType>();
+    blocks = new ArrayList<Block>();
     levels = new ArrayList<Level>();
-    ball = new Ball(aCurrentSpeedForBall, aBlock223ForBall, this);
-    paddle = new Paddle(aBlock223ForPaddle, this);
-    hallOfFame = new HallOfFame(aBlock223ForHallOfFame, this);
+    ball = new Ball(aCurrentSpeedForBall, this);
+    paddle = new Paddle(aLengthForPaddle, this);
+    hallOfFame = new HallOfFame(aNameForHallOfFame, this);
     boolean didAddBlock223 = setBlock223(aBlock223);
     if (!didAddBlock223)
     {
@@ -166,38 +160,6 @@ public class Game
     return wasSet;
   }
 
-  public boolean setMinHeight(int aMinHeight)
-  {
-    boolean wasSet = false;
-    minHeight = aMinHeight;
-    wasSet = true;
-    return wasSet;
-  }
-
-  public boolean setMinWidth(int aMinWidth)
-  {
-    boolean wasSet = false;
-    minWidth = aMinWidth;
-    wasSet = true;
-    return wasSet;
-  }
-
-  public boolean setMaxHeight(int aMaxHeight)
-  {
-    boolean wasSet = false;
-    maxHeight = aMaxHeight;
-    wasSet = true;
-    return wasSet;
-  }
-
-  public boolean setMaxWidth(int aMaxWidth)
-  {
-    boolean wasSet = false;
-    maxWidth = aMaxWidth;
-    wasSet = true;
-    return wasSet;
-  }
-
   public boolean setHeight(int aHeight)
   {
     boolean wasSet = false;
@@ -252,26 +214,12 @@ public class Game
     return speedFactor;
   }
 
-  public int getMinHeight()
-  {
-    return minHeight;
-  }
-
-  public int getMinWidth()
-  {
-    return minWidth;
-  }
-
-  public int getMaxHeight()
-  {
-    return maxHeight;
-  }
-
-  public int getMaxWidth()
-  {
-    return maxWidth;
-  }
-
+  /**
+   * int minHeight = 200;
+   * int minWidth = 200;
+   * int maxHeight = 500;
+   * int maxWidth = 500;
+   */
   public int getHeight()
   {
     return height;
@@ -292,15 +240,72 @@ public class Game
     return admin;
   }
   /* Code from template association_GetMany */
+  public BlockType getBlockType(int index)
+  {
+    BlockType aBlockType = blockTypes.get(index);
+    return aBlockType;
+  }
+
+  public List<BlockType> getBlockTypes()
+  {
+    List<BlockType> newBlockTypes = Collections.unmodifiableList(blockTypes);
+    return newBlockTypes;
+  }
+
+  public int numberOfBlockTypes()
+  {
+    int number = blockTypes.size();
+    return number;
+  }
+
+  public boolean hasBlockTypes()
+  {
+    boolean has = blockTypes.size() > 0;
+    return has;
+  }
+
+  public int indexOfBlockType(BlockType aBlockType)
+  {
+    int index = blockTypes.indexOf(aBlockType);
+    return index;
+  }
+  /* Code from template association_GetMany */
+  public Block getBlock(int index)
+  {
+    Block aBlock = blocks.get(index);
+    return aBlock;
+  }
+
+  public List<Block> getBlocks()
+  {
+    List<Block> newBlocks = Collections.unmodifiableList(blocks);
+    return newBlocks;
+  }
+
+  public int numberOfBlocks()
+  {
+    int number = blocks.size();
+    return number;
+  }
+
+  public boolean hasBlocks()
+  {
+    boolean has = blocks.size() > 0;
+    return has;
+  }
+
+  public int indexOfBlock(Block aBlock)
+  {
+    int index = blocks.indexOf(aBlock);
+    return index;
+  }
+  /* Code from template association_GetMany */
   public Level getLevel(int index)
   {
     Level aLevel = levels.get(index);
     return aLevel;
   }
 
-  /**
-   * 1 -- * Block;
-   */
   public List<Level> getLevels()
   {
     List<Level> newLevels = Collections.unmodifiableList(levels);
@@ -364,14 +369,158 @@ public class Game
     return wasSet;
   }
   /* Code from template association_MinimumNumberOfMethod */
+  public static int minimumNumberOfBlockTypes()
+  {
+    return 0;
+  }
+  /* Code from template association_AddManyToOne */
+  public BlockType addBlockType(int aPoints, int aColour)
+  {
+    return new BlockType(aPoints, aColour, this);
+  }
+
+  public boolean addBlockType(BlockType aBlockType)
+  {
+    boolean wasAdded = false;
+    if (blockTypes.contains(aBlockType)) { return false; }
+    Game existingGame = aBlockType.getGame();
+    boolean isNewGame = existingGame != null && !this.equals(existingGame);
+    if (isNewGame)
+    {
+      aBlockType.setGame(this);
+    }
+    else
+    {
+      blockTypes.add(aBlockType);
+    }
+    wasAdded = true;
+    return wasAdded;
+  }
+
+  public boolean removeBlockType(BlockType aBlockType)
+  {
+    boolean wasRemoved = false;
+    //Unable to remove aBlockType, as it must always have a game
+    if (!this.equals(aBlockType.getGame()))
+    {
+      blockTypes.remove(aBlockType);
+      wasRemoved = true;
+    }
+    return wasRemoved;
+  }
+  /* Code from template association_AddIndexControlFunctions */
+  public boolean addBlockTypeAt(BlockType aBlockType, int index)
+  {  
+    boolean wasAdded = false;
+    if(addBlockType(aBlockType))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfBlockTypes()) { index = numberOfBlockTypes() - 1; }
+      blockTypes.remove(aBlockType);
+      blockTypes.add(index, aBlockType);
+      wasAdded = true;
+    }
+    return wasAdded;
+  }
+
+  public boolean addOrMoveBlockTypeAt(BlockType aBlockType, int index)
+  {
+    boolean wasAdded = false;
+    if(blockTypes.contains(aBlockType))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfBlockTypes()) { index = numberOfBlockTypes() - 1; }
+      blockTypes.remove(aBlockType);
+      blockTypes.add(index, aBlockType);
+      wasAdded = true;
+    } 
+    else 
+    {
+      wasAdded = addBlockTypeAt(aBlockType, index);
+    }
+    return wasAdded;
+  }
+  /* Code from template association_MinimumNumberOfMethod */
+  public static int minimumNumberOfBlocks()
+  {
+    return 0;
+  }
+  /* Code from template association_AddManyToOne */
+  public Block addBlock(int aX, int aY, BlockType aBlockType, Level aLevel)
+  {
+    return new Block(aX, aY, this, aBlockType, aLevel);
+  }
+
+  public boolean addBlock(Block aBlock)
+  {
+    boolean wasAdded = false;
+    if (blocks.contains(aBlock)) { return false; }
+    Game existingGame = aBlock.getGame();
+    boolean isNewGame = existingGame != null && !this.equals(existingGame);
+    if (isNewGame)
+    {
+      aBlock.setGame(this);
+    }
+    else
+    {
+      blocks.add(aBlock);
+    }
+    wasAdded = true;
+    return wasAdded;
+  }
+
+  public boolean removeBlock(Block aBlock)
+  {
+    boolean wasRemoved = false;
+    //Unable to remove aBlock, as it must always have a game
+    if (!this.equals(aBlock.getGame()))
+    {
+      blocks.remove(aBlock);
+      wasRemoved = true;
+    }
+    return wasRemoved;
+  }
+  /* Code from template association_AddIndexControlFunctions */
+  public boolean addBlockAt(Block aBlock, int index)
+  {  
+    boolean wasAdded = false;
+    if(addBlock(aBlock))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfBlocks()) { index = numberOfBlocks() - 1; }
+      blocks.remove(aBlock);
+      blocks.add(index, aBlock);
+      wasAdded = true;
+    }
+    return wasAdded;
+  }
+
+  public boolean addOrMoveBlockAt(Block aBlock, int index)
+  {
+    boolean wasAdded = false;
+    if(blocks.contains(aBlock))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfBlocks()) { index = numberOfBlocks() - 1; }
+      blocks.remove(aBlock);
+      blocks.add(index, aBlock);
+      wasAdded = true;
+    } 
+    else 
+    {
+      wasAdded = addBlockAt(aBlock, index);
+    }
+    return wasAdded;
+  }
+  /* Code from template association_MinimumNumberOfMethod */
   public static int minimumNumberOfLevels()
   {
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Level addLevel(int aNumber, boolean aIsRandom, Block223 aBlock223)
+  public Level addLevel(int aNumber, boolean aIsRandom)
   {
-    return new Level(aNumber, aIsRandom, aBlock223, this);
+    return new Level(aNumber, aIsRandom, this);
   }
 
   public boolean addLevel(Level aLevel)
@@ -463,11 +612,27 @@ public class Game
     {
       placeholderAdmin.removeGame(this);
     }
-    for(int i=levels.size(); i > 0; i--)
+    while (blockTypes.size() > 0)
     {
-      Level aLevel = levels.get(i - 1);
-      aLevel.delete();
+      BlockType aBlockType = blockTypes.get(blockTypes.size() - 1);
+      aBlockType.delete();
+      blockTypes.remove(aBlockType);
     }
+    
+    while (blocks.size() > 0)
+    {
+      Block aBlock = blocks.get(blocks.size() - 1);
+      aBlock.delete();
+      blocks.remove(aBlock);
+    }
+    
+    while (levels.size() > 0)
+    {
+      Level aLevel = levels.get(levels.size() - 1);
+      aLevel.delete();
+      levels.remove(aLevel);
+    }
+    
     Ball existingBall = ball;
     ball = null;
     if (existingBall != null)
@@ -504,10 +669,6 @@ public class Game
             "minLength" + ":" + getMinLength()+ "," +
             "maxLength" + ":" + getMaxLength()+ "," +
             "speedFactor" + ":" + getSpeedFactor()+ "," +
-            "minHeight" + ":" + getMinHeight()+ "," +
-            "minWidth" + ":" + getMinWidth()+ "," +
-            "maxHeight" + ":" + getMaxHeight()+ "," +
-            "maxWidth" + ":" + getMaxWidth()+ "," +
             "height" + ":" + getHeight()+ "," +
             "width" + ":" + getWidth()+ "," +
             "numLevels" + ":" + getNumLevels()+ "]" + System.getProperties().getProperty("line.separator") +
