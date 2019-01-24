@@ -8,17 +8,15 @@ class Admin
 
 class Ball
 {
+  int currentSpeed;
   int diameter;
-    Color color;
-        int currentSpeed;
-  int xPosition;
-  int yPosition;
 }
 
 class Block
 {
   int xPosition;
   int yPosition;
+int size;
 * -- * Level;
   * -- 1 BlockType;
   }
@@ -33,6 +31,10 @@ minLength;
 int speedFactor;
 int xFrame;
 int yFrame;
+int minLevel;
+int maxLevel;
+boolean random;
+int lengthFactor;
 1 -- * User;
   1<@>- 1 Paddle;
   1<@>- 1 Ball;
@@ -43,14 +45,16 @@ int yFrame;
 
 class Level
 {
-    levelNumber;
-  boolean random;
+    int currentLevel;
   }
 
 class HallOfFame
 {
   name;
-  1 -- * Player;
+  Button button;
+nameList;
+int scoreList;
+1 -- * Player;
 }
 
 class User
@@ -74,9 +78,9 @@ class Block223
 
 class Paddle
 {
-    int currentLength;
-  int xPosition;
-  }
+    int width;
+  int currentLength;
+}
 
 class UserRole
 {
@@ -94,12 +98,12 @@ class BlockType
 class Admin
 {
   position 139 577 109 41;
-  position.association Admin__Game 102,0 8,177;
+  position.association Admin__Game 102,0 0,199;
 }
 
 class Ball
 {
-  position 670 31 109 143;
+  position 670 31 109 92;
       }
 
 class Block
@@ -111,23 +115,23 @@ class Block
 
 class Game
 {
-  position 318 173 146 160;
+  position 318 173 146 228;
   position.association Game__User 0,48 112,8;
   position.association Game__Paddle 146,32 0,33;
   position.association Game__HallOfFame 146,79 8,0;
   position.association Ball__Game 105,0 0,10;
-  position.association Game__Level 27,177 30,0;
+  position.association Game__Level 40,245 30,0;
   position.association Block__Game 146,176 0,10;
 }
 
 class Level
 {
-  position 354 612 109 92;
+  position 354 612 159 58;
 }
 
 class HallOfFame
 {
-  position 652 382 112 58;
+  position 725 362 136 109;
   position.association HallOfFame__Player 0,39 109,43;
 }
 
@@ -144,7 +148,8 @@ class Player
 
 class Block223
 {
-  position 253 22 109 41;
+  position 323 16 109 41;
+  position.association Block223__Game 52,41 62,0;
 }
 
 class Paddle
