@@ -1,0 +1,163 @@
+class Admin
+{
+   
+   
+  isA UserRole;
+  1 -- * Game;
+}
+
+class Ball
+{
+  int diameter;
+    Color color;
+        int currentSpeed;
+  int xPosition;
+  int yPosition;
+}
+
+class Block
+{
+  int xPosition;
+  int yPosition;
+* -- * Level;
+  * -- 1 BlockType;
+  }
+
+class Game
+{
+  name;
+  int maxSpeed;
+int minSpeed;
+int maxLength;
+minLength;
+int speedFactor;
+int xFrame;
+int yFrame;
+1 -- * User;
+  1<@>- 1 Paddle;
+  1<@>- 1 Ball;
+  1<@>- * HallOfFame;
+  *<@>-*Level;
+  1<@>-*Block;
+}
+
+class Level
+{
+    levelNumber;
+  boolean random;
+  }
+
+class HallOfFame
+{
+  name;
+  1 -- * Player;
+}
+
+class User
+{
+      name;
+* -- 1..2 UserRole;
+}
+
+class Player
+{
+   
+    isA UserRole;
+int live;
+int score;
+}
+
+class Block223
+{
+  1<@>- * Game;
+}
+
+class Paddle
+{
+    int currentLength;
+  int xPosition;
+  }
+
+class UserRole
+{
+  password;
+}
+
+class BlockType
+{
+  Color color;
+  int point;
+}
+
+//$?[End_of_model]$?
+
+class Admin
+{
+  position 139 577 109 41;
+  position.association Admin__Game 102,0 8,177;
+}
+
+class Ball
+{
+  position 670 31 109 143;
+      }
+
+class Block
+{
+  position 543 480 114 75;
+  position.association Block__Level 0,109 91,0;
+  position.association Block__BlockType 114,59 14,0;
+  }
+
+class Game
+{
+  position 318 173 146 160;
+  position.association Game__User 0,48 112,8;
+  position.association Game__Paddle 146,32 0,33;
+  position.association Game__HallOfFame 146,79 8,0;
+  position.association Ball__Game 105,0 0,10;
+  position.association Game__Level 27,177 30,0;
+  position.association Block__Game 146,176 0,10;
+}
+
+class Level
+{
+  position 354 612 109 92;
+}
+
+class HallOfFame
+{
+  position 652 382 112 58;
+  position.association HallOfFame__Player 0,39 109,43;
+}
+
+class User
+{
+  position 61 71 112 58;
+    position.association User__UserRole 32,58 80,0;
+}
+
+class Player
+{
+  position 9 419 109 75;
+  }
+
+class Block223
+{
+  position 253 22 109 41;
+}
+
+class Paddle
+{
+  position 707 201 109 92;
+  }
+
+class UserRole
+{
+  position 66 249 138 58;
+}
+
+class BlockType
+{
+  position 733 625 109 58;
+}
