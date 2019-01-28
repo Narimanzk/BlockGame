@@ -5,7 +5,7 @@ package ca.mcgill.ecse223.block.model;
 
 import java.util.*;
 
-// line 33 "Block223.ump"
+// line 27 "Block223.ump"
 public class Game
 {
 
@@ -22,10 +22,9 @@ public class Game
   private float speedFactor;
   private int height;
   private int width;
-  private int numLevels;
 
   //Game Associations
-  private Admin admin;
+  private User user;
   private List<BlockType> blockTypes;
   private List<Block> blocks;
   private List<Level> levels;
@@ -38,7 +37,7 @@ public class Game
   // CONSTRUCTOR
   //------------------------
 
-  public Game(String aName, int aMinSpeed, int aMaxSpeed, int aMinLength, int aMaxLength, float aSpeedFactor, int aHeight, int aWidth, int aNumLevels, Admin aAdmin, Ball aBall, Paddle aPaddle, HallOfFame aHallOfFame, Block223 aBlock223)
+  public Game(String aName, int aMinSpeed, int aMaxSpeed, int aMinLength, int aMaxLength, float aSpeedFactor, int aHeight, int aWidth, User aUser, Ball aBall, Paddle aPaddle, HallOfFame aHallOfFame, Block223 aBlock223)
   {
     name = aName;
     minSpeed = aMinSpeed;
@@ -48,11 +47,10 @@ public class Game
     speedFactor = aSpeedFactor;
     height = aHeight;
     width = aWidth;
-    numLevels = aNumLevels;
-    boolean didAddAdmin = setAdmin(aAdmin);
-    if (!didAddAdmin)
+    boolean didAddUser = setUser(aUser);
+    if (!didAddUser)
     {
-      throw new RuntimeException("Unable to create game due to admin");
+      throw new RuntimeException("Unable to create game due to user");
     }
     blockTypes = new ArrayList<BlockType>();
     blocks = new ArrayList<Block>();
@@ -79,7 +77,7 @@ public class Game
     }
   }
 
-  public Game(String aName, int aMinSpeed, int aMaxSpeed, int aMinLength, int aMaxLength, float aSpeedFactor, int aHeight, int aWidth, int aNumLevels, Admin aAdmin, int aCurrentSpeedForBall, int aLengthForPaddle, String aNameForHallOfFame, Block223 aBlock223)
+  public Game(String aName, int aMinSpeed, int aMaxSpeed, int aMinLength, int aMaxLength, float aSpeedFactor, int aHeight, int aWidth, User aUser, float aCurrentSpeedForBall, float aDegreesForBall, int aLengthForPaddle, String aNameForHallOfFame, Block223 aBlock223)
   {
     name = aName;
     minSpeed = aMinSpeed;
@@ -89,16 +87,15 @@ public class Game
     speedFactor = aSpeedFactor;
     height = aHeight;
     width = aWidth;
-    numLevels = aNumLevels;
-    boolean didAddAdmin = setAdmin(aAdmin);
-    if (!didAddAdmin)
+    boolean didAddUser = setUser(aUser);
+    if (!didAddUser)
     {
-      throw new RuntimeException("Unable to create game due to admin");
+      throw new RuntimeException("Unable to create game due to user");
     }
     blockTypes = new ArrayList<BlockType>();
     blocks = new ArrayList<Block>();
     levels = new ArrayList<Level>();
-    ball = new Ball(aCurrentSpeedForBall, this);
+    ball = new Ball(aCurrentSpeedForBall, aDegreesForBall, this);
     paddle = new Paddle(aLengthForPaddle, this);
     hallOfFame = new HallOfFame(aNameForHallOfFame, this);
     boolean didAddBlock223 = setBlock223(aBlock223);
@@ -176,14 +173,6 @@ public class Game
     return wasSet;
   }
 
-  public boolean setNumLevels(int aNumLevels)
-  {
-    boolean wasSet = false;
-    numLevels = aNumLevels;
-    wasSet = true;
-    return wasSet;
-  }
-
   public String getName()
   {
     return name;
@@ -214,12 +203,6 @@ public class Game
     return speedFactor;
   }
 
-  /**
-   * int minHeight = 200;
-   * int minWidth = 200;
-   * int maxHeight = 500;
-   * int maxWidth = 500;
-   */
   public int getHeight()
   {
     return height;
@@ -229,15 +212,10 @@ public class Game
   {
     return width;
   }
-
-  public int getNumLevels()
-  {
-    return numLevels;
-  }
   /* Code from template association_GetOne */
-  public Admin getAdmin()
+  public User getUser()
   {
-    return admin;
+    return user;
   }
   /* Code from template association_GetMany */
   public BlockType getBlockType(int index)
@@ -350,21 +328,21 @@ public class Game
     return block223;
   }
   /* Code from template association_SetOneToMany */
-  public boolean setAdmin(Admin aAdmin)
+  public boolean setUser(User aUser)
   {
     boolean wasSet = false;
-    if (aAdmin == null)
+    if (aUser == null)
     {
       return wasSet;
     }
 
-    Admin existingAdmin = admin;
-    admin = aAdmin;
-    if (existingAdmin != null && !existingAdmin.equals(aAdmin))
+    User existingUser = user;
+    user = aUser;
+    if (existingUser != null && !existingUser.equals(aUser))
     {
-      existingAdmin.removeGame(this);
+      existingUser.removeGame(this);
     }
-    admin.addGame(this);
+    user.addGame(this);
     wasSet = true;
     return wasSet;
   }
@@ -606,11 +584,11 @@ public class Game
 
   public void delete()
   {
-    Admin placeholderAdmin = admin;
-    this.admin = null;
-    if(placeholderAdmin != null)
+    User placeholderUser = user;
+    this.user = null;
+    if(placeholderUser != null)
     {
-      placeholderAdmin.removeGame(this);
+      placeholderUser.removeGame(this);
     }
     while (blockTypes.size() > 0)
     {
@@ -670,9 +648,8 @@ public class Game
             "maxLength" + ":" + getMaxLength()+ "," +
             "speedFactor" + ":" + getSpeedFactor()+ "," +
             "height" + ":" + getHeight()+ "," +
-            "width" + ":" + getWidth()+ "," +
-            "numLevels" + ":" + getNumLevels()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "admin = "+(getAdmin()!=null?Integer.toHexString(System.identityHashCode(getAdmin())):"null") + System.getProperties().getProperty("line.separator") +
+            "width" + ":" + getWidth()+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "user = "+(getUser()!=null?Integer.toHexString(System.identityHashCode(getUser())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "ball = "+(getBall()!=null?Integer.toHexString(System.identityHashCode(getBall())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "paddle = "+(getPaddle()!=null?Integer.toHexString(System.identityHashCode(getPaddle())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "hallOfFame = "+(getHallOfFame()!=null?Integer.toHexString(System.identityHashCode(getHallOfFame())):"null") + System.getProperties().getProperty("line.separator") +

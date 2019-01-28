@@ -5,7 +5,7 @@ package ca.mcgill.ecse223.block.model;
 
 import java.util.*;
 
-// line 84 "Block223.ump"
+// line 74 "Block223.ump"
 public class Level
 {
 
@@ -18,7 +18,7 @@ public class Level
   private boolean isRandom;
 
   //Level Associations
-  private List<Block> blocks;
+  private List<Block> grid;
   private Game game;
 
   //------------------------
@@ -29,7 +29,7 @@ public class Level
   {
     number = aNumber;
     isRandom = aIsRandom;
-    blocks = new ArrayList<Block>();
+    grid = new ArrayList<Block>();
     boolean didAddGame = setGame(aGame);
     if (!didAddGame)
     {
@@ -67,33 +67,33 @@ public class Level
     return isRandom;
   }
   /* Code from template association_GetMany */
-  public Block getBlock(int index)
+  public Block getGrid(int index)
   {
-    Block aBlock = blocks.get(index);
-    return aBlock;
+    Block aGrid = grid.get(index);
+    return aGrid;
   }
 
-  public List<Block> getBlocks()
+  public List<Block> getGrid()
   {
-    List<Block> newBlocks = Collections.unmodifiableList(blocks);
-    return newBlocks;
+    List<Block> newGrid = Collections.unmodifiableList(grid);
+    return newGrid;
   }
 
-  public int numberOfBlocks()
+  public int numberOfGrid()
   {
-    int number = blocks.size();
+    int number = grid.size();
     return number;
   }
 
-  public boolean hasBlocks()
+  public boolean hasGrid()
   {
-    boolean has = blocks.size() > 0;
+    boolean has = grid.size() > 0;
     return has;
   }
 
-  public int indexOfBlock(Block aBlock)
+  public int indexOfGrid(Block aGrid)
   {
-    int index = blocks.indexOf(aBlock);
+    int index = grid.indexOf(aGrid);
     return index;
   }
   /* Code from template association_GetOne */
@@ -102,74 +102,74 @@ public class Level
     return game;
   }
   /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfBlocks()
+  public static int minimumNumberOfGrid()
   {
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Block addBlock(int aX, int aY, Game aGame, BlockType aBlockType)
+  public Block addGrid(int aX, int aY, Game aGame, BlockType aBlockType)
   {
     return new Block(aX, aY, aGame, aBlockType, this);
   }
 
-  public boolean addBlock(Block aBlock)
+  public boolean addGrid(Block aGrid)
   {
     boolean wasAdded = false;
-    if (blocks.contains(aBlock)) { return false; }
-    Level existingLevel = aBlock.getLevel();
+    if (grid.contains(aGrid)) { return false; }
+    Level existingLevel = aGrid.getLevel();
     boolean isNewLevel = existingLevel != null && !this.equals(existingLevel);
     if (isNewLevel)
     {
-      aBlock.setLevel(this);
+      aGrid.setLevel(this);
     }
     else
     {
-      blocks.add(aBlock);
+      grid.add(aGrid);
     }
     wasAdded = true;
     return wasAdded;
   }
 
-  public boolean removeBlock(Block aBlock)
+  public boolean removeGrid(Block aGrid)
   {
     boolean wasRemoved = false;
-    //Unable to remove aBlock, as it must always have a level
-    if (!this.equals(aBlock.getLevel()))
+    //Unable to remove aGrid, as it must always have a level
+    if (!this.equals(aGrid.getLevel()))
     {
-      blocks.remove(aBlock);
+      grid.remove(aGrid);
       wasRemoved = true;
     }
     return wasRemoved;
   }
   /* Code from template association_AddIndexControlFunctions */
-  public boolean addBlockAt(Block aBlock, int index)
+  public boolean addGridAt(Block aGrid, int index)
   {  
     boolean wasAdded = false;
-    if(addBlock(aBlock))
+    if(addGrid(aGrid))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfBlocks()) { index = numberOfBlocks() - 1; }
-      blocks.remove(aBlock);
-      blocks.add(index, aBlock);
+      if(index > numberOfGrid()) { index = numberOfGrid() - 1; }
+      grid.remove(aGrid);
+      grid.add(index, aGrid);
       wasAdded = true;
     }
     return wasAdded;
   }
 
-  public boolean addOrMoveBlockAt(Block aBlock, int index)
+  public boolean addOrMoveGridAt(Block aGrid, int index)
   {
     boolean wasAdded = false;
-    if(blocks.contains(aBlock))
+    if(grid.contains(aGrid))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfBlocks()) { index = numberOfBlocks() - 1; }
-      blocks.remove(aBlock);
-      blocks.add(index, aBlock);
+      if(index > numberOfGrid()) { index = numberOfGrid() - 1; }
+      grid.remove(aGrid);
+      grid.add(index, aGrid);
       wasAdded = true;
     } 
     else 
     {
-      wasAdded = addBlockAt(aBlock, index);
+      wasAdded = addGridAt(aGrid, index);
     }
     return wasAdded;
   }
@@ -195,10 +195,10 @@ public class Level
 
   public void delete()
   {
-    for(int i=blocks.size(); i > 0; i--)
+    for(int i=grid.size(); i > 0; i--)
     {
-      Block aBlock = blocks.get(i - 1);
-      aBlock.delete();
+      Block aGrid = grid.get(i - 1);
+      aGrid.delete();
     }
     Game placeholderGame = game;
     this.game = null;

@@ -5,34 +5,34 @@ package ca.mcgill.ecse223.block.model;
 
 import java.util.*;
 
-// line 18 "Block223.ump"
-public class PersonRole
+// line 12 "Block223.ump"
+public class UserRole
 {
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
-  //PersonRole Attributes
+  //UserRole Attributes
   private String password;
 
-  //PersonRole Associations
+  //UserRole Associations
   private Block223 block223;
-  private List<Person> persons;
+  private List<User> users;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public PersonRole(String aPassword, Block223 aBlock223)
+  public UserRole(String aPassword, Block223 aBlock223)
   {
     password = aPassword;
     boolean didAddBlock223 = setBlock223(aBlock223);
     if (!didAddBlock223)
     {
-      throw new RuntimeException("Unable to create personRole due to block223");
+      throw new RuntimeException("Unable to create userRole due to block223");
     }
-    persons = new ArrayList<Person>();
+    users = new ArrayList<User>();
   }
 
   //------------------------
@@ -57,33 +57,33 @@ public class PersonRole
     return block223;
   }
   /* Code from template association_GetMany */
-  public Person getPerson(int index)
+  public User getUser(int index)
   {
-    Person aPerson = persons.get(index);
-    return aPerson;
+    User aUser = users.get(index);
+    return aUser;
   }
 
-  public List<Person> getPersons()
+  public List<User> getUsers()
   {
-    List<Person> newPersons = Collections.unmodifiableList(persons);
-    return newPersons;
+    List<User> newUsers = Collections.unmodifiableList(users);
+    return newUsers;
   }
 
-  public int numberOfPersons()
+  public int numberOfUsers()
   {
-    int number = persons.size();
+    int number = users.size();
     return number;
   }
 
-  public boolean hasPersons()
+  public boolean hasUsers()
   {
-    boolean has = persons.size() > 0;
+    boolean has = users.size() > 0;
     return has;
   }
 
-  public int indexOfPerson(Person aPerson)
+  public int indexOfUser(User aUser)
   {
-    int index = persons.indexOf(aPerson);
+    int index = users.indexOf(aUser);
     return index;
   }
   /* Code from template association_SetOneToMany */
@@ -99,91 +99,91 @@ public class PersonRole
     block223 = aBlock223;
     if (existingBlock223 != null && !existingBlock223.equals(aBlock223))
     {
-      existingBlock223.removePersonRole(this);
+      existingBlock223.removeUserRole(this);
     }
-    block223.addPersonRole(this);
+    block223.addUserRole(this);
     wasSet = true;
     return wasSet;
   }
   /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfPersons()
+  public static int minimumNumberOfUsers()
   {
     return 0;
   }
   /* Code from template association_AddManyToManyMethod */
-  public boolean addPerson(Person aPerson)
+  public boolean addUser(User aUser)
   {
     boolean wasAdded = false;
-    if (persons.contains(aPerson)) { return false; }
-    persons.add(aPerson);
-    if (aPerson.indexOfPersonRole(this) != -1)
+    if (users.contains(aUser)) { return false; }
+    users.add(aUser);
+    if (aUser.indexOfUserRole(this) != -1)
     {
       wasAdded = true;
     }
     else
     {
-      wasAdded = aPerson.addPersonRole(this);
+      wasAdded = aUser.addUserRole(this);
       if (!wasAdded)
       {
-        persons.remove(aPerson);
+        users.remove(aUser);
       }
     }
     return wasAdded;
   }
   /* Code from template association_RemoveMany */
-  public boolean removePerson(Person aPerson)
+  public boolean removeUser(User aUser)
   {
     boolean wasRemoved = false;
-    if (!persons.contains(aPerson))
+    if (!users.contains(aUser))
     {
       return wasRemoved;
     }
 
-    int oldIndex = persons.indexOf(aPerson);
-    persons.remove(oldIndex);
-    if (aPerson.indexOfPersonRole(this) == -1)
+    int oldIndex = users.indexOf(aUser);
+    users.remove(oldIndex);
+    if (aUser.indexOfUserRole(this) == -1)
     {
       wasRemoved = true;
     }
     else
     {
-      wasRemoved = aPerson.removePersonRole(this);
+      wasRemoved = aUser.removeUserRole(this);
       if (!wasRemoved)
       {
-        persons.add(oldIndex,aPerson);
+        users.add(oldIndex,aUser);
       }
     }
     return wasRemoved;
   }
   /* Code from template association_AddIndexControlFunctions */
-  public boolean addPersonAt(Person aPerson, int index)
+  public boolean addUserAt(User aUser, int index)
   {  
     boolean wasAdded = false;
-    if(addPerson(aPerson))
+    if(addUser(aUser))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfPersons()) { index = numberOfPersons() - 1; }
-      persons.remove(aPerson);
-      persons.add(index, aPerson);
+      if(index > numberOfUsers()) { index = numberOfUsers() - 1; }
+      users.remove(aUser);
+      users.add(index, aUser);
       wasAdded = true;
     }
     return wasAdded;
   }
 
-  public boolean addOrMovePersonAt(Person aPerson, int index)
+  public boolean addOrMoveUserAt(User aUser, int index)
   {
     boolean wasAdded = false;
-    if(persons.contains(aPerson))
+    if(users.contains(aUser))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfPersons()) { index = numberOfPersons() - 1; }
-      persons.remove(aPerson);
-      persons.add(index, aPerson);
+      if(index > numberOfUsers()) { index = numberOfUsers() - 1; }
+      users.remove(aUser);
+      users.add(index, aUser);
       wasAdded = true;
     } 
     else 
     {
-      wasAdded = addPersonAt(aPerson, index);
+      wasAdded = addUserAt(aUser, index);
     }
     return wasAdded;
   }
@@ -194,19 +194,19 @@ public class PersonRole
     this.block223 = null;
     if(placeholderBlock223 != null)
     {
-      placeholderBlock223.removePersonRole(this);
+      placeholderBlock223.removeUserRole(this);
     }
-    ArrayList<Person> copyOfPersons = new ArrayList<Person>(persons);
-    persons.clear();
-    for(Person aPerson : copyOfPersons)
+    ArrayList<User> copyOfUsers = new ArrayList<User>(users);
+    users.clear();
+    for(User aUser : copyOfUsers)
     {
-      if (aPerson.numberOfPersonRoles() <= Person.minimumNumberOfPersonRoles())
+      if (aUser.numberOfUserRoles() <= User.minimumNumberOfUserRoles())
       {
-        aPerson.delete();
+        aUser.delete();
       }
       else
       {
-        aPerson.removePersonRole(this);
+        aUser.removeUserRole(this);
       }
     }
   }

@@ -4,7 +4,7 @@ package ca.mcgill.ecse223.block.model;
 
 
 
-// line 74 "Block223.ump"
+// line 64 "Block223.ump"
 public class Paddle
 {
 
@@ -34,11 +34,11 @@ public class Paddle
     game = aGame;
   }
 
-  public Paddle(int aLength, String aNameForGame, int aMinSpeedForGame, int aMaxSpeedForGame, int aMinLengthForGame, int aMaxLengthForGame, float aSpeedFactorForGame, int aHeightForGame, int aWidthForGame, int aNumLevelsForGame, Admin aAdminForGame, Ball aBallForGame, HallOfFame aHallOfFameForGame, Block223 aBlock223ForGame)
+  public Paddle(int aLength, String aNameForGame, int aMinSpeedForGame, int aMaxSpeedForGame, int aMinLengthForGame, int aMaxLengthForGame, float aSpeedFactorForGame, int aHeightForGame, int aWidthForGame, User aUserForGame, Ball aBallForGame, HallOfFame aHallOfFameForGame, Block223 aBlock223ForGame)
   {
     length = aLength;
     width = 5;
-    game = new Game(aNameForGame, aMinSpeedForGame, aMaxSpeedForGame, aMinLengthForGame, aMaxLengthForGame, aSpeedFactorForGame, aHeightForGame, aWidthForGame, aNumLevelsForGame, aAdminForGame, aBallForGame, this, aHallOfFameForGame, aBlock223ForGame);
+    game = new Game(aNameForGame, aMinSpeedForGame, aMaxSpeedForGame, aMinLengthForGame, aMaxLengthForGame, aSpeedFactorForGame, aHeightForGame, aWidthForGame, aUserForGame, aBallForGame, this, aHallOfFameForGame, aBlock223ForGame);
   }
 
   //------------------------

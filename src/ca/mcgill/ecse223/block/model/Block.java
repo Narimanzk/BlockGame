@@ -4,7 +4,7 @@ package ca.mcgill.ecse223.block.model;
 
 
 
-// line 68 "Block223.ump"
+// line 58 "Block223.ump"
 public class Block
 {
 
@@ -42,7 +42,7 @@ public class Block
     boolean didAddLevel = setLevel(aLevel);
     if (!didAddLevel)
     {
-      throw new RuntimeException("Unable to create block due to level");
+      throw new RuntimeException("Unable to create grid due to level");
     }
   }
 
@@ -141,9 +141,9 @@ public class Block
     level = aLevel;
     if (existingLevel != null && !existingLevel.equals(aLevel))
     {
-      existingLevel.removeBlock(this);
+      existingLevel.removeGrid(this);
     }
-    level.addBlock(this);
+    level.addGrid(this);
     wasSet = true;
     return wasSet;
   }
@@ -166,7 +166,7 @@ public class Block
     this.level = null;
     if(placeholderLevel != null)
     {
-      placeholderLevel.removeBlock(this);
+      placeholderLevel.removeGrid(this);
     }
   }
 

@@ -5,7 +5,7 @@ package ca.mcgill.ecse223.block.model;
 
 import java.util.*;
 
-// line 79 "Block223.ump"
+// line 69 "Block223.ump"
 public class HallOfFame
 {
 
@@ -17,7 +17,7 @@ public class HallOfFame
   private String name;
 
   //HallOfFame Associations
-  private List<Player> players;
+  private List<User> users;
   private Game game;
 
   //------------------------
@@ -27,7 +27,7 @@ public class HallOfFame
   public HallOfFame(String aName, Game aGame)
   {
     name = aName;
-    players = new ArrayList<Player>();
+    users = new ArrayList<User>();
     if (aGame == null || aGame.getHallOfFame() != null)
     {
       throw new RuntimeException("Unable to create HallOfFame due to aGame");
@@ -35,11 +35,11 @@ public class HallOfFame
     game = aGame;
   }
 
-  public HallOfFame(String aName, String aNameForGame, int aMinSpeedForGame, int aMaxSpeedForGame, int aMinLengthForGame, int aMaxLengthForGame, float aSpeedFactorForGame, int aHeightForGame, int aWidthForGame, int aNumLevelsForGame, Admin aAdminForGame, Ball aBallForGame, Paddle aPaddleForGame, Block223 aBlock223ForGame)
+  public HallOfFame(String aName, String aNameForGame, int aMinSpeedForGame, int aMaxSpeedForGame, int aMinLengthForGame, int aMaxLengthForGame, float aSpeedFactorForGame, int aHeightForGame, int aWidthForGame, User aUserForGame, Ball aBallForGame, Paddle aPaddleForGame, Block223 aBlock223ForGame)
   {
     name = aName;
-    players = new ArrayList<Player>();
-    game = new Game(aNameForGame, aMinSpeedForGame, aMaxSpeedForGame, aMinLengthForGame, aMaxLengthForGame, aSpeedFactorForGame, aHeightForGame, aWidthForGame, aNumLevelsForGame, aAdminForGame, aBallForGame, aPaddleForGame, this, aBlock223ForGame);
+    users = new ArrayList<User>();
+    game = new Game(aNameForGame, aMinSpeedForGame, aMaxSpeedForGame, aMinLengthForGame, aMaxLengthForGame, aSpeedFactorForGame, aHeightForGame, aWidthForGame, aUserForGame, aBallForGame, aPaddleForGame, this, aBlock223ForGame);
   }
 
   //------------------------
@@ -59,33 +59,33 @@ public class HallOfFame
     return name;
   }
   /* Code from template association_GetMany */
-  public Player getPlayer(int index)
+  public User getUser(int index)
   {
-    Player aPlayer = players.get(index);
-    return aPlayer;
+    User aUser = users.get(index);
+    return aUser;
   }
 
-  public List<Player> getPlayers()
+  public List<User> getUsers()
   {
-    List<Player> newPlayers = Collections.unmodifiableList(players);
-    return newPlayers;
+    List<User> newUsers = Collections.unmodifiableList(users);
+    return newUsers;
   }
 
-  public int numberOfPlayers()
+  public int numberOfUsers()
   {
-    int number = players.size();
+    int number = users.size();
     return number;
   }
 
-  public boolean hasPlayers()
+  public boolean hasUsers()
   {
-    boolean has = players.size() > 0;
+    boolean has = users.size() > 0;
     return has;
   }
 
-  public int indexOfPlayer(Player aPlayer)
+  public int indexOfUser(User aUser)
   {
-    int index = players.indexOf(aPlayer);
+    int index = users.indexOf(aUser);
     return index;
   }
   /* Code from template association_GetOne */
@@ -94,95 +94,95 @@ public class HallOfFame
     return game;
   }
   /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfPlayers()
+  public static int minimumNumberOfUsers()
   {
     return 0;
   }
   /* Code from template association_AddManyToManyMethod */
-  public boolean addPlayer(Player aPlayer)
+  public boolean addUser(User aUser)
   {
     boolean wasAdded = false;
-    if (players.contains(aPlayer)) { return false; }
-    players.add(aPlayer);
-    if (aPlayer.indexOfHallOfFame(this) != -1)
+    if (users.contains(aUser)) { return false; }
+    users.add(aUser);
+    if (aUser.indexOfHallOfFame(this) != -1)
     {
       wasAdded = true;
     }
     else
     {
-      wasAdded = aPlayer.addHallOfFame(this);
+      wasAdded = aUser.addHallOfFame(this);
       if (!wasAdded)
       {
-        players.remove(aPlayer);
+        users.remove(aUser);
       }
     }
     return wasAdded;
   }
   /* Code from template association_RemoveMany */
-  public boolean removePlayer(Player aPlayer)
+  public boolean removeUser(User aUser)
   {
     boolean wasRemoved = false;
-    if (!players.contains(aPlayer))
+    if (!users.contains(aUser))
     {
       return wasRemoved;
     }
 
-    int oldIndex = players.indexOf(aPlayer);
-    players.remove(oldIndex);
-    if (aPlayer.indexOfHallOfFame(this) == -1)
+    int oldIndex = users.indexOf(aUser);
+    users.remove(oldIndex);
+    if (aUser.indexOfHallOfFame(this) == -1)
     {
       wasRemoved = true;
     }
     else
     {
-      wasRemoved = aPlayer.removeHallOfFame(this);
+      wasRemoved = aUser.removeHallOfFame(this);
       if (!wasRemoved)
       {
-        players.add(oldIndex,aPlayer);
+        users.add(oldIndex,aUser);
       }
     }
     return wasRemoved;
   }
   /* Code from template association_AddIndexControlFunctions */
-  public boolean addPlayerAt(Player aPlayer, int index)
+  public boolean addUserAt(User aUser, int index)
   {  
     boolean wasAdded = false;
-    if(addPlayer(aPlayer))
+    if(addUser(aUser))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfPlayers()) { index = numberOfPlayers() - 1; }
-      players.remove(aPlayer);
-      players.add(index, aPlayer);
+      if(index > numberOfUsers()) { index = numberOfUsers() - 1; }
+      users.remove(aUser);
+      users.add(index, aUser);
       wasAdded = true;
     }
     return wasAdded;
   }
 
-  public boolean addOrMovePlayerAt(Player aPlayer, int index)
+  public boolean addOrMoveUserAt(User aUser, int index)
   {
     boolean wasAdded = false;
-    if(players.contains(aPlayer))
+    if(users.contains(aUser))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfPlayers()) { index = numberOfPlayers() - 1; }
-      players.remove(aPlayer);
-      players.add(index, aPlayer);
+      if(index > numberOfUsers()) { index = numberOfUsers() - 1; }
+      users.remove(aUser);
+      users.add(index, aUser);
       wasAdded = true;
     } 
     else 
     {
-      wasAdded = addPlayerAt(aPlayer, index);
+      wasAdded = addUserAt(aUser, index);
     }
     return wasAdded;
   }
 
   public void delete()
   {
-    ArrayList<Player> copyOfPlayers = new ArrayList<Player>(players);
-    players.clear();
-    for(Player aPlayer : copyOfPlayers)
+    ArrayList<User> copyOfUsers = new ArrayList<User>(users);
+    users.clear();
+    for(User aUser : copyOfUsers)
     {
-      aPlayer.removeHallOfFame(this);
+      aUser.removeHallOfFame(this);
     }
     Game existingGame = game;
     game = null;

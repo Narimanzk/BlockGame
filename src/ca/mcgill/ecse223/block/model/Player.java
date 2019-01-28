@@ -5,8 +5,8 @@ package ca.mcgill.ecse223.block.model;
 
 import java.util.*;
 
-// line 23 "Block223.ump"
-public class Player extends PersonRole
+// line 17 "Block223.ump"
+public class Player extends UserRole
 {
 
   //------------------------
@@ -17,9 +17,6 @@ public class Player extends PersonRole
   private int points;
   private int lives;
 
-  //Player Associations
-  private List<HallOfFame> hallOfFames;
-
   //------------------------
   // CONSTRUCTOR
   //------------------------
@@ -29,7 +26,6 @@ public class Player extends PersonRole
     super(aPassword, aBlock223);
     points = aPoints;
     lives = aLives;
-    hallOfFames = new ArrayList<HallOfFame>();
   }
 
   //------------------------
@@ -61,127 +57,9 @@ public class Player extends PersonRole
   {
     return lives;
   }
-  /* Code from template association_GetMany */
-  public HallOfFame getHallOfFame(int index)
-  {
-    HallOfFame aHallOfFame = hallOfFames.get(index);
-    return aHallOfFame;
-  }
-
-  public List<HallOfFame> getHallOfFames()
-  {
-    List<HallOfFame> newHallOfFames = Collections.unmodifiableList(hallOfFames);
-    return newHallOfFames;
-  }
-
-  public int numberOfHallOfFames()
-  {
-    int number = hallOfFames.size();
-    return number;
-  }
-
-  public boolean hasHallOfFames()
-  {
-    boolean has = hallOfFames.size() > 0;
-    return has;
-  }
-
-  public int indexOfHallOfFame(HallOfFame aHallOfFame)
-  {
-    int index = hallOfFames.indexOf(aHallOfFame);
-    return index;
-  }
-  /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfHallOfFames()
-  {
-    return 0;
-  }
-  /* Code from template association_AddManyToManyMethod */
-  public boolean addHallOfFame(HallOfFame aHallOfFame)
-  {
-    boolean wasAdded = false;
-    if (hallOfFames.contains(aHallOfFame)) { return false; }
-    hallOfFames.add(aHallOfFame);
-    if (aHallOfFame.indexOfPlayer(this) != -1)
-    {
-      wasAdded = true;
-    }
-    else
-    {
-      wasAdded = aHallOfFame.addPlayer(this);
-      if (!wasAdded)
-      {
-        hallOfFames.remove(aHallOfFame);
-      }
-    }
-    return wasAdded;
-  }
-  /* Code from template association_RemoveMany */
-  public boolean removeHallOfFame(HallOfFame aHallOfFame)
-  {
-    boolean wasRemoved = false;
-    if (!hallOfFames.contains(aHallOfFame))
-    {
-      return wasRemoved;
-    }
-
-    int oldIndex = hallOfFames.indexOf(aHallOfFame);
-    hallOfFames.remove(oldIndex);
-    if (aHallOfFame.indexOfPlayer(this) == -1)
-    {
-      wasRemoved = true;
-    }
-    else
-    {
-      wasRemoved = aHallOfFame.removePlayer(this);
-      if (!wasRemoved)
-      {
-        hallOfFames.add(oldIndex,aHallOfFame);
-      }
-    }
-    return wasRemoved;
-  }
-  /* Code from template association_AddIndexControlFunctions */
-  public boolean addHallOfFameAt(HallOfFame aHallOfFame, int index)
-  {  
-    boolean wasAdded = false;
-    if(addHallOfFame(aHallOfFame))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfHallOfFames()) { index = numberOfHallOfFames() - 1; }
-      hallOfFames.remove(aHallOfFame);
-      hallOfFames.add(index, aHallOfFame);
-      wasAdded = true;
-    }
-    return wasAdded;
-  }
-
-  public boolean addOrMoveHallOfFameAt(HallOfFame aHallOfFame, int index)
-  {
-    boolean wasAdded = false;
-    if(hallOfFames.contains(aHallOfFame))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfHallOfFames()) { index = numberOfHallOfFames() - 1; }
-      hallOfFames.remove(aHallOfFame);
-      hallOfFames.add(index, aHallOfFame);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addHallOfFameAt(aHallOfFame, index);
-    }
-    return wasAdded;
-  }
 
   public void delete()
   {
-    ArrayList<HallOfFame> copyOfHallOfFames = new ArrayList<HallOfFame>(hallOfFames);
-    hallOfFames.clear();
-    for(HallOfFame aHallOfFame : copyOfHallOfFames)
-    {
-      aHallOfFame.removePlayer(this);
-    }
     super.delete();
   }
 

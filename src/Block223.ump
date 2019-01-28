@@ -1,33 +1,27 @@
 class Block223{
-    1 <@>-* Person;
-    //1 <@>-* HallOfFame;
-    //1 <@>-* Ball;
-    //1 <@>-* BlockType;
-    //1 <@>-* Block;
-    //1 <@>-* Paddle;
+    1 <@>-* User;
     1 <@>-* Game;
-    //1 <@>-* Level;
-    1 <@>-* PersonRole;
+    1 <@>-* UserRole;
 }
 
-class Person{
-    String name;
- * -- 1..2 PersonRole;
+class User{
+ String name;
+ * -- 1..2 UserRole;
 }
 
-class PersonRole{
+class UserRole{
   String password;
 
 }
 
 class Player{
-  isA PersonRole;
+  isA UserRole;
    int points;
    int lives;
 }
 
 class Admin{
-  isA PersonRole;
+  isA UserRole;
 }
 
 class Game{
@@ -37,14 +31,9 @@ class Game{
   int minLength;
   int maxLength;
   float speedFactor;
-  //int minHeight = 200;
-  //int minWidth = 200;
-  //int maxHeight = 500;
-  //int maxWidth = 500;
   int height;
   int width;
-  int numLevels;
-  * -- 1 Admin;
+  * -- 1 User;
   1 <@>- * BlockType;
   1 <@>- * Block;
   1 <@>- * Level;
@@ -54,8 +43,9 @@ class Game{
 }
 
 class Ball{
-  int currentSpeed;
+  float currentSpeed;
   int diameter = 10;
+  float degrees;
 }
 
 class BlockType{
@@ -72,18 +62,18 @@ class Block{
 }
 
 class Paddle{
-   int length;
+  int length;
   int width = 5;
 }
 
 class HallOfFame{
-  * -- * Player;
+  * -- * User;
   String name;
 }
 
 class Level{
   int number;
   boolean isRandom;
-  1 -- * Block;
+  1 -- * Block grid;
 }
   

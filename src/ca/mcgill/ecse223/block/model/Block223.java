@@ -14,9 +14,9 @@ public class Block223
   //------------------------
 
   //Block223 Associations
-  private List<Person> persons;
+  private List<User> users;
   private List<Game> games;
-  private List<PersonRole> personRoles;
+  private List<UserRole> userRoles;
 
   //------------------------
   // CONSTRUCTOR
@@ -24,42 +24,42 @@ public class Block223
 
   public Block223()
   {
-    persons = new ArrayList<Person>();
+    users = new ArrayList<User>();
     games = new ArrayList<Game>();
-    personRoles = new ArrayList<PersonRole>();
+    userRoles = new ArrayList<UserRole>();
   }
 
   //------------------------
   // INTERFACE
   //------------------------
   /* Code from template association_GetMany */
-  public Person getPerson(int index)
+  public User getUser(int index)
   {
-    Person aPerson = persons.get(index);
-    return aPerson;
+    User aUser = users.get(index);
+    return aUser;
   }
 
-  public List<Person> getPersons()
+  public List<User> getUsers()
   {
-    List<Person> newPersons = Collections.unmodifiableList(persons);
-    return newPersons;
+    List<User> newUsers = Collections.unmodifiableList(users);
+    return newUsers;
   }
 
-  public int numberOfPersons()
+  public int numberOfUsers()
   {
-    int number = persons.size();
+    int number = users.size();
     return number;
   }
 
-  public boolean hasPersons()
+  public boolean hasUsers()
   {
-    boolean has = persons.size() > 0;
+    boolean has = users.size() > 0;
     return has;
   }
 
-  public int indexOfPerson(Person aPerson)
+  public int indexOfUser(User aUser)
   {
-    int index = persons.indexOf(aPerson);
+    int index = users.indexOf(aUser);
     return index;
   }
   /* Code from template association_GetMany */
@@ -69,13 +69,6 @@ public class Block223
     return aGame;
   }
 
-  /**
-   * 1 <@>-* HallOfFame;
-   * 1 <@>-* Ball;
-   * 1 <@>-* BlockType;
-   * 1 <@>-* Block;
-   * 1 <@>-* Paddle;
-   */
   public List<Game> getGames()
   {
     List<Game> newGames = Collections.unmodifiableList(games);
@@ -100,107 +93,104 @@ public class Block223
     return index;
   }
   /* Code from template association_GetMany */
-  public PersonRole getPersonRole(int index)
+  public UserRole getUserRole(int index)
   {
-    PersonRole aPersonRole = personRoles.get(index);
-    return aPersonRole;
+    UserRole aUserRole = userRoles.get(index);
+    return aUserRole;
   }
 
-  /**
-   * 1 <@>-* Level;
-   */
-  public List<PersonRole> getPersonRoles()
+  public List<UserRole> getUserRoles()
   {
-    List<PersonRole> newPersonRoles = Collections.unmodifiableList(personRoles);
-    return newPersonRoles;
+    List<UserRole> newUserRoles = Collections.unmodifiableList(userRoles);
+    return newUserRoles;
   }
 
-  public int numberOfPersonRoles()
+  public int numberOfUserRoles()
   {
-    int number = personRoles.size();
+    int number = userRoles.size();
     return number;
   }
 
-  public boolean hasPersonRoles()
+  public boolean hasUserRoles()
   {
-    boolean has = personRoles.size() > 0;
+    boolean has = userRoles.size() > 0;
     return has;
   }
 
-  public int indexOfPersonRole(PersonRole aPersonRole)
+  public int indexOfUserRole(UserRole aUserRole)
   {
-    int index = personRoles.indexOf(aPersonRole);
+    int index = userRoles.indexOf(aUserRole);
     return index;
   }
   /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfPersons()
+  public static int minimumNumberOfUsers()
   {
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Person addPerson(String aName, PersonRole... allPersonRoles)
+  public User addUser(String aName, UserRole... allUserRoles)
   {
-    return new Person(aName, this, allPersonRoles);
+    return new User(aName, this, allUserRoles);
   }
 
-  public boolean addPerson(Person aPerson)
+  public boolean addUser(User aUser)
   {
     boolean wasAdded = false;
-    if (persons.contains(aPerson)) { return false; }
-    Block223 existingBlock223 = aPerson.getBlock223();
+    if (users.contains(aUser)) { return false; }
+    Block223 existingBlock223 = aUser.getBlock223();
     boolean isNewBlock223 = existingBlock223 != null && !this.equals(existingBlock223);
     if (isNewBlock223)
     {
-      aPerson.setBlock223(this);
+      aUser.setBlock223(this);
     }
     else
     {
-      persons.add(aPerson);
+      users.add(aUser);
     }
     wasAdded = true;
     return wasAdded;
   }
 
-  public boolean removePerson(Person aPerson)
+  public boolean removeUser(User aUser)
   {
     boolean wasRemoved = false;
-    //Unable to remove aPerson, as it must always have a block223
-    if (!this.equals(aPerson.getBlock223()))
+    //Unable to remove aUser, as it must always have a block223
+    if (!this.equals(aUser.getBlock223()))
     {
-      persons.remove(aPerson);
+      users.remove(aUser);
       wasRemoved = true;
     }
     return wasRemoved;
   }
   /* Code from template association_AddIndexControlFunctions */
-  public boolean addPersonAt(Person aPerson, int index)
+  public boolean addUserAt(User aUser, int index)
   {  
     boolean wasAdded = false;
-    if(addPerson(aPerson))
+    if(addUser(aUser))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfPersons()) { index = numberOfPersons() - 1; }
-      persons.remove(aPerson);
-      persons.add(index, aPerson);
+      if(index > numberOfUsers()) { index = numberOfUsers() - 1; }
+      users.remove(aUser);
+      users.add(index, aUser);
       wasAdded = true;
     }
     return wasAdded;
   }
 
-  public boolean addOrMovePersonAt(Person aPerson, int index)
+  public boolean addOrMoveUserAt(User aUser, int index)
   {
     boolean wasAdded = false;
-    if(persons.contains(aPerson))
+    if(users.contains(aUser))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfPersons()) { index = numberOfPersons() - 1; }
-      persons.remove(aPerson);
-      persons.add(index, aPerson);
+      if(index > numberOfUsers()) { index = numberOfUsers() - 1; }
+      users.remove(aUser);
+      users.add(index, aUser);
       wasAdded = true;
     } 
     else 
     {
-      wasAdded = addPersonAt(aPerson, index);
+      wasAdded = addUserAt(aUser, index);
     }
     return wasAdded;
   }
@@ -210,9 +200,9 @@ public class Block223
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Game addGame(String aName, int aMinSpeed, int aMaxSpeed, int aMinLength, int aMaxLength, float aSpeedFactor, int aHeight, int aWidth, int aNumLevels, Admin aAdmin, Ball aBall, Paddle aPaddle, HallOfFame aHallOfFame)
+  public Game addGame(String aName, int aMinSpeed, int aMaxSpeed, int aMinLength, int aMaxLength, float aSpeedFactor, int aHeight, int aWidth, User aUser, Ball aBall, Paddle aPaddle, HallOfFame aHallOfFame)
   {
-    return new Game(aName, aMinSpeed, aMaxSpeed, aMinLength, aMaxLength, aSpeedFactor, aHeight, aWidth, aNumLevels, aAdmin, aBall, aPaddle, aHallOfFame, this);
+    return new Game(aName, aMinSpeed, aMaxSpeed, aMinLength, aMaxLength, aSpeedFactor, aHeight, aWidth, aUser, aBall, aPaddle, aHallOfFame, this);
   }
 
   public boolean addGame(Game aGame)
@@ -277,85 +267,85 @@ public class Block223
     return wasAdded;
   }
   /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfPersonRoles()
+  public static int minimumNumberOfUserRoles()
   {
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public PersonRole addPersonRole(String aPassword)
+  public UserRole addUserRole(String aPassword)
   {
-    return new PersonRole(aPassword, this);
+    return new UserRole(aPassword, this);
   }
 
-  public boolean addPersonRole(PersonRole aPersonRole)
+  public boolean addUserRole(UserRole aUserRole)
   {
     boolean wasAdded = false;
-    if (personRoles.contains(aPersonRole)) { return false; }
-    Block223 existingBlock223 = aPersonRole.getBlock223();
+    if (userRoles.contains(aUserRole)) { return false; }
+    Block223 existingBlock223 = aUserRole.getBlock223();
     boolean isNewBlock223 = existingBlock223 != null && !this.equals(existingBlock223);
     if (isNewBlock223)
     {
-      aPersonRole.setBlock223(this);
+      aUserRole.setBlock223(this);
     }
     else
     {
-      personRoles.add(aPersonRole);
+      userRoles.add(aUserRole);
     }
     wasAdded = true;
     return wasAdded;
   }
 
-  public boolean removePersonRole(PersonRole aPersonRole)
+  public boolean removeUserRole(UserRole aUserRole)
   {
     boolean wasRemoved = false;
-    //Unable to remove aPersonRole, as it must always have a block223
-    if (!this.equals(aPersonRole.getBlock223()))
+    //Unable to remove aUserRole, as it must always have a block223
+    if (!this.equals(aUserRole.getBlock223()))
     {
-      personRoles.remove(aPersonRole);
+      userRoles.remove(aUserRole);
       wasRemoved = true;
     }
     return wasRemoved;
   }
   /* Code from template association_AddIndexControlFunctions */
-  public boolean addPersonRoleAt(PersonRole aPersonRole, int index)
+  public boolean addUserRoleAt(UserRole aUserRole, int index)
   {  
     boolean wasAdded = false;
-    if(addPersonRole(aPersonRole))
+    if(addUserRole(aUserRole))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfPersonRoles()) { index = numberOfPersonRoles() - 1; }
-      personRoles.remove(aPersonRole);
-      personRoles.add(index, aPersonRole);
+      if(index > numberOfUserRoles()) { index = numberOfUserRoles() - 1; }
+      userRoles.remove(aUserRole);
+      userRoles.add(index, aUserRole);
       wasAdded = true;
     }
     return wasAdded;
   }
 
-  public boolean addOrMovePersonRoleAt(PersonRole aPersonRole, int index)
+  public boolean addOrMoveUserRoleAt(UserRole aUserRole, int index)
   {
     boolean wasAdded = false;
-    if(personRoles.contains(aPersonRole))
+    if(userRoles.contains(aUserRole))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfPersonRoles()) { index = numberOfPersonRoles() - 1; }
-      personRoles.remove(aPersonRole);
-      personRoles.add(index, aPersonRole);
+      if(index > numberOfUserRoles()) { index = numberOfUserRoles() - 1; }
+      userRoles.remove(aUserRole);
+      userRoles.add(index, aUserRole);
       wasAdded = true;
     } 
     else 
     {
-      wasAdded = addPersonRoleAt(aPersonRole, index);
+      wasAdded = addUserRoleAt(aUserRole, index);
     }
     return wasAdded;
   }
 
   public void delete()
   {
-    while (persons.size() > 0)
+    while (users.size() > 0)
     {
-      Person aPerson = persons.get(persons.size() - 1);
-      aPerson.delete();
-      persons.remove(aPerson);
+      User aUser = users.get(users.size() - 1);
+      aUser.delete();
+      users.remove(aUser);
     }
     
     while (games.size() > 0)
@@ -365,11 +355,11 @@ public class Block223
       games.remove(aGame);
     }
     
-    while (personRoles.size() > 0)
+    while (userRoles.size() > 0)
     {
-      PersonRole aPersonRole = personRoles.get(personRoles.size() - 1);
-      aPersonRole.delete();
-      personRoles.remove(aPersonRole);
+      UserRole aUserRole = userRoles.get(userRoles.size() - 1);
+      aUserRole.delete();
+      userRoles.remove(aUserRole);
     }
     
   }
