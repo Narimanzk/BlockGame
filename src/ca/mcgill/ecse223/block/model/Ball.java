@@ -27,7 +27,7 @@ public class Ball
   public Ball(float aCurrentSpeed, float aDegrees, Game aGame)
   {
     currentSpeed = aCurrentSpeed;
-    resetDiameter();
+    diameter = 10;
     degrees = aDegrees;
     if (aGame == null || aGame.getBall() != null)
     {
@@ -39,7 +39,7 @@ public class Ball
   public Ball(float aCurrentSpeed, float aDegrees, String aNameForGame, int aMinSpeedForGame, int aMaxSpeedForGame, int aMinLengthForGame, int aMaxLengthForGame, float aSpeedFactorForGame, int aHeightForGame, int aWidthForGame, User aUserForGame, Paddle aPaddleForGame, HallOfFame aHallOfFameForGame, Block223 aBlock223ForGame)
   {
     currentSpeed = aCurrentSpeed;
-    resetDiameter();
+    diameter = 10;
     degrees = aDegrees;
     game = new Game(aNameForGame, aMinSpeedForGame, aMaxSpeedForGame, aMinLengthForGame, aMaxLengthForGame, aSpeedFactorForGame, aHeightForGame, aWidthForGame, aUserForGame, this, aPaddleForGame, aHallOfFameForGame, aBlock223ForGame);
   }
@@ -55,21 +55,13 @@ public class Ball
     wasSet = true;
     return wasSet;
   }
-  /* Code from template attribute_SetDefaulted */
+
   public boolean setDiameter(int aDiameter)
   {
     boolean wasSet = false;
     diameter = aDiameter;
     wasSet = true;
     return wasSet;
-  }
-
-  public boolean resetDiameter()
-  {
-    boolean wasReset = false;
-    diameter = getDefaultDiameter();
-    wasReset = true;
-    return wasReset;
   }
 
   public boolean setDegrees(float aDegrees)
@@ -88,11 +80,6 @@ public class Ball
   public int getDiameter()
   {
     return diameter;
-  }
-  /* Code from template attribute_GetDefaulted */
-  public int getDefaultDiameter()
-  {
-    return 10;
   }
 
   public float getDegrees()

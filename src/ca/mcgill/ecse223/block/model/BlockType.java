@@ -30,7 +30,7 @@ public class BlockType
   {
     points = aPoints;
     colour = aColour;
-    resetSideLength();
+    sideLength = 20;
     blocks = new ArrayList<Block>();
     boolean didAddGame = setGame(aGame);
     if (!didAddGame)
@@ -58,21 +58,13 @@ public class BlockType
     wasSet = true;
     return wasSet;
   }
-  /* Code from template attribute_SetDefaulted */
+
   public boolean setSideLength(int aSideLength)
   {
     boolean wasSet = false;
     sideLength = aSideLength;
     wasSet = true;
     return wasSet;
-  }
-
-  public boolean resetSideLength()
-  {
-    boolean wasReset = false;
-    sideLength = getDefaultSideLength();
-    wasReset = true;
-    return wasReset;
   }
 
   public int getPoints()
@@ -91,11 +83,6 @@ public class BlockType
   public int getSideLength()
   {
     return sideLength;
-  }
-  /* Code from template attribute_GetDefaulted */
-  public int getDefaultSideLength()
-  {
-    return 20;
   }
   /* Code from template association_GetMany */
   public Block getBlock(int index)

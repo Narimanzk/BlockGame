@@ -5,7 +5,7 @@ class Block223{
 }
 
 class User{
- String name;
+ unique String name;
  * -- 1..2 UserRole;
 }
 

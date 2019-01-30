@@ -10,6 +10,12 @@ public class User
 {
 
   //------------------------
+  // STATIC VARIABLES
+  //------------------------
+
+  private static Map<String, User> usersByName = new HashMap<String, User>();
+
+  //------------------------
   // MEMBER VARIABLES
   //------------------------
 
@@ -28,7 +34,10 @@ public class User
 
   public User(String aName, Block223 aBlock223, UserRole... allUserRoles)
   {
-    name = aName;
+    if (!setName(aName))
+    {
+      throw new RuntimeException("Cannot create due to duplicate name");
+    }
     userRoles = new ArrayList<UserRole>();
     boolean didAddUserRoles = setUserRoles(allUserRoles);
     if (!didAddUserRoles)
@@ -51,14 +60,32 @@ public class User
   public boolean setName(String aName)
   {
     boolean wasSet = false;
+    String anOldName = getName();
+    if (hasWithName(aName)) {
+      return wasSet;
+    }
     name = aName;
     wasSet = true;
+    if (anOldName != null) {
+      usersByName.remove(anOldName);
+    }
+    usersByName.put(aName, this);
     return wasSet;
   }
 
   public String getName()
   {
     return name;
+  }
+  /* Code from template attribute_GetUnique */
+  public static User getWithName(String aName)
+  {
+    return usersByName.get(aName);
+  }
+  /* Code from template attribute_HasUnique */
+  public static boolean hasWithName(String aName)
+  {
+    return getWithName(aName) != null;
   }
   /* Code from template association_GetMany */
   public UserRole getUserRole(int index)
@@ -475,6 +502,7 @@ public class User
 
   public void delete()
   {
+    usersByName.remove(getName());
     ArrayList<UserRole> copyOfUserRoles = new ArrayList<UserRole>(userRoles);
     userRoles.clear();
     for(UserRole aUserRole : copyOfUserRoles)
