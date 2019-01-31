@@ -1,11 +1,10 @@
-package ca.mcgill.ecse223.block.model;
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.29.0.4181.a593105a9 modeling language!*/
 
-
+package ca.mcgill.ecse223.block.model;
 import java.util.*;
 
-// line 1 "Block223.ump"
+// line 3 "../../../../../Block223.ump"
 public class Block223
 {
 
@@ -15,8 +14,8 @@ public class Block223
 
   //Block223 Associations
   private List<User> users;
+  private List<UserRole> roles;
   private List<Game> games;
-  private List<UserRole> userRoles;
 
   //------------------------
   // CONSTRUCTOR
@@ -25,8 +24,8 @@ public class Block223
   public Block223()
   {
     users = new ArrayList<User>();
+    roles = new ArrayList<UserRole>();
     games = new ArrayList<Game>();
-    userRoles = new ArrayList<UserRole>();
   }
 
   //------------------------
@@ -63,6 +62,36 @@ public class Block223
     return index;
   }
   /* Code from template association_GetMany */
+  public UserRole getRole(int index)
+  {
+    UserRole aRole = roles.get(index);
+    return aRole;
+  }
+
+  public List<UserRole> getRoles()
+  {
+    List<UserRole> newRoles = Collections.unmodifiableList(roles);
+    return newRoles;
+  }
+
+  public int numberOfRoles()
+  {
+    int number = roles.size();
+    return number;
+  }
+
+  public boolean hasRoles()
+  {
+    boolean has = roles.size() > 0;
+    return has;
+  }
+
+  public int indexOfRole(UserRole aRole)
+  {
+    int index = roles.indexOf(aRole);
+    return index;
+  }
+  /* Code from template association_GetMany */
   public Game getGame(int index)
   {
     Game aGame = games.get(index);
@@ -92,45 +121,15 @@ public class Block223
     int index = games.indexOf(aGame);
     return index;
   }
-  /* Code from template association_GetMany */
-  public UserRole getUserRole(int index)
-  {
-    UserRole aUserRole = userRoles.get(index);
-    return aUserRole;
-  }
-
-  public List<UserRole> getUserRoles()
-  {
-    List<UserRole> newUserRoles = Collections.unmodifiableList(userRoles);
-    return newUserRoles;
-  }
-
-  public int numberOfUserRoles()
-  {
-    int number = userRoles.size();
-    return number;
-  }
-
-  public boolean hasUserRoles()
-  {
-    boolean has = userRoles.size() > 0;
-    return has;
-  }
-
-  public int indexOfUserRole(UserRole aUserRole)
-  {
-    int index = userRoles.indexOf(aUserRole);
-    return index;
-  }
   /* Code from template association_MinimumNumberOfMethod */
   public static int minimumNumberOfUsers()
   {
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public User addUser(String aName, UserRole... allUserRoles)
+  public User addUser(String aUsername, UserRole... allRoles)
   {
-    return new User(aName, this, allUserRoles);
+    return new User(aUsername, this, allRoles);
   }
 
   public boolean addUser(User aUser)
@@ -195,14 +194,83 @@ public class Block223
     return wasAdded;
   }
   /* Code from template association_MinimumNumberOfMethod */
+  public static int minimumNumberOfRoles()
+  {
+    return 0;
+  }
+  /* Code from template association_AddManyToOne */
+
+
+  public boolean addRole(UserRole aRole)
+  {
+    boolean wasAdded = false;
+    if (roles.contains(aRole)) { return false; }
+    Block223 existingBlock223 = aRole.getBlock223();
+    boolean isNewBlock223 = existingBlock223 != null && !this.equals(existingBlock223);
+    if (isNewBlock223)
+    {
+      aRole.setBlock223(this);
+    }
+    else
+    {
+      roles.add(aRole);
+    }
+    wasAdded = true;
+    return wasAdded;
+  }
+
+  public boolean removeRole(UserRole aRole)
+  {
+    boolean wasRemoved = false;
+    //Unable to remove aRole, as it must always have a block223
+    if (!this.equals(aRole.getBlock223()))
+    {
+      roles.remove(aRole);
+      wasRemoved = true;
+    }
+    return wasRemoved;
+  }
+  /* Code from template association_AddIndexControlFunctions */
+  public boolean addRoleAt(UserRole aRole, int index)
+  {  
+    boolean wasAdded = false;
+    if(addRole(aRole))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfRoles()) { index = numberOfRoles() - 1; }
+      roles.remove(aRole);
+      roles.add(index, aRole);
+      wasAdded = true;
+    }
+    return wasAdded;
+  }
+
+  public boolean addOrMoveRoleAt(UserRole aRole, int index)
+  {
+    boolean wasAdded = false;
+    if(roles.contains(aRole))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfRoles()) { index = numberOfRoles() - 1; }
+      roles.remove(aRole);
+      roles.add(index, aRole);
+      wasAdded = true;
+    } 
+    else 
+    {
+      wasAdded = addRoleAt(aRole, index);
+    }
+    return wasAdded;
+  }
+  /* Code from template association_MinimumNumberOfMethod */
   public static int minimumNumberOfGames()
   {
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Game addGame(String aName, int aMinSpeed, int aMaxSpeed, int aMinLength, int aMaxLength, float aSpeedFactor, int aHeight, int aWidth, User aUser, Ball aBall, Paddle aPaddle, HallOfFame aHallOfFame)
+  public Game addGame(String aName, int aNrBlocksPerLevel, int aWidthPlayArea, int aHeightPlayArea, Admin aAdmin, Ball aBall, Paddle aPaddle)
   {
-    return new Game(aName, aMinSpeed, aMaxSpeed, aMinLength, aMaxLength, aSpeedFactor, aHeight, aWidth, aUser, aBall, aPaddle, aHallOfFame, this);
+    return new Game(aName, aNrBlocksPerLevel, aWidthPlayArea, aHeightPlayArea, aAdmin, aBall, aPaddle, this);
   }
 
   public boolean addGame(Game aGame)
@@ -266,78 +334,6 @@ public class Block223
     }
     return wasAdded;
   }
-  /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfUserRoles()
-  {
-    return 0;
-  }
-  /* Code from template association_AddManyToOne */
-  public UserRole addUserRole(String aPassword)
-  {
-    return new UserRole(aPassword, this);
-  }
-
-  public boolean addUserRole(UserRole aUserRole)
-  {
-    boolean wasAdded = false;
-    if (userRoles.contains(aUserRole)) { return false; }
-    Block223 existingBlock223 = aUserRole.getBlock223();
-    boolean isNewBlock223 = existingBlock223 != null && !this.equals(existingBlock223);
-    if (isNewBlock223)
-    {
-      aUserRole.setBlock223(this);
-    }
-    else
-    {
-      userRoles.add(aUserRole);
-    }
-    wasAdded = true;
-    return wasAdded;
-  }
-
-  public boolean removeUserRole(UserRole aUserRole)
-  {
-    boolean wasRemoved = false;
-    //Unable to remove aUserRole, as it must always have a block223
-    if (!this.equals(aUserRole.getBlock223()))
-    {
-      userRoles.remove(aUserRole);
-      wasRemoved = true;
-    }
-    return wasRemoved;
-  }
-  /* Code from template association_AddIndexControlFunctions */
-  public boolean addUserRoleAt(UserRole aUserRole, int index)
-  {  
-    boolean wasAdded = false;
-    if(addUserRole(aUserRole))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfUserRoles()) { index = numberOfUserRoles() - 1; }
-      userRoles.remove(aUserRole);
-      userRoles.add(index, aUserRole);
-      wasAdded = true;
-    }
-    return wasAdded;
-  }
-
-  public boolean addOrMoveUserRoleAt(UserRole aUserRole, int index)
-  {
-    boolean wasAdded = false;
-    if(userRoles.contains(aUserRole))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfUserRoles()) { index = numberOfUserRoles() - 1; }
-      userRoles.remove(aUserRole);
-      userRoles.add(index, aUserRole);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addUserRoleAt(aUserRole, index);
-    }
-    return wasAdded;
-  }
 
   public void delete()
   {
@@ -348,18 +344,18 @@ public class Block223
       users.remove(aUser);
     }
     
+    while (roles.size() > 0)
+    {
+      UserRole aRole = roles.get(roles.size() - 1);
+      aRole.delete();
+      roles.remove(aRole);
+    }
+    
     while (games.size() > 0)
     {
       Game aGame = games.get(games.size() - 1);
       aGame.delete();
       games.remove(aGame);
-    }
-    
-    while (userRoles.size() > 0)
-    {
-      UserRole aUserRole = userRoles.get(userRoles.size() - 1);
-      aUserRole.delete();
-      userRoles.remove(aUserRole);
     }
     
   }

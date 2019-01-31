@@ -1,20 +1,27 @@
-package ca.mcgill.ecse223.block.model;
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.29.0.4181.a593105a9 modeling language!*/
 
+package ca.mcgill.ecse223.block.model;
+import java.util.*;
 
-
-// line 64 "Block223.ump"
+// line 78 "../../../../../Block223.ump"
 public class Paddle
 {
+
+  //------------------------
+  // STATIC VARIABLES
+  //------------------------
+
+  public static final int PADDLE_WIDTH = 5;
+  public static final int VERTICAL_DISTANCE = 30;
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
   //Paddle Attributes
-  private int length;
-  private int width;
+  private int maxPaddleLength;
+  private int minPaddleLength;
 
   //Paddle Associations
   private Game game;
@@ -23,10 +30,10 @@ public class Paddle
   // CONSTRUCTOR
   //------------------------
 
-  public Paddle(int aLength, Game aGame)
+  public Paddle(int aMaxPaddleLength, int aMinPaddleLength, Game aGame)
   {
-    length = aLength;
-    width = 5;
+    maxPaddleLength = aMaxPaddleLength;
+    minPaddleLength = aMinPaddleLength;
     if (aGame == null || aGame.getPaddle() != null)
     {
       throw new RuntimeException("Unable to create Paddle due to aGame");
@@ -34,41 +41,41 @@ public class Paddle
     game = aGame;
   }
 
-  public Paddle(int aLength, String aNameForGame, int aMinSpeedForGame, int aMaxSpeedForGame, int aMinLengthForGame, int aMaxLengthForGame, float aSpeedFactorForGame, int aHeightForGame, int aWidthForGame, User aUserForGame, Ball aBallForGame, HallOfFame aHallOfFameForGame, Block223 aBlock223ForGame)
+  public Paddle(int aMaxPaddleLength, int aMinPaddleLength, String aNameForGame, int aNrBlocksPerLevelForGame, int aWidthPlayAreaForGame, int aHeightPlayAreaForGame, Admin aAdminForGame, Ball aBallForGame, Block223 aBlock223ForGame)
   {
-    length = aLength;
-    width = 5;
-    game = new Game(aNameForGame, aMinSpeedForGame, aMaxSpeedForGame, aMinLengthForGame, aMaxLengthForGame, aSpeedFactorForGame, aHeightForGame, aWidthForGame, aUserForGame, aBallForGame, this, aHallOfFameForGame, aBlock223ForGame);
+    maxPaddleLength = aMaxPaddleLength;
+    minPaddleLength = aMinPaddleLength;
+    game = new Game(aNameForGame, aNrBlocksPerLevelForGame, aWidthPlayAreaForGame, aHeightPlayAreaForGame, aAdminForGame, aBallForGame, this, aBlock223ForGame);
   }
 
   //------------------------
   // INTERFACE
   //------------------------
 
-  public boolean setLength(int aLength)
+  public boolean setMaxPaddleLength(int aMaxPaddleLength)
   {
     boolean wasSet = false;
-    length = aLength;
+    maxPaddleLength = aMaxPaddleLength;
     wasSet = true;
     return wasSet;
   }
 
-  public boolean setWidth(int aWidth)
+  public boolean setMinPaddleLength(int aMinPaddleLength)
   {
     boolean wasSet = false;
-    width = aWidth;
+    minPaddleLength = aMinPaddleLength;
     wasSet = true;
     return wasSet;
   }
 
-  public int getLength()
+  public int getMaxPaddleLength()
   {
-    return length;
+    return maxPaddleLength;
   }
 
-  public int getWidth()
+  public int getMinPaddleLength()
   {
-    return width;
+    return minPaddleLength;
   }
   /* Code from template association_GetOne */
   public Game getGame()
@@ -90,8 +97,8 @@ public class Paddle
   public String toString()
   {
     return super.toString() + "["+
-            "length" + ":" + getLength()+ "," +
-            "width" + ":" + getWidth()+ "]" + System.getProperties().getProperty("line.separator") +
+            "maxPaddleLength" + ":" + getMaxPaddleLength()+ "," +
+            "minPaddleLength" + ":" + getMinPaddleLength()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "game = "+(getGame()!=null?Integer.toHexString(System.identityHashCode(getGame())):"null");
   }
 }

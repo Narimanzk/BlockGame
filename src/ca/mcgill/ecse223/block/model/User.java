@@ -1,11 +1,10 @@
-package ca.mcgill.ecse223.block.model;
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.29.0.4181.a593105a9 modeling language!*/
 
-
+package ca.mcgill.ecse223.block.model;
 import java.util.*;
 
-// line 7 "Block223.ump"
+// line 9 "../../../../../Block223.ump"
 public class User
 {
 
@@ -13,108 +12,104 @@ public class User
   // STATIC VARIABLES
   //------------------------
 
-  private static Map<String, User> usersByName = new HashMap<String, User>();
+  private static Map<String, User> usersByUsername = new HashMap<String, User>();
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
   //User Attributes
-  private String name;
+  private String username;
 
   //User Associations
-  private List<UserRole> userRoles;
+  private List<UserRole> roles;
   private Block223 block223;
-  private List<Game> games;
-  private List<HallOfFame> hallOfFames;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public User(String aName, Block223 aBlock223, UserRole... allUserRoles)
+  public User(String aUsername, Block223 aBlock223, UserRole... allRoles)
   {
-    if (!setName(aName))
+    if (!setUsername(aUsername))
     {
-      throw new RuntimeException("Cannot create due to duplicate name");
+      throw new RuntimeException("Cannot create due to duplicate username");
     }
-    userRoles = new ArrayList<UserRole>();
-    boolean didAddUserRoles = setUserRoles(allUserRoles);
-    if (!didAddUserRoles)
+    roles = new ArrayList<UserRole>();
+    boolean didAddRoles = setRoles(allRoles);
+    if (!didAddRoles)
     {
-      throw new RuntimeException("Unable to create User, must have 1 to 2 userRoles");
+      throw new RuntimeException("Unable to create User, must have 1 to 2 roles");
     }
     boolean didAddBlock223 = setBlock223(aBlock223);
     if (!didAddBlock223)
     {
       throw new RuntimeException("Unable to create user due to block223");
     }
-    games = new ArrayList<Game>();
-    hallOfFames = new ArrayList<HallOfFame>();
   }
 
   //------------------------
   // INTERFACE
   //------------------------
 
-  public boolean setName(String aName)
+  public boolean setUsername(String aUsername)
   {
     boolean wasSet = false;
-    String anOldName = getName();
-    if (hasWithName(aName)) {
+    String anOldUsername = getUsername();
+    if (hasWithUsername(aUsername)) {
       return wasSet;
     }
-    name = aName;
+    username = aUsername;
     wasSet = true;
-    if (anOldName != null) {
-      usersByName.remove(anOldName);
+    if (anOldUsername != null) {
+      usersByUsername.remove(anOldUsername);
     }
-    usersByName.put(aName, this);
+    usersByUsername.put(aUsername, this);
     return wasSet;
   }
 
-  public String getName()
+  public String getUsername()
   {
-    return name;
+    return username;
   }
   /* Code from template attribute_GetUnique */
-  public static User getWithName(String aName)
+  public static User getWithUsername(String aUsername)
   {
-    return usersByName.get(aName);
+    return usersByUsername.get(aUsername);
   }
   /* Code from template attribute_HasUnique */
-  public static boolean hasWithName(String aName)
+  public static boolean hasWithUsername(String aUsername)
   {
-    return getWithName(aName) != null;
+    return getWithUsername(aUsername) != null;
   }
   /* Code from template association_GetMany */
-  public UserRole getUserRole(int index)
+  public UserRole getRole(int index)
   {
-    UserRole aUserRole = userRoles.get(index);
-    return aUserRole;
+    UserRole aRole = roles.get(index);
+    return aRole;
   }
 
-  public List<UserRole> getUserRoles()
+  public List<UserRole> getRoles()
   {
-    List<UserRole> newUserRoles = Collections.unmodifiableList(userRoles);
-    return newUserRoles;
+    List<UserRole> newRoles = Collections.unmodifiableList(roles);
+    return newRoles;
   }
 
-  public int numberOfUserRoles()
+  public int numberOfRoles()
   {
-    int number = userRoles.size();
+    int number = roles.size();
     return number;
   }
 
-  public boolean hasUserRoles()
+  public boolean hasRoles()
   {
-    boolean has = userRoles.size() > 0;
+    boolean has = roles.size() > 0;
     return has;
   }
 
-  public int indexOfUserRole(UserRole aUserRole)
+  public int indexOfRole(UserRole aRole)
   {
-    int index = userRoles.indexOf(aUserRole);
+    int index = roles.indexOf(aRole);
     return index;
   }
   /* Code from template association_GetOne */
@@ -122,207 +117,99 @@ public class User
   {
     return block223;
   }
-  /* Code from template association_GetMany */
-  public Game getGame(int index)
-  {
-    Game aGame = games.get(index);
-    return aGame;
-  }
-
-  public List<Game> getGames()
-  {
-    List<Game> newGames = Collections.unmodifiableList(games);
-    return newGames;
-  }
-
-  public int numberOfGames()
-  {
-    int number = games.size();
-    return number;
-  }
-
-  public boolean hasGames()
-  {
-    boolean has = games.size() > 0;
-    return has;
-  }
-
-  public int indexOfGame(Game aGame)
-  {
-    int index = games.indexOf(aGame);
-    return index;
-  }
-  /* Code from template association_GetMany */
-  public HallOfFame getHallOfFame(int index)
-  {
-    HallOfFame aHallOfFame = hallOfFames.get(index);
-    return aHallOfFame;
-  }
-
-  public List<HallOfFame> getHallOfFames()
-  {
-    List<HallOfFame> newHallOfFames = Collections.unmodifiableList(hallOfFames);
-    return newHallOfFames;
-  }
-
-  public int numberOfHallOfFames()
-  {
-    int number = hallOfFames.size();
-    return number;
-  }
-
-  public boolean hasHallOfFames()
-  {
-    boolean has = hallOfFames.size() > 0;
-    return has;
-  }
-
-  public int indexOfHallOfFame(HallOfFame aHallOfFame)
-  {
-    int index = hallOfFames.indexOf(aHallOfFame);
-    return index;
-  }
-  /* Code from template association_IsNumberOfValidMethod */
-  public boolean isNumberOfUserRolesValid()
-  {
-    boolean isValid = numberOfUserRoles() >= minimumNumberOfUserRoles() && numberOfUserRoles() <= maximumNumberOfUserRoles();
-    return isValid;
-  }
   /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfUserRoles()
+  public static int minimumNumberOfRoles()
   {
     return 1;
   }
   /* Code from template association_MaximumNumberOfMethod */
-  public static int maximumNumberOfUserRoles()
+  public static int maximumNumberOfRoles()
   {
     return 2;
   }
-  /* Code from template association_AddManyToManyMethod */
-  public boolean addUserRole(UserRole aUserRole)
+  /* Code from template association_AddUnidirectionalMN */
+  public boolean addRole(UserRole aRole)
   {
     boolean wasAdded = false;
-    if (userRoles.contains(aUserRole)) { return false; }
-    if (numberOfUserRoles() >= maximumNumberOfUserRoles())
+    if (roles.contains(aRole)) { return false; }
+    if (numberOfRoles() < maximumNumberOfRoles())
     {
-      return wasAdded;
-    }
-
-    userRoles.add(aUserRole);
-    if (aUserRole.indexOfUser(this) != -1)
-    {
+      roles.add(aRole);
       wasAdded = true;
-    }
-    else
-    {
-      wasAdded = aUserRole.addUser(this);
-      if (!wasAdded)
-      {
-        userRoles.remove(aUserRole);
-      }
     }
     return wasAdded;
   }
-  /* Code from template association_AddMNToMany */
-  public boolean removeUserRole(UserRole aUserRole)
+
+  public boolean removeRole(UserRole aRole)
   {
     boolean wasRemoved = false;
-    if (!userRoles.contains(aUserRole))
+    if (!roles.contains(aRole))
     {
       return wasRemoved;
     }
 
-    if (numberOfUserRoles() <= minimumNumberOfUserRoles())
+    if (numberOfRoles() <= minimumNumberOfRoles())
     {
       return wasRemoved;
     }
 
-    int oldIndex = userRoles.indexOf(aUserRole);
-    userRoles.remove(oldIndex);
-    if (aUserRole.indexOfUser(this) == -1)
-    {
-      wasRemoved = true;
-    }
-    else
-    {
-      wasRemoved = aUserRole.removeUser(this);
-      if (!wasRemoved)
-      {
-        userRoles.add(oldIndex,aUserRole);
-      }
-    }
+    roles.remove(aRole);
+    wasRemoved = true;
     return wasRemoved;
   }
-  /* Code from template association_SetMNToMany */
-  public boolean setUserRoles(UserRole... newUserRoles)
+  /* Code from template association_SetUnidirectionalMN */
+  public boolean setRoles(UserRole... newRoles)
   {
     boolean wasSet = false;
-    ArrayList<UserRole> verifiedUserRoles = new ArrayList<UserRole>();
-    for (UserRole aUserRole : newUserRoles)
+    ArrayList<UserRole> verifiedRoles = new ArrayList<UserRole>();
+    for (UserRole aRole : newRoles)
     {
-      if (verifiedUserRoles.contains(aUserRole))
+      if (verifiedRoles.contains(aRole))
       {
         continue;
       }
-      verifiedUserRoles.add(aUserRole);
+      verifiedRoles.add(aRole);
     }
 
-    if (verifiedUserRoles.size() != newUserRoles.length || verifiedUserRoles.size() < minimumNumberOfUserRoles() || verifiedUserRoles.size() > maximumNumberOfUserRoles())
+    if (verifiedRoles.size() != newRoles.length || verifiedRoles.size() < minimumNumberOfRoles() || verifiedRoles.size() > maximumNumberOfRoles())
     {
       return wasSet;
     }
 
-    ArrayList<UserRole> oldUserRoles = new ArrayList<UserRole>(userRoles);
-    userRoles.clear();
-    for (UserRole aNewUserRole : verifiedUserRoles)
-    {
-      userRoles.add(aNewUserRole);
-      if (oldUserRoles.contains(aNewUserRole))
-      {
-        oldUserRoles.remove(aNewUserRole);
-      }
-      else
-      {
-        aNewUserRole.addUser(this);
-      }
-    }
-
-    for (UserRole anOldUserRole : oldUserRoles)
-    {
-      anOldUserRole.removeUser(this);
-    }
+    roles.clear();
+    roles.addAll(verifiedRoles);
     wasSet = true;
     return wasSet;
   }
   /* Code from template association_AddIndexControlFunctions */
-  public boolean addUserRoleAt(UserRole aUserRole, int index)
+  public boolean addRoleAt(UserRole aRole, int index)
   {  
     boolean wasAdded = false;
-    if(addUserRole(aUserRole))
+    if(addRole(aRole))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfUserRoles()) { index = numberOfUserRoles() - 1; }
-      userRoles.remove(aUserRole);
-      userRoles.add(index, aUserRole);
+      if(index > numberOfRoles()) { index = numberOfRoles() - 1; }
+      roles.remove(aRole);
+      roles.add(index, aRole);
       wasAdded = true;
     }
     return wasAdded;
   }
 
-  public boolean addOrMoveUserRoleAt(UserRole aUserRole, int index)
+  public boolean addOrMoveRoleAt(UserRole aRole, int index)
   {
     boolean wasAdded = false;
-    if(userRoles.contains(aUserRole))
+    if(roles.contains(aRole))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfUserRoles()) { index = numberOfUserRoles() - 1; }
-      userRoles.remove(aUserRole);
-      userRoles.add(index, aUserRole);
+      if(index > numberOfRoles()) { index = numberOfRoles() - 1; }
+      roles.remove(aRole);
+      roles.add(index, aRole);
       wasAdded = true;
     } 
     else 
     {
-      wasAdded = addUserRoleAt(aUserRole, index);
+      wasAdded = addRoleAt(aRole, index);
     }
     return wasAdded;
   }
@@ -345,186 +232,16 @@ public class User
     wasSet = true;
     return wasSet;
   }
-  /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfGames()
-  {
-    return 0;
-  }
-  /* Code from template association_AddManyToOne */
-  public Game addGame(String aName, int aMinSpeed, int aMaxSpeed, int aMinLength, int aMaxLength, float aSpeedFactor, int aHeight, int aWidth, Ball aBall, Paddle aPaddle, HallOfFame aHallOfFame, Block223 aBlock223)
-  {
-    return new Game(aName, aMinSpeed, aMaxSpeed, aMinLength, aMaxLength, aSpeedFactor, aHeight, aWidth, this, aBall, aPaddle, aHallOfFame, aBlock223);
-  }
-
-  public boolean addGame(Game aGame)
-  {
-    boolean wasAdded = false;
-    if (games.contains(aGame)) { return false; }
-    User existingUser = aGame.getUser();
-    boolean isNewUser = existingUser != null && !this.equals(existingUser);
-    if (isNewUser)
-    {
-      aGame.setUser(this);
-    }
-    else
-    {
-      games.add(aGame);
-    }
-    wasAdded = true;
-    return wasAdded;
-  }
-
-  public boolean removeGame(Game aGame)
-  {
-    boolean wasRemoved = false;
-    //Unable to remove aGame, as it must always have a user
-    if (!this.equals(aGame.getUser()))
-    {
-      games.remove(aGame);
-      wasRemoved = true;
-    }
-    return wasRemoved;
-  }
-  /* Code from template association_AddIndexControlFunctions */
-  public boolean addGameAt(Game aGame, int index)
-  {  
-    boolean wasAdded = false;
-    if(addGame(aGame))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfGames()) { index = numberOfGames() - 1; }
-      games.remove(aGame);
-      games.add(index, aGame);
-      wasAdded = true;
-    }
-    return wasAdded;
-  }
-
-  public boolean addOrMoveGameAt(Game aGame, int index)
-  {
-    boolean wasAdded = false;
-    if(games.contains(aGame))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfGames()) { index = numberOfGames() - 1; }
-      games.remove(aGame);
-      games.add(index, aGame);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addGameAt(aGame, index);
-    }
-    return wasAdded;
-  }
-  /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfHallOfFames()
-  {
-    return 0;
-  }
-  /* Code from template association_AddManyToManyMethod */
-  public boolean addHallOfFame(HallOfFame aHallOfFame)
-  {
-    boolean wasAdded = false;
-    if (hallOfFames.contains(aHallOfFame)) { return false; }
-    hallOfFames.add(aHallOfFame);
-    if (aHallOfFame.indexOfUser(this) != -1)
-    {
-      wasAdded = true;
-    }
-    else
-    {
-      wasAdded = aHallOfFame.addUser(this);
-      if (!wasAdded)
-      {
-        hallOfFames.remove(aHallOfFame);
-      }
-    }
-    return wasAdded;
-  }
-  /* Code from template association_RemoveMany */
-  public boolean removeHallOfFame(HallOfFame aHallOfFame)
-  {
-    boolean wasRemoved = false;
-    if (!hallOfFames.contains(aHallOfFame))
-    {
-      return wasRemoved;
-    }
-
-    int oldIndex = hallOfFames.indexOf(aHallOfFame);
-    hallOfFames.remove(oldIndex);
-    if (aHallOfFame.indexOfUser(this) == -1)
-    {
-      wasRemoved = true;
-    }
-    else
-    {
-      wasRemoved = aHallOfFame.removeUser(this);
-      if (!wasRemoved)
-      {
-        hallOfFames.add(oldIndex,aHallOfFame);
-      }
-    }
-    return wasRemoved;
-  }
-  /* Code from template association_AddIndexControlFunctions */
-  public boolean addHallOfFameAt(HallOfFame aHallOfFame, int index)
-  {  
-    boolean wasAdded = false;
-    if(addHallOfFame(aHallOfFame))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfHallOfFames()) { index = numberOfHallOfFames() - 1; }
-      hallOfFames.remove(aHallOfFame);
-      hallOfFames.add(index, aHallOfFame);
-      wasAdded = true;
-    }
-    return wasAdded;
-  }
-
-  public boolean addOrMoveHallOfFameAt(HallOfFame aHallOfFame, int index)
-  {
-    boolean wasAdded = false;
-    if(hallOfFames.contains(aHallOfFame))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfHallOfFames()) { index = numberOfHallOfFames() - 1; }
-      hallOfFames.remove(aHallOfFame);
-      hallOfFames.add(index, aHallOfFame);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addHallOfFameAt(aHallOfFame, index);
-    }
-    return wasAdded;
-  }
 
   public void delete()
   {
-    usersByName.remove(getName());
-    ArrayList<UserRole> copyOfUserRoles = new ArrayList<UserRole>(userRoles);
-    userRoles.clear();
-    for(UserRole aUserRole : copyOfUserRoles)
-    {
-      aUserRole.removeUser(this);
-    }
+    usersByUsername.remove(getUsername());
+    roles.clear();
     Block223 placeholderBlock223 = block223;
     this.block223 = null;
     if(placeholderBlock223 != null)
     {
       placeholderBlock223.removeUser(this);
-    }
-    for(int i=games.size(); i > 0; i--)
-    {
-      Game aGame = games.get(i - 1);
-      aGame.delete();
-    }
-    ArrayList<HallOfFame> copyOfHallOfFames = new ArrayList<HallOfFame>(hallOfFames);
-    hallOfFames.clear();
-    for(HallOfFame aHallOfFame : copyOfHallOfFames)
-    {
-      aHallOfFame.removeUser(this);
     }
   }
 
@@ -532,7 +249,7 @@ public class User
   public String toString()
   {
     return super.toString() + "["+
-            "name" + ":" + getName()+ "]" + System.getProperties().getProperty("line.separator") +
+            "username" + ":" + getUsername()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "block223 = "+(getBlock223()!=null?Integer.toHexString(System.identityHashCode(getBlock223())):"null");
   }
 }
