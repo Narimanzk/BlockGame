@@ -8,7 +8,7 @@ public class BlockController {
 	private static Block223 Block223;
 
 	public BlockController() {
-		this.Block223 = new Block223();
+		BlockController.Block223 = new Block223();
 
 	}
 	
@@ -20,6 +20,7 @@ public class BlockController {
 		//create game, dont need to do block223.addGame since its already added from the game constructor (in theory)
 		Game newGame = new Game(aName, aNrBlocksPerLevel, aWidthPlayArea, aHeightPlayArea, aAdmin, aMinBallSpeedXForBall,
 				 aMinBallSpeedYForBall, aBallSpeedIncreaseFactorForBall, aMaxPaddleLengthForPaddle, aMinPaddleLengthForPaddle, Block223);
+		
 	}
 	
 	//define game settings TODO
@@ -68,6 +69,7 @@ public class BlockController {
 	
 	//delete block from game so it cant be used in level TODO
 	public static void deleteBlockFromGame(int gameIndex, int blockId) throws InvalidInputException {
+		//get game
 		Game gameToChange = Block223.getGame(gameIndex);
 		//get list of blocks assigned to game
 		List<Block> myBlocks = gameToChange.getBlocks();
@@ -79,24 +81,42 @@ public class BlockController {
 		}
 	}
 	
-	//update block in game TODO
+	//update block in game TODO wtf is this supposed to do
 	public static void updateBlock() throws InvalidInputException {
 		
 	}
 	
 	//position a block at a grid location in level TODO
-	public static void positionBlock() throws InvalidInputException {
-		
+	public static void positionBlock(int gameIndex, int aGridHorizontalPosition, int aGridVerticalPosition, Level aLevel, Block aBlock) throws InvalidInputException {
+		//get game
+		Game gameToChange = Block223.getGame(gameIndex);
+		//assign block to a position in a level
+		gameToChange.addBlockAssignment(aGridHorizontalPosition, aGridVerticalPosition, aLevel, aBlock);
+
 	}
 	
 	//move block from one grid location to another in a level TODO
-	public static void moveBlock() throws InvalidInputException {
+	public static void moveBlock(BlockAssignment blockAssignment, int aGridHorizontalPosition, int aGridVerticalPosition) throws InvalidInputException {
+		//get game
+//		Game gameToChange = Block223.getGame(gameIndex);
+
+		//get list of blocks assigned to game
+		blockAssignment.setGridHorizontalPosition(aGridHorizontalPosition);
+		blockAssignment.setGridVerticalPosition(aGridVerticalPosition);
+		
 		
 	}
 	
 	//remove block from level TODO
-	public static void removeBlockFromLevel() throws InvalidInputException {
-		
+	public static void removeBlockFromLevel(int blockId , Level level) throws InvalidInputException {
+		//get block assignments in level
+		List<BlockAssignment> myBlockAssignments = level.getBlockAssignments();
+		//loop through list and check if ID matches
+		for(int i = 0; i < myBlockAssignments.size(); i++) {
+			if(myBlockAssignments.get(i).getBlock().getId() == blockId) {//if ID matches remove it from level
+				level.removeBlockAssignment(myBlockAssignments.get(i));
+			}
+		}
 	}
 	
 	//save game TODO
