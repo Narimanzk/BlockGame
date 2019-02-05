@@ -2,13 +2,12 @@ package ca.mcgill.ecse223.block.controller;
 
 import java.util.List;
 
+import ca.mcgill.ecse223.block.application.BlockApplication;
 import ca.mcgill.ecse223.block.model.*;
 
 public class BlockController {
-	private static Block223 Block223;
 
 	public BlockController() {
-		BlockController.Block223 = new Block223();
 
 	}
 	
@@ -17,9 +16,16 @@ public class BlockController {
 			int aMinBallSpeedXForBall, int aMinBallSpeedYForBall, double aBallSpeedIncreaseFactorForBall,
 			int aMaxPaddleLengthForPaddle, int aMinPaddleLengthForPaddle) throws InvalidInputException {
 		
+		Block223 block223 = BlockApplication.getBlock223();
 		//create game, dont need to do block223.addGame since its already added from the game constructor (in theory)
-		Game newGame = new Game(aName, aNrBlocksPerLevel, aWidthPlayArea, aHeightPlayArea, aAdmin, aMinBallSpeedXForBall,
-				 aMinBallSpeedYForBall, aBallSpeedIncreaseFactorForBall, aMaxPaddleLengthForPaddle, aMinPaddleLengthForPaddle, Block223);
+		try {
+			Game newGame = new Game(aName, aNrBlocksPerLevel, aWidthPlayArea, aHeightPlayArea, aAdmin, aMinBallSpeedXForBall,
+					 aMinBallSpeedYForBall, aBallSpeedIncreaseFactorForBall, aMaxPaddleLengthForPaddle, aMinPaddleLengthForPaddle, block223);
+		}
+		catch (RuntimeException e) {
+			throw new InvalidInputException(e.getMessage());
+		}
+
 		
 	}
 	
@@ -29,7 +35,8 @@ public class BlockController {
 			int aMaxPaddleLength, int aMinPaddleLength) throws InvalidInputException {
 		
 		//get game to change
-		Game gameToChange = Block223.getGame(gameIndex);
+		Block223 block223 = BlockApplication.getBlock223();
+		Game gameToChange = block223.getGame(gameIndex);
 		
 		//change game properties
 		gameToChange.setNrBlocksPerLevel(aNrBlocksPerLevel);
@@ -49,7 +56,8 @@ public class BlockController {
 	
 	//delete game TODO
 	public static void deleteGame(int gameIndex) {
-		Block223.getGame(gameIndex).delete();
+		Block223 block223 = BlockApplication.getBlock223();
+		block223.getGame(gameIndex).delete();
 		
 	}
 	
@@ -61,7 +69,8 @@ public class BlockController {
 	//add block to game to use in level TODO
 	public static void addBlockToGame(int gameIndex, int aRed, int aGreen, int aBlue, int aPoints) throws InvalidInputException {
 		//get game
-		Game gameToChange = Block223.getGame(gameIndex);
+		Block223 block223 = BlockApplication.getBlock223();
+		Game gameToChange = block223.getGame(gameIndex);
 		//add block to game from block constructor
 		gameToChange.addBlock(aRed, aGreen, aBlue, aPoints);
 		
@@ -70,7 +79,9 @@ public class BlockController {
 	//delete block from game so it cant be used in level TODO
 	public static void deleteBlockFromGame(int gameIndex, int blockId) throws InvalidInputException {
 		//get game
-		Game gameToChange = Block223.getGame(gameIndex);
+		Block223 block223 = BlockApplication.getBlock223();
+
+		Game gameToChange = block223.getGame(gameIndex);
 		//get list of blocks assigned to game
 		List<Block> myBlocks = gameToChange.getBlocks();
 		//loop through list and check if ID matches
@@ -89,7 +100,9 @@ public class BlockController {
 	//position a block at a grid location in level TODO
 	public static void positionBlock(int gameIndex, int aGridHorizontalPosition, int aGridVerticalPosition, Level aLevel, Block aBlock) throws InvalidInputException {
 		//get game
-		Game gameToChange = Block223.getGame(gameIndex);
+		Block223 block223 = BlockApplication.getBlock223();
+
+		Game gameToChange = block223.getGame(gameIndex);
 		//assign block to a position in a level
 		gameToChange.addBlockAssignment(aGridHorizontalPosition, aGridVerticalPosition, aLevel, aBlock);
 
