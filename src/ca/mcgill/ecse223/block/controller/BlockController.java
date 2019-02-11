@@ -1,7 +1,5 @@
 package ca.mcgill.ecse223.block.controller;
 
-import java.util.List;
-
 import ca.mcgill.ecse223.block.application.BlockApplication;
 import ca.mcgill.ecse223.block.model.*;
 
@@ -82,12 +80,11 @@ public class BlockController {
 		Block223 block223 = BlockApplication.getBlock223();
 
 		Game gameToChange = block223.getGame(gameIndex);
-		//get list of blocks assigned to game
-		List<Block> myBlocks = gameToChange.getBlocks();
 		//loop through list and check if ID matches
-		for(int i = 0; i < myBlocks.size(); i++) {
-			if(myBlocks.get(i).getId() == blockId) {//if ID matches remove it from game
-				gameToChange.removeBlock(myBlocks.get(i));
+		//cleaner way of iterating through blocks
+		for(Block aBlock : gameToChange.getBlocks()) {
+			if(aBlock.getId() == blockId) {
+				gameToChange.removeBlock(aBlock);
 			}
 		}
 	}
@@ -122,12 +119,11 @@ public class BlockController {
 	
 	//remove block from level TODO
 	public static void removeBlockFromLevel(int blockId , Level level) throws InvalidInputException {
-		//get block assignments in level
-		List<BlockAssignment> myBlockAssignments = level.getBlockAssignments();
 		//loop through list and check if ID matches
-		for(int i = 0; i < myBlockAssignments.size(); i++) {
-			if(myBlockAssignments.get(i).getBlock().getId() == blockId) {//if ID matches remove it from level
-				level.removeBlockAssignment(myBlockAssignments.get(i));
+		//cleaner way of iterating through
+		for(BlockAssignment aBlockAssignment : level.getBlockAssignments()) {
+			if(aBlockAssignment.getBlock().getId() == blockId) {
+				level.removeBlockAssignment(aBlockAssignment);
 			}
 		}
 	}
