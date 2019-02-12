@@ -13,7 +13,31 @@ public class BlockController {
 	public static void addGame(String aName, int aNrBlocksPerLevel, int aWidthPlayArea, int aHeightPlayArea, Admin aAdmin,
 			int aMinBallSpeedXForBall, int aMinBallSpeedYForBall, double aBallSpeedIncreaseFactorForBall,
 			int aMaxPaddleLengthForPaddle, int aMinPaddleLengthForPaddle) throws InvalidInputException {
+		String error = "";
 		
+		if(aNrBlocksPerLevel > 50)//arbitrary # i picked, need to check actual max
+			error += "Cannot have more than 50 blocks per level";
+		if(aWidthPlayArea < 200)
+			error += "Min game width is 200";
+		if(aWidthPlayArea > 500)
+			error += "Max game width is 500";
+		if(aHeightPlayArea < 200)
+			error += "Min game height is 200";
+		if(aHeightPlayArea > 500)
+			error += "Max game height is 500";
+		if(aMinBallSpeedXForBall < 1)//arbitrary # i picked, need to check actual min
+			error += "Min X ball speed is 1";
+		if(aMinBallSpeedYForBall < 1)//arbitrary # i picked, need to check actual min
+			error += "Min Y ball speed is 1";
+		if(aMaxPaddleLengthForPaddle > aWidthPlayArea)
+			error += "Max paddle length cannot exceed game width";
+		if(aMinPaddleLengthForPaddle < 5)
+			error += "Min paddle lendth is 5";
+		
+		if (error.length() > 0) {
+			throw new InvalidInputException(error.trim());
+		}
+
 		Block223 block223 = BlockApplication.getBlock223();
 		//create game, dont need to do block223.addGame since its already added from the game constructor (in theory)
 		try {
@@ -31,7 +55,31 @@ public class BlockController {
 	public static void changeGameSettings(int gameIndex, String aName, int aNrBlocksPerLevel, int aWidthPlayArea, int aHeightPlayArea,
 			int aMinBallSpeedX, int aMinBallSpeedY, double aBallSpeedIncreaseFactor,
 			int aMaxPaddleLength, int aMinPaddleLength) throws InvalidInputException {
+		String error = "";
 		
+		if(aNrBlocksPerLevel > 50)//arbitrary # i picked, need to check actual max
+			error += "Cannot have more than 50 blocks per level";
+		if(aWidthPlayArea < 200)
+			error += "Min game width is 200";
+		if(aWidthPlayArea > 500)
+			error += "Max game width is 500";
+		if(aHeightPlayArea < 200)
+			error += "Min game height is 200";
+		if(aHeightPlayArea > 500)
+			error += "Max game height is 500";
+		if(aMinBallSpeedX < 1)//arbitrary # i picked, need to check actual min
+			error += "Min X ball speed is 1";
+		if(aMinBallSpeedY < 1)//arbitrary # i picked, need to check actual min
+			error += "Min Y ball speed is 1";
+		if(aMaxPaddleLength > aWidthPlayArea)
+			error += "Max paddle length cannot exceed game width";
+		if(aMinPaddleLength < 5)
+			error += "Min paddle lendth is 5";
+		
+		if (error.length() > 0) {
+			throw new InvalidInputException(error.trim());
+		}
+
 		//get game to change
 		Block223 block223 = BlockApplication.getBlock223();
 		try {
@@ -59,15 +107,11 @@ public class BlockController {
 	}
 	
 	//delete game TODO
-	public static void deleteGame(int gameIndex) throws InvalidInputException{
+	public static void deleteGame(int gameIndex){
 		Block223 block223 = BlockApplication.getBlock223();
-		try {
-			block223.getGame(gameIndex).delete();
-		}
-		catch (RuntimeException e) {
-			throw new InvalidInputException(e.getMessage());
-		}
-
+		Game game = block223.getGame(gameIndex);
+		if(game != null)
+			game.delete();
 		
 	}
 	
@@ -79,6 +123,27 @@ public class BlockController {
 	//add block to game to use in level TODO
 	public static void addBlockToGame(int gameIndex, int aRed, int aGreen, int aBlue, int aPoints) throws InvalidInputException {
 		//get game
+		String error = "";
+		
+		if(aRed > 255)//arbitrary # i picked, need to check actual max
+			error += "RGB max value is 255";
+		if(aRed < 0)
+			error += "RGB min value is 0";
+		if(aGreen > 255)//arbitrary # i picked, need to check actual max
+			error += "RGB max value is 255";
+		if(aGreen < 0)
+			error += "RGB min value is 0";
+		if(aBlue > 255)//arbitrary # i picked, need to check actual max
+			error += "RGB max value is 255";
+		if(aBlue < 0)
+			error += "RGB min value is 0";
+		if(aPoints < 0)
+			error += "Points min value is 0";
+		
+		if (error.length() > 0) {
+			throw new InvalidInputException(error.trim());
+		}
+
 		Block223 block223 = BlockApplication.getBlock223();
 		try {
 			Game gameToChange = block223.getGame(gameIndex);
@@ -119,6 +184,25 @@ public class BlockController {
 	
 	//position a block at a grid location in level TODO
 	public static void positionBlock(int gameIndex, int aGridHorizontalPosition, int aGridVerticalPosition, Level aLevel, Block aBlock) throws InvalidInputException {
+		String error = "";
+		
+		if(aLevel == null)
+			error += "Level must be defined";
+		if(aBlock == null)
+			error += "Block must be defined";
+		if(aGridHorizontalPosition < 0)
+			error += "Grid X min position is 0";
+		if(aGridHorizontalPosition > 20)//this is sketch in case of placing it a 15 and game window is too small, going up to only like 12
+			error += "Grid X max position is 20";
+		if(aGridVerticalPosition < 0)
+			error += "Grid Y min position is 0";
+		if(aGridVerticalPosition > 20)//this is sketch in case of placing it a 15 and game window is too small, going up to only like 12
+			error += "Grid Y max position is 20";
+
+		if (error.length() > 0) {
+			throw new InvalidInputException(error.trim());
+		}
+
 		//get game
 		Block223 block223 = BlockApplication.getBlock223();
 		try {
@@ -135,8 +219,22 @@ public class BlockController {
 	
 	//move block from one grid location to another in a level TODO
 	public static void moveBlock(BlockAssignment blockAssignment, int aGridHorizontalPosition, int aGridVerticalPosition) throws InvalidInputException {
-		//get game
-//		Game gameToChange = Block223.getGame(gameIndex);
+		String error = "";
+		
+		if(blockAssignment == null)
+			error += "BlockAssignment must be defined";
+		if(aGridHorizontalPosition < 0)
+			error += "Grid X min position is 0";
+		if(aGridHorizontalPosition > 20)//this is sketch in case of placing it a 15 and game window is too small, going up to only like 12
+			error += "Grid X max position is 20";
+		if(aGridVerticalPosition < 0)
+			error += "Grid Y min position is 0";
+		if(aGridVerticalPosition > 20)//this is sketch in case of placing it a 15 and game window is too small, going up to only like 12
+			error += "Grid Y max position is 20";
+
+		if (error.length() > 0) {
+			throw new InvalidInputException(error.trim());
+		}
 		try {
 		//get list of blocks assigned to game
 			blockAssignment.setGridHorizontalPosition(aGridHorizontalPosition);
