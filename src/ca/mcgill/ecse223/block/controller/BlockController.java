@@ -13,7 +13,31 @@ public class BlockController {
 	public static void addGame(String aName, int aNrBlocksPerLevel, int aWidthPlayArea, int aHeightPlayArea, Admin aAdmin,
 			int aMinBallSpeedXForBall, int aMinBallSpeedYForBall, double aBallSpeedIncreaseFactorForBall,
 			int aMaxPaddleLengthForPaddle, int aMinPaddleLengthForPaddle) throws InvalidInputException {
+		String error = "";
 		
+		if(aNrBlocksPerLevel > 50)//arbitrary # i picked, need to check actual max
+			error += "Cannot have more than 50 blocks per level";
+		if(aWidthPlayArea < 200)
+			error += "Min game width is 200";
+		if(aWidthPlayArea > 500)
+			error += "Max game width is 500";
+		if(aHeightPlayArea < 200)
+			error += "Min game height is 200";
+		if(aHeightPlayArea > 500)
+			error += "Max game height is 500";
+		if(aMinBallSpeedXForBall < 1)//arbitrary # i picked, need to check actual min
+			error += "Min X ball speed is 1";
+		if(aMinBallSpeedYForBall < 1)//arbitrary # i picked, need to check actual min
+			error += "Min Y ball speed is 1";
+		if(aMaxPaddleLengthForPaddle > aWidthPlayArea)
+			error += "Max paddle length cannot exceed game width";
+		if(aMinPaddleLengthForPaddle < 5)
+			error += "Min paddle lendth is 5";
+		
+		if (error.length() > 0) {
+			throw new InvalidInputException(error.trim());
+		}
+
 		Block223 block223 = BlockApplication.getBlock223();
 		//create game, dont need to do block223.addGame since its already added from the game constructor (in theory)
 		try {
@@ -28,91 +52,275 @@ public class BlockController {
 	}
 	
 	//define game settings TODO
-	public static void changeGameSettings(int gameIndex, String aName, int aNrBlocksPerLevel, int aWidthPlayArea, int aHeightPlayArea,
+	public static void changeGameSettings(String gameName, String aName, int aNrBlocksPerLevel, int aWidthPlayArea, int aHeightPlayArea,
 			int aMinBallSpeedX, int aMinBallSpeedY, double aBallSpeedIncreaseFactor,
 			int aMaxPaddleLength, int aMinPaddleLength) throws InvalidInputException {
+		String error = "";
 		
+		if(aNrBlocksPerLevel > 50)//arbitrary # i picked, need to check actual max
+			error += "Cannot have more than 50 blocks per level";
+		if(aWidthPlayArea < 200)
+			error += "Min game width is 200";
+		if(aWidthPlayArea > 500)
+			error += "Max game width is 500";
+		if(aHeightPlayArea < 200)
+			error += "Min game height is 200";
+		if(aHeightPlayArea > 500)
+			error += "Max game height is 500";
+		if(aMinBallSpeedX < 1)//arbitrary # i picked, need to check actual min
+			error += "Min X ball speed is 1";
+		if(aMinBallSpeedY < 1)//arbitrary # i picked, need to check actual min
+			error += "Min Y ball speed is 1";
+		if(aMaxPaddleLength > aWidthPlayArea)
+			error += "Max paddle length cannot exceed game width";
+		if(aMinPaddleLength < 5)
+			error += "Min paddle lendth is 5";
+		
+		if (error.length() > 0) {
+			throw new InvalidInputException(error.trim());
+		}
+
 		//get game to change
 		Block223 block223 = BlockApplication.getBlock223();
-		Game gameToChange = block223.getGame(gameIndex);
-		
-		//change game properties
-		gameToChange.setNrBlocksPerLevel(aNrBlocksPerLevel);
-		gameToChange.setWidthPlayArea(aWidthPlayArea);
-		gameToChange.setHeightPlayArea(aHeightPlayArea);
-		gameToChange.setName(aName);
-		
-		//change ball properties
-		gameToChange.getBall().setBallSpeedIncreaseFactor(aBallSpeedIncreaseFactor);
-		gameToChange.getBall().setMinBallSpeedX(aMinBallSpeedX);
-		gameToChange.getBall().setMinBallSpeedY(aMinBallSpeedY);
-		
-		//change paddle properties
-		gameToChange.getPaddle().setMaxPaddleLength(aMaxPaddleLength);
-		gameToChange.getPaddle().setMinPaddleLength(aMinPaddleLength);
+		try {
+			Game gameToChange = getGame(gameName);
+			
+			//change game properties
+			gameToChange.setNrBlocksPerLevel(aNrBlocksPerLevel);
+			gameToChange.setWidthPlayArea(aWidthPlayArea);
+			gameToChange.setHeightPlayArea(aHeightPlayArea);
+			gameToChange.setName(aName);
+			
+			//change ball properties
+			gameToChange.getBall().setBallSpeedIncreaseFactor(aBallSpeedIncreaseFactor);
+			gameToChange.getBall().setMinBallSpeedX(aMinBallSpeedX);
+			gameToChange.getBall().setMinBallSpeedY(aMinBallSpeedY);
+			
+			//change paddle properties
+			gameToChange.getPaddle().setMaxPaddleLength(aMaxPaddleLength);
+			gameToChange.getPaddle().setMinPaddleLength(aMinPaddleLength);
+		}
+		catch (RuntimeException e) {
+			throw new InvalidInputException(e.getMessage());
+		}
+
 	}
 	
 	//delete game TODO
-	public static void deleteGame(int gameIndex) {
+	public static void deleteGame(String gameName){
 		Block223 block223 = BlockApplication.getBlock223();
-		block223.getGame(gameIndex).delete();
+		Game game = getGame(gameName);
+		if(game != null)
+			game.delete();
 		
 	}
 	
-	//update game TODO wtf is this supposed to do
-	public static void updateGame() throws InvalidInputException {
+	//update game TODO 
+	public static void updateGame(String gameName, String aName, int aNrBlocksPerLevel, int aWidthPlayArea, int aHeightPlayArea,
+			int aMinBallSpeedX, int aMinBallSpeedY, double aBallSpeedIncreaseFactor,
+			int aMaxPaddleLength, int aMinPaddleLength) throws InvalidInputException {
 		
+		//cheeky technique
+		
+		Game gameToChange = getGame(gameName);
+		
+		String name = aName;
+		int numBlocks = aNrBlocksPerLevel;
+		int width = aWidthPlayArea;
+		int height = aHeightPlayArea;
+		int xSpeed = aMinBallSpeedX;
+		int ySpeed = aMinBallSpeedY;
+		double speedFactor = aBallSpeedIncreaseFactor;
+		int maxPaddleLength = aMaxPaddleLength;
+		int minPaddleLength = aMinPaddleLength;
+
+		if(aName == ""){
+			name = gameToChange.getName();
+		}
+	
+		if(aNrBlocksPerLevel == 0) {
+			numBlocks = gameToChange.getNrBlocksPerLevel();
+		}
+
+		if(aWidthPlayArea == 0) {
+			width = gameToChange.getWidthPlayArea();
+		}
+
+		if(aHeightPlayArea == 0) {
+			height = gameToChange.getHeightPlayArea();
+		}
+
+		if(aMinBallSpeedX == 0) {
+			xSpeed = gameToChange.getBall().getMinBallSpeedX();
+		}
+
+		if(aMinBallSpeedY == 0) {
+			ySpeed = gameToChange.getBall().getMinBallSpeedY();
+		}
+		if(aBallSpeedIncreaseFactor == 0) {
+			speedFactor = gameToChange.getBall().getBallSpeedIncreaseFactor();
+		}
+
+		if(aMaxPaddleLength == 0) {
+			maxPaddleLength = gameToChange.getPaddle().getMaxPaddleLength();
+		}
+
+		if(aMinPaddleLength == 0) {
+			minPaddleLength = gameToChange.getPaddle().getMinPaddleLength();
+		}
+
+		
+		changeGameSettings(gameName, name, numBlocks, width, height, xSpeed, ySpeed, speedFactor, maxPaddleLength, minPaddleLength);
+
 	}
 	
 	//add block to game to use in level TODO
-	public static void addBlockToGame(int gameIndex, int aRed, int aGreen, int aBlue, int aPoints) throws InvalidInputException {
+	public static void addBlockToGame(String gameName, int aRed, int aGreen, int aBlue, int aPoints) throws InvalidInputException {
 		//get game
+		String error = "";
+		
+		if(aRed > 255)//arbitrary # i picked, need to check actual max
+			error += "RGB max value is 255";
+		if(aRed < 0)
+			error += "RGB min value is 0";
+		if(aGreen > 255)//arbitrary # i picked, need to check actual max
+			error += "RGB max value is 255";
+		if(aGreen < 0)
+			error += "RGB min value is 0";
+		if(aBlue > 255)//arbitrary # i picked, need to check actual max
+			error += "RGB max value is 255";
+		if(aBlue < 0)
+			error += "RGB min value is 0";
+		if(aPoints < 0)
+			error += "Points min value is 0";
+		
+		if (error.length() > 0) {
+			throw new InvalidInputException(error.trim());
+		}
+
 		Block223 block223 = BlockApplication.getBlock223();
-		Game gameToChange = block223.getGame(gameIndex);
-		//add block to game from block constructor
-		Block newBlock = gameToChange.addBlock(aRed, aGreen, aBlue, aPoints);
-		gameToChange.addBlock(newBlock);
+		try {
+			Game gameToChange = getGame(gameName);
+			//add block to game from block constructor
+			Block newBlock = gameToChange.addBlock(aRed, aGreen, aBlue, aPoints);
+			gameToChange.addBlock(newBlock);
+		}
+		catch (RuntimeException e) {
+			throw new InvalidInputException(e.getMessage());
+		}
+
 	}
 	
 	//delete block from game so it cant be used in level TODO
-	public static void deleteBlockFromGame(int gameIndex, int blockId) throws InvalidInputException {
+	public static void deleteBlockFromGame(String gameName, int blockId) throws InvalidInputException {
 		//get game
 		Block223 block223 = BlockApplication.getBlock223();
-
-		Game gameToChange = block223.getGame(gameIndex);
-		//loop through list and check if ID matches
-		//cleaner way of iterating through blocks
-		for(Block aBlock : gameToChange.getBlocks()) {
-			if(aBlock.getId() == blockId) {
-				gameToChange.removeBlock(aBlock);
-			}
+		try {
+			Game gameToChange = getGame(gameName);
+			gameToChange.removeBlock(getBlock(gameName, blockId));//calling custom getBlock method
 		}
+		catch (RuntimeException e) {
+			throw new InvalidInputException(e.getMessage());
+		}
+
 	}
 	
-	//update block in game TODO wtf is this supposed to do
-	public static void updateBlock() throws InvalidInputException {
+	//update block in game TODO
+	public static void updateBlock(String gameName, int blockId, int aRed, int aGreen, int aBlue, int aPoints) throws InvalidInputException {
+		String error = "";
+		
+		if(aRed > 255)//arbitrary # i picked, need to check actual max
+			error += "RGB max value is 255";
+		if(aRed < 0)
+			error += "RGB min value is 0";
+		if(aGreen > 255)//arbitrary # i picked, need to check actual max
+			error += "RGB max value is 255";
+		if(aGreen < 0)
+			error += "RGB min value is 0";
+		if(aBlue > 255)//arbitrary # i picked, need to check actual max
+			error += "RGB max value is 255";
+		if(aBlue < 0)
+			error += "RGB min value is 0";
+		if(aPoints < 0)
+			error += "Points min value is 0";
+		
+		if (error.length() > 0) {
+			throw new InvalidInputException(error.trim());
+		}
+		try {
+			Block blockToChange = getBlock(gameName, blockId);
+			blockToChange.setRed(aRed);
+			blockToChange.setGreen(aGreen);
+			blockToChange.setBlue(aBlue);
+		}
+		catch (RuntimeException e) {
+			throw new InvalidInputException(e.getMessage());
+		}
 		
 	}
 	
 	//position a block at a grid location in level TODO
-	public static void positionBlock(int gameIndex, int aGridHorizontalPosition, int aGridVerticalPosition, Level aLevel, Block aBlock) throws InvalidInputException {
+	public static void positionBlock(String gameName, int aGridHorizontalPosition, int aGridVerticalPosition, Level aLevel, Block aBlock) throws InvalidInputException {
+		String error = "";
+		
+		if(aLevel == null)
+			error += "Level must be defined";
+		if(aBlock == null)
+			error += "Block must be defined";
+		if(aGridHorizontalPosition < 0)
+			error += "Grid X min position is 0";
+		if(aGridHorizontalPosition > 20)//this is sketch in case of placing it a 15 and game window is too small, going up to only like 12
+			error += "Grid X max position is 20";
+		if(aGridVerticalPosition < 0)
+			error += "Grid Y min position is 0";
+		if(aGridVerticalPosition > 20)//this is sketch in case of placing it a 15 and game window is too small, going up to only like 12
+			error += "Grid Y max position is 20";
+
+		if (error.length() > 0) {
+			throw new InvalidInputException(error.trim());
+		}
+
 		//get game
 		Block223 block223 = BlockApplication.getBlock223();
+		try {
+			Game gameToChange = getGame(gameName);
+			//assign block to a position in a level
+			gameToChange.addBlockAssignment(aGridHorizontalPosition, aGridVerticalPosition, aLevel, aBlock);
+		}
+		catch (RuntimeException e) {
+			throw new InvalidInputException(e.getMessage());
+		}
 
-		Game gameToChange = block223.getGame(gameIndex);
-		//assign block to a position in a level
-		gameToChange.addBlockAssignment(aGridHorizontalPosition, aGridVerticalPosition, aLevel, aBlock);
 
 	}
 	
 	//move block from one grid location to another in a level TODO
 	public static void moveBlock(BlockAssignment blockAssignment, int aGridHorizontalPosition, int aGridVerticalPosition) throws InvalidInputException {
-		//get game
-//		Game gameToChange = Block223.getGame(gameIndex);
+		String error = "";
+		
+		if(blockAssignment == null)
+			error += "BlockAssignment must be defined";
+		if(aGridHorizontalPosition < 0)
+			error += "Grid X min position is 0";
+		if(aGridHorizontalPosition > 20)//this is sketch in case of placing it a 15 and game window is too small, going up to only like 12
+			error += "Grid X max position is 20";
+		if(aGridVerticalPosition < 0)
+			error += "Grid Y min position is 0";
+		if(aGridVerticalPosition > 20)//this is sketch in case of placing it a 15 and game window is too small, going up to only like 12
+			error += "Grid Y max position is 20";
 
+		if (error.length() > 0) {
+			throw new InvalidInputException(error.trim());
+		}
+		try {
 		//get list of blocks assigned to game
-		blockAssignment.setGridHorizontalPosition(aGridHorizontalPosition);
-		blockAssignment.setGridVerticalPosition(aGridVerticalPosition);
+			blockAssignment.setGridHorizontalPosition(aGridHorizontalPosition);
+			blockAssignment.setGridVerticalPosition(aGridVerticalPosition);
+		}
+		catch (RuntimeException e) {
+			throw new InvalidInputException(e.getMessage());
+		}
+
 		
 		
 	}
@@ -121,11 +329,17 @@ public class BlockController {
 	public static void removeBlockFromLevel(int blockId , Level level) throws InvalidInputException {
 		//loop through list and check if ID matches
 		//cleaner way of iterating through
-		for(BlockAssignment aBlockAssignment : level.getBlockAssignments()) {
-			if(aBlockAssignment.getBlock().getId() == blockId) {
-				level.removeBlockAssignment(aBlockAssignment);
+		try {
+			for(BlockAssignment aBlockAssignment : level.getBlockAssignments()) {
+				if(aBlockAssignment.getBlock().getId() == blockId) {
+					level.removeBlockAssignment(aBlockAssignment);
+				}
 			}
 		}
+		catch (RuntimeException e) {
+			throw new InvalidInputException(e.getMessage());
+		}
+
 	}
 	
 	//save game TODO
@@ -135,4 +349,26 @@ public class BlockController {
 	
 	//log in/log out as player/admin TODO
 	
+	//helper method to get a block
+	private static Block getBlock(String gameName, int blockId) {
+		Game gameToChange = getGame(gameName);
+		Block foundBlock = null;
+		for(Block aBlock : gameToChange.getBlocks()) {
+			if(aBlock.getId() == blockId) {
+				foundBlock = aBlock;
+			}
+		}
+		return foundBlock;
+
+	}
+	//helper method to get specific game
+	private static Game getGame(String gameName) {
+		Block223 block223 = BlockApplication.getBlock223();
+		Game foundGame = null;
+		for(Game aGame : block223.getGames()) {
+			if(aGame.getName() == gameName)
+				foundGame = aGame;
+		}
+		return foundGame;
+	}
 }
