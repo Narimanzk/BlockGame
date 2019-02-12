@@ -83,7 +83,7 @@ public class BlockController {
 		//get game to change
 		Block223 block223 = BlockApplication.getBlock223();
 		try {
-			Game gameToChange = Game.getWithName(gameName);
+			Game gameToChange = getGame(gameName);
 			
 			//change game properties
 			gameToChange.setNrBlocksPerLevel(aNrBlocksPerLevel);
@@ -109,7 +109,7 @@ public class BlockController {
 	//delete game TODO
 	public static void deleteGame(String gameName){
 		Block223 block223 = BlockApplication.getBlock223();
-		Game game = Game.getWithName(gameName);
+		Game game = getGame(gameName);
 		if(game != null)
 			game.delete();
 		
@@ -122,7 +122,8 @@ public class BlockController {
 		
 		//cheeky technique
 		
-		Game gameToChange = Game.getWithName(gameName);
+		Game gameToChange = getGame(gameName);
+		
 		String name = aName;
 		int numBlocks = aNrBlocksPerLevel;
 		int width = aWidthPlayArea;
@@ -199,7 +200,7 @@ public class BlockController {
 
 		Block223 block223 = BlockApplication.getBlock223();
 		try {
-			Game gameToChange = Game.getWithName(gameName);
+			Game gameToChange = getGame(gameName);
 			//add block to game from block constructor
 			gameToChange.addBlock(aRed, aGreen, aBlue, aPoints);
 		}
@@ -215,7 +216,7 @@ public class BlockController {
 		//get game
 		Block223 block223 = BlockApplication.getBlock223();
 		try {
-			Game gameToChange = Game.getWithName(gameName);
+			Game gameToChange = getGame(gameName);
 			gameToChange.removeBlock(getBlock(gameName, blockId));//calling custom getBlock method
 		}
 		catch (RuntimeException e) {
@@ -282,7 +283,7 @@ public class BlockController {
 		//get game
 		Block223 block223 = BlockApplication.getBlock223();
 		try {
-			Game gameToChange = Game.getWithName(gameName);
+			Game gameToChange = getGame(gameName);
 			//assign block to a position in a level
 			gameToChange.addBlockAssignment(aGridHorizontalPosition, aGridVerticalPosition, aLevel, aBlock);
 		}
@@ -347,8 +348,10 @@ public class BlockController {
 	}
 	
 	//log in/log out as player/admin TODO
+	
+	//helper method to get a block
 	private static Block getBlock(String gameName, int blockId) {
-		Game gameToChange = Game.getWithName(gameName);
+		Game gameToChange = getGame(gameName);
 		Block foundBlock = null;
 		for(Block aBlock : gameToChange.getBlocks()) {
 			if(aBlock.getId() == blockId) {
@@ -357,5 +360,15 @@ public class BlockController {
 		}
 		return foundBlock;
 
+	}
+	//helper method to get specific game
+	private static Game getGame(String gameName) {
+		Block223 block223 = BlockApplication.getBlock223();
+		Game foundGame = null;
+		for(Game aGame : block223.getGames()) {
+			if(aGame.getName() == gameName)
+				foundGame = aGame;
+		}
+		return foundGame;
 	}
 }
