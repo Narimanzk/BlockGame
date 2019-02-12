@@ -34,28 +34,40 @@ public class BlockController {
 		
 		//get game to change
 		Block223 block223 = BlockApplication.getBlock223();
-		Game gameToChange = block223.getGame(gameIndex);
-		
-		//change game properties
-		gameToChange.setNrBlocksPerLevel(aNrBlocksPerLevel);
-		gameToChange.setWidthPlayArea(aWidthPlayArea);
-		gameToChange.setHeightPlayArea(aHeightPlayArea);
-		gameToChange.setName(aName);
-		
-		//change ball properties
-		gameToChange.getBall().setBallSpeedIncreaseFactor(aBallSpeedIncreaseFactor);
-		gameToChange.getBall().setMinBallSpeedX(aMinBallSpeedX);
-		gameToChange.getBall().setMinBallSpeedY(aMinBallSpeedY);
-		
-		//change paddle properties
-		gameToChange.getPaddle().setMaxPaddleLength(aMaxPaddleLength);
-		gameToChange.getPaddle().setMinPaddleLength(aMinPaddleLength);
+		try {
+			Game gameToChange = block223.getGame(gameIndex);
+			
+			//change game properties
+			gameToChange.setNrBlocksPerLevel(aNrBlocksPerLevel);
+			gameToChange.setWidthPlayArea(aWidthPlayArea);
+			gameToChange.setHeightPlayArea(aHeightPlayArea);
+			gameToChange.setName(aName);
+			
+			//change ball properties
+			gameToChange.getBall().setBallSpeedIncreaseFactor(aBallSpeedIncreaseFactor);
+			gameToChange.getBall().setMinBallSpeedX(aMinBallSpeedX);
+			gameToChange.getBall().setMinBallSpeedY(aMinBallSpeedY);
+			
+			//change paddle properties
+			gameToChange.getPaddle().setMaxPaddleLength(aMaxPaddleLength);
+			gameToChange.getPaddle().setMinPaddleLength(aMinPaddleLength);
+		}
+		catch (RuntimeException e) {
+			throw new InvalidInputException(e.getMessage());
+		}
+
 	}
 	
 	//delete game TODO
-	public static void deleteGame(int gameIndex) {
+	public static void deleteGame(int gameIndex) throws InvalidInputException{
 		Block223 block223 = BlockApplication.getBlock223();
-		block223.getGame(gameIndex).delete();
+		try {
+			block223.getGame(gameIndex).delete();
+		}
+		catch (RuntimeException e) {
+			throw new InvalidInputException(e.getMessage());
+		}
+
 		
 	}
 	
@@ -68,9 +80,15 @@ public class BlockController {
 	public static void addBlockToGame(int gameIndex, int aRed, int aGreen, int aBlue, int aPoints) throws InvalidInputException {
 		//get game
 		Block223 block223 = BlockApplication.getBlock223();
-		Game gameToChange = block223.getGame(gameIndex);
-		//add block to game from block constructor
-		gameToChange.addBlock(aRed, aGreen, aBlue, aPoints);
+		try {
+			Game gameToChange = block223.getGame(gameIndex);
+			//add block to game from block constructor
+			gameToChange.addBlock(aRed, aGreen, aBlue, aPoints);
+		}
+		catch (RuntimeException e) {
+			throw new InvalidInputException(e.getMessage());
+		}
+
 		
 	}
 	
@@ -78,15 +96,20 @@ public class BlockController {
 	public static void deleteBlockFromGame(int gameIndex, int blockId) throws InvalidInputException {
 		//get game
 		Block223 block223 = BlockApplication.getBlock223();
-
-		Game gameToChange = block223.getGame(gameIndex);
+		try {
+			Game gameToChange = block223.getGame(gameIndex);
 		//loop through list and check if ID matches
 		//cleaner way of iterating through blocks
-		for(Block aBlock : gameToChange.getBlocks()) {
-			if(aBlock.getId() == blockId) {
-				gameToChange.removeBlock(aBlock);
+			for(Block aBlock : gameToChange.getBlocks()) {
+				if(aBlock.getId() == blockId) {
+					gameToChange.removeBlock(aBlock);
+				}
 			}
 		}
+		catch (RuntimeException e) {
+			throw new InvalidInputException(e.getMessage());
+		}
+
 	}
 	
 	//update block in game TODO wtf is this supposed to do
@@ -98,10 +121,15 @@ public class BlockController {
 	public static void positionBlock(int gameIndex, int aGridHorizontalPosition, int aGridVerticalPosition, Level aLevel, Block aBlock) throws InvalidInputException {
 		//get game
 		Block223 block223 = BlockApplication.getBlock223();
+		try {
+			Game gameToChange = block223.getGame(gameIndex);
+			//assign block to a position in a level
+			gameToChange.addBlockAssignment(aGridHorizontalPosition, aGridVerticalPosition, aLevel, aBlock);
+		}
+		catch (RuntimeException e) {
+			throw new InvalidInputException(e.getMessage());
+		}
 
-		Game gameToChange = block223.getGame(gameIndex);
-		//assign block to a position in a level
-		gameToChange.addBlockAssignment(aGridHorizontalPosition, aGridVerticalPosition, aLevel, aBlock);
 
 	}
 	
@@ -109,10 +137,15 @@ public class BlockController {
 	public static void moveBlock(BlockAssignment blockAssignment, int aGridHorizontalPosition, int aGridVerticalPosition) throws InvalidInputException {
 		//get game
 //		Game gameToChange = Block223.getGame(gameIndex);
-
+		try {
 		//get list of blocks assigned to game
-		blockAssignment.setGridHorizontalPosition(aGridHorizontalPosition);
-		blockAssignment.setGridVerticalPosition(aGridVerticalPosition);
+			blockAssignment.setGridHorizontalPosition(aGridHorizontalPosition);
+			blockAssignment.setGridVerticalPosition(aGridVerticalPosition);
+		}
+		catch (RuntimeException e) {
+			throw new InvalidInputException(e.getMessage());
+		}
+
 		
 		
 	}
@@ -121,11 +154,17 @@ public class BlockController {
 	public static void removeBlockFromLevel(int blockId , Level level) throws InvalidInputException {
 		//loop through list and check if ID matches
 		//cleaner way of iterating through
-		for(BlockAssignment aBlockAssignment : level.getBlockAssignments()) {
-			if(aBlockAssignment.getBlock().getId() == blockId) {
-				level.removeBlockAssignment(aBlockAssignment);
+		try {
+			for(BlockAssignment aBlockAssignment : level.getBlockAssignments()) {
+				if(aBlockAssignment.getBlock().getId() == blockId) {
+					level.removeBlockAssignment(aBlockAssignment);
+				}
 			}
 		}
+		catch (RuntimeException e) {
+			throw new InvalidInputException(e.getMessage());
+		}
+
 	}
 	
 	//save game TODO
