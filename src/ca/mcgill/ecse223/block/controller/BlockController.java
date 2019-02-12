@@ -70,8 +70,8 @@ public class BlockController {
 		Block223 block223 = BlockApplication.getBlock223();
 		Game gameToChange = block223.getGame(gameIndex);
 		//add block to game from block constructor
-		gameToChange.addBlock(aRed, aGreen, aBlue, aPoints);
-		
+		Block newBlock = gameToChange.addBlock(aRed, aGreen, aBlue, aPoints);
+		gameToChange.addBlock(newBlock);
 	}
 	
 	//delete block from game so it cant be used in level TODO
