@@ -1,6 +1,7 @@
 package ca.mcgill.ecse223.block.controller;
 
 import ca.mcgill.ecse223.block.application.BlockApplication;
+import ca.mcgill.ecse223.block.persistence.Block223Persistence;
 import ca.mcgill.ecse223.block.model.*;
 
 public class BlockController {
@@ -202,13 +203,13 @@ public class BlockController {
 		try {
 			Game gameToChange = getGame(gameName);
 			//add block to game from block constructor
-			Block newBlock = gameToChange.addBlock(aRed, aGreen, aBlue, aPoints);
-			gameToChange.addBlock(newBlock);
+			gameToChange.addBlock(aRed, aGreen, aBlue, aPoints);
 		}
 		catch (RuntimeException e) {
 			throw new InvalidInputException(e.getMessage());
 		}
-
+		Block223Persistence.save(block223);
+		
 	}
 	
 	//delete block from game so it cant be used in level TODO
