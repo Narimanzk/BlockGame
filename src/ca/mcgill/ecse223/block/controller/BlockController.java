@@ -44,6 +44,8 @@ public class BlockController {
 		try {
 			Game newGame = new Game(aName, aNrBlocksPerLevel, aWidthPlayArea, aHeightPlayArea, aAdmin, aMinBallSpeedXForBall,
 					 aMinBallSpeedYForBall, aBallSpeedIncreaseFactorForBall, aMaxPaddleLengthForPaddle, aMinPaddleLengthForPaddle, block223);
+			Block223Persistence.save(block223);
+
 		}
 		catch (RuntimeException e) {
 			throw new InvalidInputException(e.getMessage());
@@ -100,6 +102,8 @@ public class BlockController {
 			//change paddle properties
 			gameToChange.getPaddle().setMaxPaddleLength(aMaxPaddleLength);
 			gameToChange.getPaddle().setMinPaddleLength(aMinPaddleLength);
+			Block223Persistence.save(block223);
+
 		}
 		catch (RuntimeException e) {
 			throw new InvalidInputException(e.getMessage());
