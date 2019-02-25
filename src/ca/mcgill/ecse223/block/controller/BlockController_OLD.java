@@ -4,14 +4,14 @@ import ca.mcgill.ecse223.block.application.BlockApplication;
 import ca.mcgill.ecse223.block.persistence.Block223Persistence;
 import ca.mcgill.ecse223.block.model.*;
 
-public class BlockController {
+public class BlockController_OLD {
 
-	public BlockController() {
+	public BlockController_OLD() {
 
 	}
 	
 	//add game TODO
-	public static void addGame(String aName, int aNrBlocksPerLevel, int aWidthPlayArea, int aHeightPlayArea, Admin aAdmin,
+	public static void addGame(String aName, int aNrBlocksPerLevel, int aWidthPlayArea, int aHeightPlayArea, String playerName,
 			int aMinBallSpeedXForBall, int aMinBallSpeedYForBall, double aBallSpeedIncreaseFactorForBall,
 			int aMaxPaddleLengthForPaddle, int aMinPaddleLengthForPaddle) throws InvalidInputException {
 		String error = "";
@@ -40,6 +40,7 @@ public class BlockController {
 		}
 
 		Block223 block223 = BlockApplication.getBlock223();
+		Admin aAdmin = getAdmin(playerName);
 		//create game, dont need to do block223.addGame since its already added from the game constructor (in theory)
 		try {
 			Game newGame = new Game(aName, aNrBlocksPerLevel, aWidthPlayArea, aHeightPlayArea, aAdmin, aMinBallSpeedXForBall,
@@ -375,5 +376,18 @@ public class BlockController {
 				foundGame = aGame;
 		}
 		return foundGame;
+	}
+	//helper method to get specific Admin
+	private static Admin getAdmin(String playerName) {
+		Block223 block223 = BlockApplication.getBlock223();
+		Admin foundUserAdmin = null;
+		for(User aUser : block223.getUsers()) {
+			if(aUser.getUsername() == playerName) {
+				if(aUser.getRole(1) != null)//role[0] is player, role[1] is admin
+					foundUserAdmin = (Admin) aUser.getRole(1);
+
+			}
+		}
+		return foundUserAdmin;
 	}
 }

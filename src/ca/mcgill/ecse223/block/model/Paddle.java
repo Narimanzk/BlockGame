@@ -2,12 +2,10 @@
 /*This code was generated using the UMPLE 1.29.0.4181.a593105a9 modeling language!*/
 
 package ca.mcgill.ecse223.block.model;
-import java.io.Serializable;
 import java.util.*;
 
-// line 68 "../../../../../Block223Persistence.ump"
-// line 80 "../../../../../Block223.ump"
-public class Paddle implements Serializable
+// line 76 "../../../../../Block223.ump"
+public class Paddle
 {
 
   //------------------------
@@ -43,11 +41,11 @@ public class Paddle implements Serializable
     game = aGame;
   }
 
-  public Paddle(int aMaxPaddleLength, int aMinPaddleLength, String aNameForGame, int aNrBlocksPerLevelForGame, int aWidthPlayAreaForGame, int aHeightPlayAreaForGame, Admin aAdminForGame, Ball aBallForGame, Block223 aBlock223ForGame)
+  public Paddle(int aMaxPaddleLength, int aMinPaddleLength, String aNameForGame, int aNrBlocksPerLevelForGame, Admin aAdminForGame, Ball aBallForGame, Block223 aBlock223ForGame)
   {
     maxPaddleLength = aMaxPaddleLength;
     minPaddleLength = aMinPaddleLength;
-    game = new Game(aNameForGame, aNrBlocksPerLevelForGame, aWidthPlayAreaForGame, aHeightPlayAreaForGame, aAdminForGame, aBallForGame, this, aBlock223ForGame);
+    game = new Game(aNameForGame, aNrBlocksPerLevelForGame, aAdminForGame, aBallForGame, this, aBlock223ForGame);
   }
 
   //------------------------
@@ -102,13 +100,5 @@ public class Paddle implements Serializable
             "maxPaddleLength" + ":" + getMaxPaddleLength()+ "," +
             "minPaddleLength" + ":" + getMinPaddleLength()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "game = "+(getGame()!=null?Integer.toHexString(System.identityHashCode(getGame())):"null");
-  }  
-  //------------------------
-  // DEVELOPER CODE - PROVIDED AS-IS
-  //------------------------
-  
-  // line 71 "../../../../../Block223Persistence.ump"
-  private static final long serialVersionUID = 4417469660219235016L ;
-
-  
+  }
 }

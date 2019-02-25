@@ -2,12 +2,10 @@
 /*This code was generated using the UMPLE 1.29.0.4181.a593105a9 modeling language!*/
 
 package ca.mcgill.ecse223.block.model;
-import java.io.Serializable;
 import java.util.*;
 
-// line 15 "../../../../../Block223Persistence.ump"
-// line 49 "../../../../../Block223.ump"
-public class Block implements Serializable
+// line 44 "../../../../../Block223.ump"
+public class Block
 {
 
   //------------------------
@@ -259,17 +257,6 @@ public class Block implements Serializable
     }
   }
 
-  // line 21 "../../../../../Block223Persistence.ump"
-   public static  void reinitializeAutouniqueID(List<Block> blocks){
-    nextId = 0; 
-    for (Block block : blocks) {
-      if (block.getId() > nextId) {
-        nextId = block.getId();
-      }
-    }
-    nextId++;
-  }
-
 
   public String toString()
   {
@@ -280,13 +267,5 @@ public class Block implements Serializable
             "blue" + ":" + getBlue()+ "," +
             "points" + ":" + getPoints()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "game = "+(getGame()!=null?Integer.toHexString(System.identityHashCode(getGame())):"null");
-  }  
-  //------------------------
-  // DEVELOPER CODE - PROVIDED AS-IS
-  //------------------------
-  
-  // line 18 "../../../../../Block223Persistence.ump"
-  private static final long serialVersionUID = 6656318949934040316L ;
-
-  
+  }
 }
