@@ -3,9 +3,7 @@ package ca.mcgill.ecse223.block.controller;
 import java.util.ArrayList;
 import java.util.List;
 import ca.mcgill.ecse223.block.application.BlockApplication;
-import ca.mcgill.ecse223.block.model.Admin;
-import ca.mcgill.ecse223.block.model.Block223;
-import ca.mcgill.ecse223.block.model.Game;
+import ca.mcgill.ecse223.block.model.*;
 import ca.mcgill.ecse223.block.persistence.Block223Persistence;
 
 public class Block223Controller {
@@ -14,6 +12,24 @@ public class Block223Controller {
 	// Modifier methods
 	// ****************************
 	public static void createGame(String name) throws InvalidInputException {
+		String error = "";
+		Block223 block223 = BlockApplication.getBlock223();
+		Admin userRole = getCurrentUserRole(block223);//custom made function, probly not good
+		if(name == null || name == "") {
+			error += "Name cannot be empty\n";
+		}
+		if(findGame(name) != null) {
+			error += "Game name already in use\n";
+		}
+		if(userRole == null) {
+			error += "User has to be Admin\n";
+		}
+		if (error.length() > 0) {
+			throw new InvalidInputException(error.trim());
+		}
+		Game game = new Game(name, 1, userRole, 1, 1, 1, 10, 10, block223);
+
+
 	}
 
 	public static void setGameDetails(int nrLevels, int nrBlocksPerLevel, int minBallSpeedX, int minBallSpeedY,
@@ -153,6 +169,17 @@ public class Block223Controller {
 			}
 		}
 		return foundGame;
+	}
+	//helper method made to get user role for other functions
+	private static Admin getCurrentUserRole(Block223 block223) {
+		Admin curUserRole = null;
+		for(UserRole admin : block223.getUsers().get(0).getRoles()){//0 is sketch since idk how to see which user is current user
+			if(admin.getClass() == Admin.class) {
+				curUserRole = (Admin) admin;
+				break;
+			}
+		}
+		return curUserRole;
 	}
 
 }

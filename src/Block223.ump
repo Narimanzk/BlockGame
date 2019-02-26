@@ -1,4 +1,5 @@
 namespace ca.mcgill.ecse223.block.model;
+use Block223Persistence;
 
 class Block223 {
    1 <@>- * User users;
