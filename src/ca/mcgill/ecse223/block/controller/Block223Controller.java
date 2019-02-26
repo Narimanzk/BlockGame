@@ -15,6 +15,17 @@ public class Block223Controller {
 	}
 
 	public static void deleteGame(String name) throws InvalidInputException {
+		//TODO : exceptions
+				Game game = findGame(name);
+				if (game != null) {
+					game.delete();
+					try {
+						Block223Persistence.save(Block223Application.getBlock223());
+					}
+					catch (RuntimeException e) {
+						throw new InvalidInputException(e.getMessage());
+					}
+				}
 	}
 
 	public static void selectGame(String name) throws InvalidInputException {
