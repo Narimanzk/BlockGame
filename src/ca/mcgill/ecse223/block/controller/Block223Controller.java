@@ -46,6 +46,28 @@ public class Block223Controller {
 
 	public static void updateGame(String name, int nrLevels, int nrBlocksPerLevel, int minBallSpeedX, int minBallSpeedY,
 			Double ballSpeedIncreaseFactor, int maxPaddleLength, int minPaddleLength) throws InvalidInputException {
+		//TODO : exceptions
+		String error = "";
+				Game game = BlockApplication.getCurrentGame();
+				String currentName = game.getName();
+				if(!currentName.equals(name)) {
+					try {
+						game.setName(name);
+					}
+					catch (RuntimeException e) {
+						error = e.getMessage();
+						if (name == null || name == "" ) {
+							error = "The name of a game must be specified.";
+						}
+						throw new InvalidInputException(error);
+					}
+				}
+				else {
+					error = "The name of a game must be unique.";
+				}
+				setGameDetails(nrLevels, nrBlocksPerLevel, minBallSpeedX, minBallSpeedY, ballSpeedIncreaseFactor, maxPaddleLength, minPaddleLength);
+				
+				
 	}
 
 	public static void addBlock(int red, int green, int blue, int points) throws InvalidInputException {
