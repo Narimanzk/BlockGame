@@ -97,5 +97,16 @@ public class Block223Controller {
 	public static TOUserMode getUserMode() {
 		return null;
 	}
+	
+	private static Game findGame(String name) {
+		Game foundGame = null;
+		for (Game game : Block223Application.getBlock223().getGames()) {
+			if (game.getName().equals(name)) {
+				foundGame = game;
+				break;
+			}
+		}
+		return foundGame;
+	}
 
 }
