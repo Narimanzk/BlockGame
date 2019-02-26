@@ -134,10 +134,10 @@ public class Block223Controller {
 					throw new InvalidInputException(error.trim());
 				}
 				ArrayList<TOGame> result = new ArrayList<TOGame>();
-				for(Game game: game.getGames()) {
+				for(Game game: block223.getGames()) {
 					if(game.getAdmin().equals(admin)) {
 						TOGame to = new TOGame(game.getName(), game.getLevels().size(), game.getNrBlocksPerLevel(), game.getBall().getMinBallSpeedX(),game.getBall().getMinBallSpeedY(),game.getBall().getBallSpeedIncreaseFactor(),game.getPaddle().getMaxPaddleLength(),game.getPaddle().getMinPaddleLength());
-						result.add(toGame);
+						result.add(to);
 					}
 				}
 				return result;
