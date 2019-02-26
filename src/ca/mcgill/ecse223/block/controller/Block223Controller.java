@@ -3,6 +3,7 @@ package ca.mcgill.ecse223.block.controller;
 import java.util.ArrayList;
 import java.util.List;
 import ca.mcgill.ecse223.block.application.BlockApplication;
+import ca.mcgill.ecse223.block.model.Admin;
 import ca.mcgill.ecse223.block.model.Block223;
 import ca.mcgill.ecse223.block.model.Game;
 import ca.mcgill.ecse223.block.persistence.Block223Persistence;
@@ -85,7 +86,7 @@ public class Block223Controller {
 	public static List<TOGame> getDesignableGames() throws InvalidInputException {
 		//TODO exceptions
 				Block223 block223 = BlockApplication.getBlock223();
-				CurrentUserRole admin = BlockApplication.getCurrentUserRole();
+				Admin admin = BlockApplication.getCurrentUserRole();
 				ArrayList<TOGame> result = new ArrayList<TOGame>();
 				for(Game game: game.getGames()) {
 					if(game.getAdmin().equals(admin)) {
