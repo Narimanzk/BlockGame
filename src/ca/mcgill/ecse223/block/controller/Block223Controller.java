@@ -29,6 +29,10 @@ public class Block223Controller {
 	}
 
 	public static void selectGame(String name) throws InvalidInputException {
+		//TODO : exceptions
+				Game game = findGame(name);
+				//TODO : exception
+				Block223Application.setCurrentGame(game);
 	}
 
 	public static void updateGame(String name, int nrLevels, int nrBlocksPerLevel, int minBallSpeedX, int minBallSpeedY,
