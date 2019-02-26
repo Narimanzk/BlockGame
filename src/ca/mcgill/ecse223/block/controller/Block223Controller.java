@@ -18,9 +18,10 @@ public class Block223Controller {
 		//TODO : exceptions
 				Game game = findGame(name);
 				if (game != null) {
+					Block223 block223 = Block223Application.getBlock223();
 					game.delete();
 					try {
-						Block223Persistence.save(Block223Application.getBlock223());
+						Block223Persistence.save(block223);
 					}
 					catch (RuntimeException e) {
 						throw new InvalidInputException(e.getMessage());
