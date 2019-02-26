@@ -62,7 +62,17 @@ public class Block223Controller {
 	// Query methods
 	// ****************************
 	public static List<TOGame> getDesignableGames() throws InvalidInputException {
-		return null;
+		//TODO exceptions
+				Block223 block223 = Block223Application.getBlock223();
+				CurrentUserRole admin = Block223Application.getCurrentUserRole();
+				ArrayList<TOGame> result = new ArrayList<TOGame>();
+				for(Game game: game.getGames()) {
+					if(game.getAdmin().equals(admin)) {
+						TOGame to = new TOGame(game.getName(), game.getLevels().size(), game.getNrBlocksPerLevel(), game.getBall().getMinBallSpeedX(),game.getBall().getMinBallSpeedY(),game.getBall().getBallSpeedIncreaseFactor(),game.getPaddle().getMaxPaddleLength(),game.getPaddle().getMinPaddleLength());
+						result.add(toGame);
+					}
+				}
+				return result;
 	}
 
 	public static TOGame getCurrentDesignableGame() throws InvalidInputException {
