@@ -124,9 +124,15 @@ public class Block223Controller {
 	// Query methods
 	// ****************************
 	public static List<TOGame> getDesignableGames() throws InvalidInputException {
-		//TODO exceptions
+				String error = "";
 				Block223 block223 = BlockApplication.getBlock223();
-				Admin admin = BlockApplication.getCurrentUserRole();
+				Admin admin = getCurrentUserRole(block223);
+				if(admin == null) {
+					error += "Admin privileges are required to access game information.";
+				}
+				if (error.length() > 0) {
+					throw new InvalidInputException(error.trim());
+				}
 				ArrayList<TOGame> result = new ArrayList<TOGame>();
 				for(Game game: game.getGames()) {
 					if(game.getAdmin().equals(admin)) {
