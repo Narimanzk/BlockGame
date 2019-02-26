@@ -38,7 +38,9 @@ public class Block223Controller {
 	public static void selectGame(String name) throws InvalidInputException {
 		//TODO : exceptions
 				Game game = findGame(name);
-				//TODO : exception
+				if(game == null) {
+					System.out.println("A game with name"+ name + "does not exist.");
+				}
 				BlockApplication.setCurrentGame(game);
 	}
 
