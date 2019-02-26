@@ -1,6 +1,11 @@
 package ca.mcgill.ecse223.block.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import ca.mcgill.ecse223.block.application.BlockApplication;
+import ca.mcgill.ecse223.block.model.Block223;
+import ca.mcgill.ecse223.block.model.Game;
+import ca.mcgill.ecse223.block.persistence.Block223Persistence;
 
 public class Block223Controller {
 
@@ -18,7 +23,7 @@ public class Block223Controller {
 		//TODO : exceptions
 				Game game = findGame(name);
 				if (game != null) {
-					Block223 block223 = Block223Application.getBlock223();
+					Block223 block223 = BlockApplication.getBlock223();
 					game.delete();
 					try {
 						Block223Persistence.save(block223);
@@ -33,7 +38,7 @@ public class Block223Controller {
 		//TODO : exceptions
 				Game game = findGame(name);
 				//TODO : exception
-				Block223Application.setCurrentGame(game);
+				BlockApplication.setCurrentGame(game);
 	}
 
 	public static void updateGame(String name, int nrLevels, int nrBlocksPerLevel, int minBallSpeedX, int minBallSpeedY,
@@ -79,8 +84,8 @@ public class Block223Controller {
 	// ****************************
 	public static List<TOGame> getDesignableGames() throws InvalidInputException {
 		//TODO exceptions
-				Block223 block223 = Block223Application.getBlock223();
-				CurrentUserRole admin = Block223Application.getCurrentUserRole();
+				Block223 block223 = BlockApplication.getBlock223();
+				CurrentUserRole admin = BlockApplication.getCurrentUserRole();
 				ArrayList<TOGame> result = new ArrayList<TOGame>();
 				for(Game game: game.getGames()) {
 					if(game.getAdmin().equals(admin)) {
@@ -93,7 +98,7 @@ public class Block223Controller {
 
 	public static TOGame getCurrentDesignableGame() throws InvalidInputException {
 		//TODO exceptions
-				Game game = Block223Application.getCurrentGame();
+				Game game = BlockApplication.getCurrentGame();
 				TOGame to = new TOGame(game.getName(), game.getLevels().size(), game.getNrBlocksPerLevel(), game.getBall().getMinBallSpeedX(),game.getBall().getMinBallSpeedY(),game.getBall().getBallSpeedIncreaseFactor(),game.getPaddle().getMaxPaddleLength(),game.getPaddle().getMinPaddleLength());
 				return to;
 	}
@@ -116,7 +121,7 @@ public class Block223Controller {
 	
 	private static Game findGame(String name) {
 		Game foundGame = null;
-		for (Game game : Block223Application.getBlock223().getGames()) {
+		for (Game game : BlockApplication.getBlock223().getGames()) {
 			if (game.getName().equals(name)) {
 				foundGame = game;
 				break;
