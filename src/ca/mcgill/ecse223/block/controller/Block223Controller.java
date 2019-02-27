@@ -72,14 +72,11 @@ public class Block223Controller {
 					}
 					catch (RuntimeException e) {
 						error = e.getMessage();
-						if (name == null || name == "" ) {
-							error = "The name of a game must be specified.";
+						if (error.equals("Name is not unique")) {
+							error = "The name of a game must be unique.";
 						}
 						throw new InvalidInputException(error);
 					}
-				}
-				else {
-					error = "The name of a game must be unique.";
 				}
 				setGameDetails(nrLevels, nrBlocksPerLevel, minBallSpeedX, minBallSpeedY, ballSpeedIncreaseFactor, maxPaddleLength, minPaddleLength);
 				
@@ -126,7 +123,7 @@ public class Block223Controller {
 	public static List<TOGame> getDesignableGames() throws InvalidInputException {
 				String error = "";
 				Block223 block223 = BlockApplication.getBlock223();
-				Admin admin = getCurrentUserRole(block223);
+				Admin admin = BlockApplication.getCurrentUserRole();
 				if(admin == null) {
 					error += "Admin privileges are required to access game information.";
 				}
