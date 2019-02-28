@@ -61,7 +61,7 @@ public class Block223Controller {
 			
 		
 	}
-
+	//Narry
 	public static void deleteGame(String name) throws InvalidInputException {
 		//TODO : exceptions to be checked
 		String error = "";
@@ -84,7 +84,7 @@ public class Block223Controller {
 			}
 		}
 	}
-
+	//Narry
 	public static void selectGame(String name) throws InvalidInputException {
 		//TODO : exceptions to be checked
 		String error = "";
@@ -107,7 +107,7 @@ public class Block223Controller {
 		}
 		BlockApplication.setCurrentGame(game);
 	}
-
+	//Narry
 	public static void updateGame(String name, int nrLevels, int nrBlocksPerLevel, int minBallSpeedX, int minBallSpeedY,
 			Double ballSpeedIncreaseFactor, int maxPaddleLength, int minPaddleLength) throws InvalidInputException {
 		//TODO : exceptions to be checked
@@ -276,6 +276,7 @@ public class Block223Controller {
 	// ****************************
 	// Query methods
 	// ****************************
+	//Narry
 	public static List<TOGame> getDesignableGames() throws InvalidInputException {
 		String error = "";
 		Block223 block223 = BlockApplication.getBlock223();
@@ -295,7 +296,7 @@ public class Block223Controller {
 		}
 		return result;
 	}
-
+	//Narry
 	public static TOGame getCurrentDesignableGame() throws InvalidInputException {
 		//TODO : exceptions to be checked
 		String error = "";
@@ -328,7 +329,7 @@ public class Block223Controller {
 	public static TOUserMode getUserMode() {
 		return null;
 	}
-
+	//Narry
 	private static Game findGame(String name) {
 		Game foundGame = null;
 		for (Game game : BlockApplication.getBlock223().getGames()) {
