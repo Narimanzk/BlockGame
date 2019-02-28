@@ -237,9 +237,27 @@ public class Block223Controller {
 	public static void removeBlock(int level, int gridHorizontalPosition, int gridVerticalPosition)
 			throws InvalidInputException {
 	}
-
+	//Aly
 	public static void saveGame() throws InvalidInputException {
-	}
+		String error = "";
+		Block223 block223 = BlockApplication.getBlock223();
+		if(!(BlockApplication.getCurrentUserRole() instanceof Admin))
+			error+= "Admin priviliges are required to save a game";
+		if(BlockApplication.getCurrentGame() == null)
+			error+= "A game must be selected to save it";
+		if(BlockApplication.getCurrentGame().getAdmin() != BlockApplication.getCurrentUserRole())
+			error+= "Only the admin who created the game can save it";
+		if(error.length()>0)
+			throw new InvalidInputException(error);
+		
+		try {
+		
+		Block223Persistence.save(block223);
+		}
+		catch (RuntimeException e) {
+			throw new InvalidInputException(e.getMessage());
+		}
+		}
 	//TUDOR
 	public static void register(String username, String playerPassword, String adminPassword)
 			throws InvalidInputException {
