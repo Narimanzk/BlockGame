@@ -39,6 +39,28 @@ public class Block223Controller {
 
 	public static void setGameDetails(int nrLevels, int nrBlocksPerLevel, int minBallSpeedX, int minBallSpeedY,
 			Double ballSpeedIncreaseFactor, int maxPaddleLength, int minPaddleLength) throws InvalidInputException {
+		String error = "";
+		Block223 block223 = BlockApplication.getBlock223();
+		Admin userRole = (Admin) BlockApplication.getCurrentUserRole();
+		
+		if(nrLevels < 1 || nrLevels > 99) 
+			error += "The number of levels must be between 1 and 99\n";
+		if(nrBlocksPerLevel <= 0)
+			error += "The number of blocks per level must be greater than zero\n";
+		if(minBallSpeedX <= 0)
+			error += "The minimum speed of the ball mut be greater than zero\n";
+		if(minBallSpeedY <= 0)
+			error += "The minimum speed of the ball mut be greater than zero\n";
+		if(ballSpeedIncreaseFactor <= 0)
+			error += "The speed increase factor of the ball mut be greater than zero\n";
+		if(maxPaddleLength <= 0 || maxPaddleLength > 400) 
+			error += "THe maximum length of the paddle be greater than zero and less than or equal to 400";
+		if(minPaddleLength <= 0 ) 
+			error += "THe minimum length of the paddle be greater than zero";
+	
+			
+			
+		
 	}
 
 	public static void deleteGame(String name) throws InvalidInputException {
@@ -252,7 +274,7 @@ public class Block223Controller {
 	public static TOGame getCurrentDesignableGame() throws InvalidInputException {
 		//TODO : exceptions to be checked
 		String error = "";
-		if(BlockApplication.getCurrentUserRole == null) {
+		if(BlockApplication.getCurrentUserRole().getClass() != Admin.class) {
 			error += "Admin privileges are required to access game information.";
 		}
 		if(BlockApplication.getCurrentGame == null) {
@@ -293,20 +315,8 @@ public class Block223Controller {
 		return foundGame;
 	}
 
-	// helper method made to get user role for other functions
-	private static Admin getCurrentUserRole(Block223 block223) {
-		Admin curUserRole = null;
-		for (UserRole admin : block223.getUsers().get(0).getRoles()) {// 0 is sketch since idk how to see which user is
-																		// current user
-			if (admin.getClass() == Admin.class) {
-				curUserRole = (Admin) admin;
-				break;
-			}
-		}
-		return curUserRole;
-	}
 
 	private static Block findBlock(int id) {
-
+		return null;
 	}
 }
