@@ -252,9 +252,21 @@ public class Block223Controller {
 	}
 
 	public static void login(String username, String password) throws InvalidInputException {
+		//TODO add exceptions
+		BlockApplication.resetBlock223();
+		User user = User.getWithUsername(username);
+		List<UserRole> roles = user.getRoles();
+		
+		for(UserRole aRole : roles) {
+			String rolePassword = aRole.getPassword();
+			if(rolePassword == password) {
+				BlockApplication.setCurrentUserRole(aRole);
+			}
+		}
 	}
 
-	public static void logout() {
+	public static void logout() { //Tudor did this God function
+		BlockApplication.setCurrentUserRole(null);
 	}
 
 	// ****************************
