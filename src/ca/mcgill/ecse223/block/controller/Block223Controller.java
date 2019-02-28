@@ -4,12 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ca.mcgill.ecse223.block.application.BlockApplication;
-import ca.mcgill.ecse223.block.model.Admin;
-import ca.mcgill.ecse223.block.model.Block;
-import ca.mcgill.ecse223.block.model.Block223;
-import ca.mcgill.ecse223.block.model.Game;
-import ca.mcgill.ecse223.block.model.Level;
-import ca.mcgill.ecse223.block.model.UserRole;
+import ca.mcgill.ecse223.block.model.*;
 import ca.mcgill.ecse223.block.persistence.Block223Persistence;
 
 public class Block223Controller {
@@ -20,7 +15,7 @@ public class Block223Controller {
 	public static void createGame(String name) throws InvalidInputException {
 		String error = "";
 		Block223 block223 = BlockApplication.getBlock223();
-		Admin userRole = getCurrentUserRole(block223);// custom made function, probly not good
+		Admin userRole = (Admin) BlockApplication.getCurrentUserRole();
 		if (name == null || name == "") {
 			error += "Name cannot be empty\n";
 		}
@@ -58,6 +53,9 @@ public class Block223Controller {
 		if(minPaddleLength <= 0 ) 
 			error += "THe minimum length of the paddle be greater than zero";
 	
+		if (error.length() > 0) {
+			throw new InvalidInputException(error.trim());
+		}
 			
 			
 		
@@ -240,6 +238,17 @@ public class Block223Controller {
 
 	public static void register(String username, String playerPassword, String adminPassword)
 			throws InvalidInputException {
+		//TODO add exceptions
+		Block223 block223 = BlockApplication.getBlock223();
+		Player player = new Player(playerPassword, block223);
+		User user = new User(username, block223, player);
+		
+		if(adminPassword != null && adminPassword != "") {
+			Admin admin = new Admin(adminPassword, block223);
+			user.addRole(admin);
+		}
+		Block223Persistence.save(block223);
+
 	}
 
 	public static void login(String username, String password) throws InvalidInputException {

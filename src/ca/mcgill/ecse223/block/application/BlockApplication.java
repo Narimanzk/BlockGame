@@ -43,5 +43,11 @@ public class BlockApplication {
 		}
 		return curUserRole;
 	}
+	public static void setCurrentGame(Game aGame) {
+		
+	}
+	public static Game getCurrentGame() {
+		return null;
+	}
 	
 }
