@@ -91,7 +91,7 @@ public class Block223Controller {
 		if(admin == null) {
 			error += "Admin privileges are required to access game information.";
 		}
-		if(BlockApplication.getCurrentUserRole() != BlockApplication.getCurrentUserRole()) {//condition is wrong probably
+		if(BlockApplication.getCurrentUserRole() instanceof Admin) {//condition is wrong probably
 			error += "Only the admin who created the game can select the game.";
 		}
 		Game game = findGame(name);
@@ -114,7 +114,7 @@ public class Block223Controller {
 		if(admin == null) {
 			error += "Admin privileges are required to access game information.";
 		}
-		if(BlockApplication.getCurrentUserRole() != BlockApplication.getCurrentUserRole()) {//condition is wrong probably
+		if(BlockApplication.getCurrentUserRole() instanceof Admin) {//condition is wrong probably
 			error += "Only the admin who created the game can select the game.";
 		}
 		if (error.length() > 0) {
@@ -142,7 +142,7 @@ public class Block223Controller {
 		if(game == null) {
 			error += "A game must be selected to access information.";
 		}
-		if(BlockApplication.getCurrentUserRole() != BlockApplication.getCurrentUserRole()) {//condition is wrong probably
+		if(BlockApplication.getCurrentUserRole() instanceof Admin) {//condition is wrong probably
 			error += "Only the admin who created the game can select the game.";
 		}
 		if (error.length() > 0) {
@@ -328,11 +328,11 @@ public class Block223Controller {
 		if(admin == null) {
 			error += "Admin privileges are required to access game information.";
 		}
+		if(BlockApplication.getCurrentUserRole() instanceof Admin) {//condition is wrong probably
+			error += "Only the admin who created the game can select the game.";
+		}
 		if(BlockApplication.getCurrentGame() == null) {
 			error += "A game must be selected to access information.";
-		}
-		if(BlockApplication.getCurrentUserRole() != BlockApplication.getCurrentUserRole()) {//condition is wrong probably
-			error += "Only the admin who created the game can select the game.";
 		}
 		Game game = BlockApplication.getCurrentGame();
 		TOGame to = new TOGame(game.getName(), game.getLevels().size(), game.getNrBlocksPerLevel(), game.getBall().getMinBallSpeedX(),game.getBall().getMinBallSpeedY(),game.getBall().getBallSpeedIncreaseFactor(),game.getPaddle().getMaxPaddleLength(),game.getPaddle().getMinPaddleLength());
