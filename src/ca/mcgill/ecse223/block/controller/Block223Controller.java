@@ -12,6 +12,7 @@ public class Block223Controller {
 	// ****************************
 	// Modifier methods
 	// ****************************
+	//TUDOR
 	public static void createGame(String name) throws InvalidInputException {
 		String error = "";
 		Block223 block223 = BlockApplication.getBlock223();
@@ -31,7 +32,7 @@ public class Block223Controller {
 		Game game = new Game(name, 1, userRole, 1, 1, 1, 10, 10, block223);
 
 	}
-
+	//TUDOR
 	public static void setGameDetails(int nrLevels, int nrBlocksPerLevel, int minBallSpeedX, int minBallSpeedY,
 			Double ballSpeedIncreaseFactor, int maxPaddleLength, int minPaddleLength) throws InvalidInputException {
 		String error = "";
@@ -235,7 +236,7 @@ public class Block223Controller {
 
 	public static void saveGame() throws InvalidInputException {
 	}
-
+	//TUDOR
 	public static void register(String username, String playerPassword, String adminPassword)
 			throws InvalidInputException {
 		//TODO add exceptions
@@ -250,7 +251,7 @@ public class Block223Controller {
 		Block223Persistence.save(block223);
 
 	}
-
+	//TUDOR
 	public static void login(String username, String password) throws InvalidInputException {
 		//TODO add exceptions
 		BlockApplication.resetBlock223();
@@ -264,7 +265,7 @@ public class Block223Controller {
 			}
 		}
 	}
-
+	//TUDOR
 	public static void logout() { //Tudor did this God function
 		BlockApplication.setCurrentUserRole(null);
 	}

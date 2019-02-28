@@ -1,5 +1,8 @@
 package ca.mcgill.ecse223.block.application;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ca.mcgill.ecse223.block.model.*;
 import ca.mcgill.ecse223.block.persistence.Block223Persistence;
 import ca.mcgill.ecse223.block.view.Block223Page;
@@ -7,7 +10,8 @@ import ca.mcgill.ecse223.block.view.Block223Page;
 public class BlockApplication {
 	
 	private static Block223 block223;
-	
+	private static UserRole currentRole;
+	private static Game currentGame;
 	public static void main(String[] args) {
 		// start UI
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -29,25 +33,17 @@ public class BlockApplication {
 	}
 	
 	public static void setCurrentUserRole(UserRole aUserRole) {
+		currentRole = aUserRole;
 		
 	}
 	public static UserRole getCurrentUserRole() {
-		UserRole curUserRole = null;
-		for(UserRole userRole : block223.getUsers().get(0).getRoles()) {
-			if(userRole.getClass() == Admin.class) {
-				curUserRole = (Admin)userRole;
-			}
-			if(userRole.getClass() == Player.class) {
-				curUserRole = (Player)userRole;
-			}
-		}
-		return curUserRole;
+		return currentRole;
 	}
 	public static void setCurrentGame(Game aGame) {
-		
+		currentGame = aGame;
 	}
 	public static Game getCurrentGame() {
-		return null;
+		return currentGame;
 	}
 	
 }

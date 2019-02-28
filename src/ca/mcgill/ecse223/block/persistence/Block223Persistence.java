@@ -5,7 +5,7 @@ import ca.mcgill.ecse223.block.persistence.PersistenceObjectStream;
 
 public class Block223Persistence {
 	
-	private static String filename = "data.btms";
+	private static String filename = "data.bms";
 	
 	public static void save(Block223 block223) {
 		PersistenceObjectStream.serialize(block223);
@@ -18,7 +18,7 @@ public class Block223Persistence {
 			block223 = new Block223(); //then a new Block223 needs to be created.
 		}
 		else {
-//			block223.reinitialize();
+//			 block223.reinitialize();
 		}
 		return block223;
 	}
