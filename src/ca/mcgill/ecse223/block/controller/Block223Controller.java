@@ -354,7 +354,7 @@ public class Block223Controller {
 		return null;
 	}
 
-	public List<TOGridCell> getBlocksAtLevelOfCurrentDesignableGame(int level) throws InvalidInputException {
+	public static List<TOGridCell> getBlocksAtLevelOfCurrentDesignableGame(int level) throws InvalidInputException {
 		return null;
 	}
 

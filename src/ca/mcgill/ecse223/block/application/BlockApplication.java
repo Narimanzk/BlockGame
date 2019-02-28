@@ -23,7 +23,6 @@ public class BlockApplication {
 
 	public static Block223 getBlock223() {
 		if (block223 == null) {
-			// for now, we are just creating an empty BTMS
 			block223 = new Block223();
 		}
  		return block223;
