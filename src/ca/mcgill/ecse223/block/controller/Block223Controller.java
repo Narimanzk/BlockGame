@@ -300,7 +300,8 @@ public class Block223Controller {
 	public static TOGame getCurrentDesignableGame() throws InvalidInputException {
 		//TODO : exceptions to be checked
 		String error = "";
-		if(BlockApplication.getCurrentUserRole().getClass() != Admin.class) {
+		Admin admin =(Admin) BlockApplication.getCurrentUserRole();
+		if(admin == null) {
 			error += "Admin privileges are required to access game information.";
 		}
 		if(BlockApplication.getCurrentGame == null) {
