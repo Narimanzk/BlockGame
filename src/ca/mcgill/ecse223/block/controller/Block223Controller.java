@@ -69,7 +69,7 @@ public class Block223Controller {
 		if(admin == null) {
 			error += "Admin privileges are required to access game information.";
 		}
-		if(BlockApplication.getCurrentGame().getCurrentUserRole != BlockApplication.getCurrentUserRole) {//condition is wrong probably
+		if(BlockApplication.getCurrentUserRole() != BlockApplication.getCurrentUserRole()) {//condition is wrong probably
 			error += "Only the admin who created the game can select the game.";
 		}
 		Game game = findGame(name);
@@ -92,7 +92,7 @@ public class Block223Controller {
 		if(admin == null) {
 			error += "Admin privileges are required to access game information.";
 		}
-		if(BlockApplication.getCurrentGame().getCurrentUserRole != BlockApplication.getCurrentUserRole) {//condition is wrong probably
+		if(BlockApplication.getCurrentUserRole() != BlockApplication.getCurrentUserRole()) {//condition is wrong probably
 			error += "Only the admin who created the game can select the game.";
 		}
 		if (error.length() > 0) {
@@ -120,7 +120,7 @@ public class Block223Controller {
 		if(game == null) {
 			error += "A game must be selected to access information.";
 		}
-		if(BlockApplication.getCurrentGame().getCurrentUserRole != BlockApplication.getCurrentUserRole) {//condition is wrong probably
+		if(BlockApplication.getCurrentUserRole() != BlockApplication.getCurrentUserRole()) {//condition is wrong probably
 			error += "Only the admin who created the game can select the game.";
 		}
 		if (error.length() > 0) {
@@ -205,12 +205,12 @@ public class Block223Controller {
 			throw new InvalidInputException("Level" + level + "does not exist for the game. ");
 		}
 		
-		if(aLevel.numberOfBlockAssignments() == ???)
+		/*if(aLevel.numberOfBlockAssignments() == ???)
 		{
 			
 		}
 			
-			
+			*/
 		Block foundBlock = null;
 		List<Block> blocks = game.getBlocks();
 		for (Block block : blocks) {
@@ -223,9 +223,10 @@ public class Block223Controller {
 		if (foundBlock == null) {
 			throw new InvalidInputException("The block does not exist. ");
 		}	
-		try {
-			BlockAssignment blockAssignment = new BlockAssignment(gridHorizontalPosition, gridVerticalPosition, alevel, block, game);
-		}
+		
+			BlockAssignment blockAssignment = new BlockAssignment(gridHorizontalPosition, gridVerticalPosition, aLevel, foundBlock, game);
+		
+		
 		
 	}
 
@@ -302,10 +303,10 @@ public class Block223Controller {
 		if(BlockApplication.getCurrentUserRole().getClass() != Admin.class) {
 			error += "Admin privileges are required to access game information.";
 		}
-		if(BlockApplication.getCurrentGame == null) {
+		if(BlockApplication.getCurrentGame() == null) {
 			error += "A game must be selected to access information.";
 		}
-		if(BlockApplication.getCurrentGame().getCurrentUserRole != BlockApplication.getCurrentUserRole) {//condition is wrong probably
+		if(BlockApplication.getCurrentUserRole() != BlockApplication.getCurrentUserRole()) {//condition is wrong probably
 			error += "Only the admin who created the game can select the game.";
 		}
 		Game game = BlockApplication.getCurrentGame();
