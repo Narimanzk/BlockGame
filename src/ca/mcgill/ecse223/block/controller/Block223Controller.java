@@ -65,7 +65,8 @@ public class Block223Controller {
 	public static void deleteGame(String name) throws InvalidInputException {
 		//TODO : exceptions to be checked
 		String error = "";
-		if(BlockApplication.getCurrentUserRole == null) {
+		Admin admin =(Admin) BlockApplication.getCurrentUserRole();
+		if(admin == null) {
 			error += "Admin privileges are required to access game information.";
 		}
 		if(BlockApplication.getCurrentGame().getCurrentUserRole != BlockApplication.getCurrentUserRole) {//condition is wrong probably
@@ -87,7 +88,8 @@ public class Block223Controller {
 	public static void selectGame(String name) throws InvalidInputException {
 		//TODO : exceptions to be checked
 		String error = "";
-		if(BlockApplication.getCurrentUserRole == null) {
+		Admin admin =(Admin) BlockApplication.getCurrentUserRole();
+		if(admin == null) {
 			error += "Admin privileges are required to access game information.";
 		}
 		if(BlockApplication.getCurrentGame().getCurrentUserRole != BlockApplication.getCurrentUserRole) {//condition is wrong probably
@@ -110,10 +112,12 @@ public class Block223Controller {
 			Double ballSpeedIncreaseFactor, int maxPaddleLength, int minPaddleLength) throws InvalidInputException {
 		//TODO : exceptions to be checked
 		String error = "";
-		if(BlockApplication.getCurrentUserRole == null) {
+		Admin admin =(Admin) BlockApplication.getCurrentUserRole();
+		Game game = BlockApplication.getCurrentGame();
+		if(admin == null) {
 			error += "Admin privileges are required to access game information.";
 		}
-		if(BlockApplication.getCurrentGame == null) {
+		if(game == null) {
 			error += "A game must be selected to access information.";
 		}
 		if(BlockApplication.getCurrentGame().getCurrentUserRole != BlockApplication.getCurrentUserRole) {//condition is wrong probably
@@ -122,7 +126,6 @@ public class Block223Controller {
 		if (error.length() > 0) {
 			throw new InvalidInputException(error.trim());
 		}
-		Game game = BlockApplication.getCurrentGame();
 		String currentName = game.getName();
 		if(!currentName.equals(name)) {
 			try {
@@ -276,7 +279,7 @@ public class Block223Controller {
 	public static List<TOGame> getDesignableGames() throws InvalidInputException {
 		String error = "";
 		Block223 block223 = BlockApplication.getBlock223();
-		Admin admin = BlockApplication.getCurrentUserRole();
+		Admin admin =(Admin) BlockApplication.getCurrentUserRole();
 		if(admin == null) {
 			error += "Admin privileges are required to access game information.";
 		}
