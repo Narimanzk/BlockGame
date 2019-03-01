@@ -159,10 +159,49 @@ public class Block223Controller {
 
 	}
 
+	//Charles McC
 	public static void addBlock(int red, int green, int blue, int points) throws InvalidInputException {
+		String error = "";
+		if (red > 255 || red < 0) {
+			error = error + "Red must be between 0 and 255. ";
+		}
+		if (green > 255 || green < 0) {
+			error = error + "Green must be between 0 and 255. ";
+		}
+		if (blue > 255 || blue < 0) {
+			error = error + "Blue must be between 0 and 255. ";
+		}
+		if (green > 255 || green < 0) {
+			error = error + "Green must be between 0 and 255. ";
+		}
+		if (points > 1000 || points < 1) {
+			error = error + "Points must be between 1 and 1000.";
+		}
+		if(error.trim().length()>0) {
+			throw new InvalidInputException(error);			
+		}
+		try {
+			BlockApplication.getCurrentGame().addBlock(red, green, blue, points);
+		}catch(RuntimeException e) {
+			throw new InvalidInputException(e.getMessage());
+		}
 	}
 
+	//Charles McC
 	public static void deleteBlock(int id) throws InvalidInputException {
+		Game gameToChange = BlockApplication.getCurrentGame();		
+		List<Block> blocks = gameToChange.getBlocks();		
+		Block toDelete = null;
+		for(int i=0;i<blocks.size();i++) {
+			if(blocks.get(i).getId() == id) {
+				toDelete = blocks.get(i);
+				break;
+			}
+		}
+		if(toDelete==null) {
+			throw new InvalidInputException("Block does not exist.");
+		}
+		BlockApplication.getCurrentGame().removeBlock(toDelete);//calling custom getBlock method
 	}
 
 	// Charles L
