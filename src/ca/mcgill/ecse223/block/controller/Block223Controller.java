@@ -20,7 +20,7 @@ public class Block223Controller {
 		UserRole userRole = BlockApplication.getCurrentUserRole();
 		Game aGame = findGame(name);
 		
-		if (!(BlockApplication.getCurrentUserRole() instanceof Admin)) {
+		if (!(userRole instanceof Admin)) {
 			error += "Admin privileges are required to create a game\n";
 		}
 		if (error.length() > 0) {
@@ -42,7 +42,7 @@ public class Block223Controller {
 		UserRole userRole = BlockApplication.getCurrentUserRole();
 		Game aGame = BlockApplication.getCurrentGame();
 		
-		if (!(BlockApplication.getCurrentUserRole() instanceof Admin)) 
+		if (!(userRole instanceof Admin)) 
 			error += "Admin privileges are required to create a game\n";
 		if(aGame == null)
 			error += "A game must be selected to define game settings\n";
@@ -406,7 +406,7 @@ public class Block223Controller {
 		String error = "";
 		UserRole userRole = BlockApplication.getCurrentUserRole();
 		
-		if (!(BlockApplication.getCurrentUserRole() instanceof Admin)) 
+		if (!(userRole instanceof Admin)) 
 			error += "Admin privileges are required to create a game\n";
 		
 		if(playerPassword.equals(adminPassword))
@@ -430,7 +430,18 @@ public class Block223Controller {
 
 	// TUDOR
 	public static void login(String username, String password) throws InvalidInputException {
-		// TODO add exceptions
+		String error = "";
+		UserRole userRole = BlockApplication.getCurrentUserRole();
+		
+		if (userRole != null) 
+			error += "Cannot login a user while a user is already logged in\n";
+		if(User.getWithUsername(username) == null)
+			error += "The username and password do not match\n";
+		
+		if (error.length() > 0) {
+			throw new InvalidInputException(error.trim());
+		}
+
 		BlockApplication.resetBlock223();
 		User user = User.getWithUsername(username);
 		List<UserRole> roles = user.getRoles();
@@ -441,6 +452,9 @@ public class Block223Controller {
 				BlockApplication.setCurrentUserRole(aRole);
 			}
 		}
+		if(BlockApplication.getCurrentUserRole() == null) 
+			throw new InvalidInputException("The username and password do not match\n");
+		
 	}
 
 	// TUDOR
