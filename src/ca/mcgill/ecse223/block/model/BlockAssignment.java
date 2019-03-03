@@ -3,7 +3,7 @@
 
 package ca.mcgill.ecse223.block.model;
 
-// line 75 "../../../../../Block223.ump"
+// line 80 "../../../../../Block223.ump"
 public class BlockAssignment
 {
 
@@ -52,6 +52,13 @@ public class BlockAssignment
   public boolean setGridHorizontalPosition(int aGridHorizontalPosition)
   {
     boolean wasSet = false;
+    // line 84 "../../../../../Block223.ump"
+    //1 Column padding at each side
+    	    int maxNumberHorizontalBlocks = (Game.PLAY_AREA_SIDE - 2 * Game.COLUMNS_PADDING) / Block.SIZE;
+    	    if ( aGridHorizontalPosition <= 0 || aGridHorizontalPosition > maxNumberHorizontalBlocks ) {
+    			throw new RuntimeException("The horizontal position must be between 1 and " + maxNumberHorizontalBlocks + ".");
+    		}
+    // END OF UMPLE BEFORE INJECTION
     gridHorizontalPosition = aGridHorizontalPosition;
     wasSet = true;
     return wasSet;
@@ -60,6 +67,13 @@ public class BlockAssignment
   public boolean setGridVerticalPosition(int aGridVerticalPosition)
   {
     boolean wasSet = false;
+    // line 91 "../../../../../Block223.ump"
+    //1 Row padding at the top
+    	    int maxNumberVerticalBlocks = (Game.PLAY_AREA_SIDE - Game.ROW_PADDING) / Block.SIZE;
+    	    if ( aGridVerticalPosition <= 0 || aGridVerticalPosition > maxNumberVerticalBlocks ) {
+    	 		throw new RuntimeException("The vertical position must be between 1 and " + maxNumberVerticalBlocks + ".");
+    		}
+    // END OF UMPLE BEFORE INJECTION
     gridVerticalPosition = aGridVerticalPosition;
     wasSet = true;
     return wasSet;

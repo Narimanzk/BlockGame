@@ -217,6 +217,11 @@ public class Game
   /* Code from template association_GetMany */
   public Level getLevel(int index)
   {
+    // line 47 "../../../../../Block223.ump"
+    if ( index < 1 || index > levels.size()) {
+    			throw new IndexOutOfBoundsException("Level" + index + "does not exist for the game");
+    		}
+    // END OF UMPLE BEFORE INJECTION
     Level aLevel = levels.get(index);
     return aLevel;
   }
