@@ -50,20 +50,6 @@ public class Block223Controller {
 			error += "Only the admin who create the game can define its game settings\n";
 		if (nrLevels < 1 || nrLevels > 99)
 			error += "The number of levels must be between 1 and 99\n";
-		
-//		if (nrBlocksPerLevel <= 0)
-//			error += "The number of blocks per level must be greater than zero\n";
-//		if (minBallSpeedX <= 0)
-//			error += "The minimum speed of the ball mut be greater than zero\n";
-//		if (minBallSpeedY <= 0)
-//			error += "The minimum speed of the ball mut be greater than zero\n";
-//		if (ballSpeedIncreaseFactor <= 0)
-//			error += "The speed increase factor of the ball mut be greater than zero\n";
-//		if (maxPaddleLength <= 0 || maxPaddleLength > 400)
-//			error += "THe maximum length of the paddle be greater than zero and less than or equal to 400";
-//		if (minPaddleLength <= 0)
-//			error += "THe minimum length of the paddle be greater than zero";
-
 		if (error.length() > 0) {
 			throw new InvalidInputException(error.trim());
 		}
@@ -344,7 +330,19 @@ public class Block223Controller {
 	// TUDOR
 	public static void register(String username, String playerPassword, String adminPassword)
 			throws InvalidInputException {
-		// TODO add exceptions
+		String error = "";
+		UserRole userRole = BlockApplication.getCurrentUserRole();
+		
+		if (!(BlockApplication.getCurrentUserRole() instanceof Admin)) 
+			error += "Admin privileges are required to create a game\n";
+		
+		if(playerPassword.equals(adminPassword))
+			error += "The passwords have to be different\n";
+		
+		if (error.length() > 0) {
+			throw new InvalidInputException(error.trim());
+		}
+
 		Block223 block223 = BlockApplication.getBlock223();
 		Player player = new Player(playerPassword, block223);
 		User user = new User(username, block223, player);

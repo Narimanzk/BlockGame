@@ -43,6 +43,11 @@ class Game {
   			throw new RuntimeException("The number of blocks per level must be greater than zero.");
   		}
   	}
+  	before getLevel {
+    	if ( index < 1 || index > levels.size()) {
+			throw new IndexOutOfBoundsException("Level" + index + "does not exist for the game");
+		}
+	}
 			
 		
    Integer nrBlocksPerLevel;
@@ -75,6 +80,20 @@ class Level {
 class BlockAssignment {
    Integer gridHorizontalPosition;
    Integer gridVerticalPosition;
+   before setGridHorizontalPosition {
+	   	//1 Column padding at each side
+	    int maxNumberHorizontalBlocks = (Game.PLAY_AREA_SIDE - 2 * Game.COLUMNS_PADDING) / Block.SIZE;
+	    if ( aGridHorizontalPosition <= 0 || aGridHorizontalPosition > maxNumberHorizontalBlocks ) {
+			throw new RuntimeException("The horizontal position must be between 1 and " + maxNumberHorizontalBlocks + ".");
+		}
+	}	
+	before setGridVerticalPosition {
+		//1 Row padding at the top
+	    int maxNumberVerticalBlocks = (Game.PLAY_AREA_SIDE - Game.ROW_PADDING) / Block.SIZE;
+	    if ( aGridVerticalPosition <= 0 || aGridVerticalPosition > maxNumberVerticalBlocks ) {
+	 		throw new RuntimeException("The vertical position must be between 1 and " + maxNumberVerticalBlocks + ".");
+		}
+	}
    * -- 1 Level level;
    * -- 1 Block block;
 }
