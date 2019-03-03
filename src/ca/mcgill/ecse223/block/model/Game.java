@@ -4,7 +4,7 @@
 package ca.mcgill.ecse223.block.model;
 import java.util.*;
 
-// line 28 "../../../../../Block223.ump"
+// line 46 "../../../../../Block223.ump"
 public class Game
 {
 
@@ -22,7 +22,7 @@ public class Game
   /**
    * play area is now constant
    */
-  public static final int PLAY_AREA_SIDE = 400;
+  public static final int PLAY_AREA_SIDE = 390;
   public static final int WALL_PADDING = 10;
   public static final int COLUMNS_PADDING = 5;
   public static final int ROW_PADDING = 2;
@@ -51,6 +51,16 @@ public class Game
 
   public Game(String aName, int aNrBlocksPerLevel, Admin aAdmin, Ball aBall, Paddle aPaddle, Block223 aBlock223)
   {
+    // line 55 "../../../../../Block223.ump"
+    if (aName == null || aName.length() == 0) {
+    	  		throw new RuntimeException("The name of a game must be specified.");
+    		}
+    // END OF UMPLE BEFORE INJECTION
+    // line 60 "../../../../../Block223.ump"
+    if (nrBlocksPerLevel <= 0){
+      			throw new RuntimeException("The number of blocks per level must be greater than zero.");
+      		}
+    // END OF UMPLE BEFORE INJECTION
     nrBlocksPerLevel = aNrBlocksPerLevel;
     if (!setName(aName))
     {
@@ -83,6 +93,16 @@ public class Game
 
   public Game(String aName, int aNrBlocksPerLevel, Admin aAdmin, int aMinBallSpeedXForBall, int aMinBallSpeedYForBall, double aBallSpeedIncreaseFactorForBall, int aMaxPaddleLengthForPaddle, int aMinPaddleLengthForPaddle, Block223 aBlock223)
   {
+    // line 55 "../../../../../Block223.ump"
+    if (aName == null || aName.length() == 0) {
+    	  		throw new RuntimeException("The name of a game must be specified.");
+    		}
+    // END OF UMPLE BEFORE INJECTION
+    // line 60 "../../../../../Block223.ump"
+    if (nrBlocksPerLevel <= 0){
+      			throw new RuntimeException("The number of blocks per level must be greater than zero.");
+      		}
+    // END OF UMPLE BEFORE INJECTION
     name = aName;
     nrBlocksPerLevel = aNrBlocksPerLevel;
     boolean didAddAdmin = setAdmin(aAdmin);
@@ -109,6 +129,11 @@ public class Game
   public boolean setName(String aName)
   {
     boolean wasSet = false;
+    // line 55 "../../../../../Block223.ump"
+    if (aName == null || aName.length() == 0) {
+    	  		throw new RuntimeException("The name of a game must be specified.");
+    		}
+    // END OF UMPLE BEFORE INJECTION
     String anOldName = getName();
     if (hasWithName(aName)) {
       return wasSet;
@@ -125,6 +150,11 @@ public class Game
   public boolean setNrBlocksPerLevel(int aNrBlocksPerLevel)
   {
     boolean wasSet = false;
+    // line 60 "../../../../../Block223.ump"
+    if (nrBlocksPerLevel <= 0){
+      			throw new RuntimeException("The number of blocks per level must be greater than zero.");
+      		}
+    // END OF UMPLE BEFORE INJECTION
     nrBlocksPerLevel = aNrBlocksPerLevel;
     wasSet = true;
     return wasSet;
@@ -187,6 +217,11 @@ public class Game
   /* Code from template association_GetMany */
   public Level getLevel(int index)
   {
+    // line 65 "../../../../../Block223.ump"
+    if ( index < 1 || index > levels.size()) {
+    			throw new IndexOutOfBoundsException("Level" + index + "does not exist for the game");
+    		}
+    // END OF UMPLE BEFORE INJECTION
     Level aLevel = levels.get(index);
     return aLevel;
   }
