@@ -298,12 +298,85 @@ public class Block223Controller {
 		}
 	}
 
+	//MATT:
 	public static void moveBlock(int level, int oldGridHorizontalPosition, int oldGridVerticalPosition,
 			int newGridHorizontalPosition, int newGridVerticalPosition) throws InvalidInputException {
+		//Error checking:
+		String error = "";
+		
+		//Needs to be an admin.
+		if (!(BlockApplication.getCurrentUserRole() instanceof Admin))
+			error += "Admin privileges are required to move a block.";
+		//Game needs to be set.
+		if (BlockApplication.getCurrentGame() == null){
+			error += "A game must be selected to move a block.";
+		}
+		//The admin must be the admin of the current game.
+		if (BlockApplication.getCurrentGame().getAdmin() != BlockApplication.getCurrentUserRole())
+			error += "Only the admin who created the game can move a block.";
+
+		if (error.length() > 0)
+			throw new InvalidInputException(error.trim());
+		
+		Game game = BlockApplication.getCurrentGame();
+		
+		Level editLevel;
+		try {
+		editLevel = game.getLevel(level);
+		}
+		catch (IndexOutOfBoundsException e) {
+			throw new InvalidInputException(e.getMessage());
+		}
+		
+		BlockAssignment moveBlock = findBlockAssigment(editLevel,oldGridHorizontalPosition,oldGridVerticalPosition);
+		
+		//Throw error if there's no block at x and y
+		if (moveBlock == null)
+			throw new InvalidInputException("A block does not exist at location " + oldGridHorizontalPosition + " /" + oldGridVerticalPosition + ".");
+		
+		//Throw error if there's already a block at x and y
+		if (findBlockAssigment(editLevel,newGridHorizontalPosition,newGridVerticalPosition) != null) {
+			throw new InvalidInputException("A block already exists at position " + newGridHorizontalPosition + "/" + newGridVerticalPosition);
+		}
+		try {
+		moveBlock.setGridHorizontalPosition(newGridHorizontalPosition);
+		moveBlock.setGridVerticalPosition(newGridVerticalPosition);
+		}
+		catch (RuntimeException e) {
+			throw new InvalidInputException(e.getMessage());
+		}
 	}
 
+
+	//MATT:
 	public static void removeBlock(int level, int gridHorizontalPosition, int gridVerticalPosition)
 			throws InvalidInputException {
+		
+		//Error checking:
+		String error = "";
+		
+		//Needs to be an admin.
+		if (!(BlockApplication.getCurrentUserRole() instanceof Admin))
+			error += "Admin privileges are required to move a block.";
+		
+		//Game needs to be set.
+		if (BlockApplication.getCurrentGame() == null){
+			error += "A game must be selected to move a block.";
+		}
+		
+		//The admin must be the admin of the current game.
+		if (BlockApplication.getCurrentGame().getAdmin() != BlockApplication.getCurrentUserRole())
+			error += "Only the admin who created the game can move a block.";
+
+		if (error.length() > 0)
+			throw new InvalidInputException(error.trim());
+		
+		Game game = BlockApplication.getCurrentGame();
+		Level editLevel = game.getLevel(level);
+		BlockAssignment moveBlock = findBlockAssigment(editLevel,gridHorizontalPosition,gridVerticalPosition);
+		if (moveBlock != null) {
+			editLevel.removeBlockAssignment(moveBlock);
+		}
 	}
 
 	// Aly
@@ -485,7 +558,18 @@ public class Block223Controller {
 		}
 		return foundGame;
 	}
-
+	
+	// MATT: 
+	private static BlockAssignment findBlockAssigment(Level editLevel, int oldGridHorizontalPosition,
+			int oldGridVerticalPosition) {
+		for (BlockAssignment curBlock : editLevel.getBlockAssignments()) {
+			if (curBlock.getGridHorizontalPosition() == oldGridHorizontalPosition 
+					&& curBlock.getGridVerticalPosition() == oldGridVerticalPosition) {
+				return curBlock;
+			}
+		}
+		return null;
+	}
 	// Check UpdateBlock and PositionBlock -- Charles L
 	// What I'm confused is that this should be game.findBlock(), but I don't know
 	// how to implement that
