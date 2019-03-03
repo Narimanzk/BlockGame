@@ -10,8 +10,8 @@ import ca.mcgill.ecse223.block.view.Block223Page;
 public class BlockApplication {
 	
 	private static Block223 block223;
-	private static UserRole currentRole;
-	private static Game currentGame;
+	private static UserRole currentRole = null;
+	private static Game currentGame = null;
 	public static void main(String[] args) {
 		// start UI
         java.awt.EventQueue.invokeLater(new Runnable() {

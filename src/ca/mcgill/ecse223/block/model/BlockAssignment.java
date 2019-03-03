@@ -3,7 +3,7 @@
 
 package ca.mcgill.ecse223.block.model;
 
-// line 63 "../../../../../Block223.ump"
+// line 75 "../../../../../Block223.ump"
 public class BlockAssignment
 {
 
