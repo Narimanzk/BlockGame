@@ -578,7 +578,7 @@ public class Block223Page{
 			public void actionPerformed(ActionEvent e) {
 				error = "";
 				try {
-					Block223Controller.register(txtrNewUsername.toString(), txtrNewPassword.toString(), txtrAdminPassword.toString());
+					Block223Controller.register(txtrNewUsername.getText(), txtrNewPassword.getText(), txtrAdminPassword.getText());
 				} catch (InvalidInputException e1) {
 					error+=e1.getMessage();
 				}
@@ -595,7 +595,7 @@ public class Block223Page{
 			public void actionPerformed(ActionEvent e) {
 				error = null;
 				try {
-					Block223Controller.login(txtrUsername.toString(),txtrPassword.toString());
+					Block223Controller.login(txtrUsername.getText(),txtrPassword.getText());
 				}	catch (InvalidInputException err) {
 					error = err.getMessage();
 				}
@@ -639,9 +639,9 @@ public class Block223Page{
 			public void actionPerformed(ActionEvent e) {
 				error = "";
 				try {
-					Block223Controller.setGameDetails(Integer.valueOf(txtrNumberOfLevels.toString()), Integer.valueOf(txtrNumBlocksPerLvl.toString()), 
-							Integer.valueOf(txtrMinBallSpdX.toString()), Integer.valueOf(txtrMinimumBallSpeedY.toString()), Double.valueOf(txtrBallSpeedIncrease.toString())
-							, Integer.valueOf(txtrMaxPaddleLength.toString()), Integer.valueOf(txtrMinimumPaddleLength.toString()));
+					Block223Controller.setGameDetails(Integer.valueOf(txtrNumberOfLevels.getText()), Integer.valueOf(txtrNumBlocksPerLvl.getText()), 
+							Integer.valueOf(txtrMinBallSpdX.getText()), Integer.valueOf(txtrMinimumBallSpeedY.getText()), Double.valueOf(txtrBallSpeedIncrease.getText())
+							, Integer.valueOf(txtrMaxPaddleLength.getText()), Integer.valueOf(txtrMinimumPaddleLength.getText()));
 				} catch (NumberFormatException e1) {
 					// 
 					error+=e1.getMessage();
@@ -661,9 +661,9 @@ public class Block223Page{
 			public void actionPerformed(ActionEvent e) {
 				error = "";
 				try {
-					Block223Controller.updateGame(txtrNewGameName.toString(),Integer.valueOf(NrLevels.toString()), Integer.valueOf(NrBlocksPerLvl.toString()), 
-							Integer.valueOf(MinBallSpdX.toString()), Integer.valueOf(MinBallSpdY.toString()), Double.valueOf(BallSpdIncFactor.toString())
-							, Integer.valueOf(MaxPaddleLngth.toString()), Integer.valueOf(MinPaddleLngth.toString()));
+					Block223Controller.updateGame(txtrNewGameName.getText(),Integer.valueOf(NrLevels.getText()), Integer.valueOf(NrBlocksPerLvl.getText()), 
+							Integer.valueOf(MinBallSpdX.getText()), Integer.valueOf(MinBallSpdY.getText()), Double.valueOf(BallSpdIncFactor.getText())
+							, Integer.valueOf(MaxPaddleLngth.getText()), Integer.valueOf(MinPaddleLngth.getText()));
 				} catch (NumberFormatException e1) {
 					error+=e1.getMessage();
 				} catch (InvalidInputException e1) {
@@ -701,8 +701,8 @@ public class Block223Page{
 			public void actionPerformed(ActionEvent e) {
 				error = "";
 				try {
-					Block223Controller.updateBlock(Integer.valueOf(blockList.getSelectedItem().toString()), Integer.valueOf(txtRedValue.toString()), Integer.valueOf(txtGreenValue.toString()),
-							Integer.valueOf(txtBlueValue.toString()), Integer.valueOf(txtPoints.toString()));
+					Block223Controller.updateBlock(Integer.valueOf(blockList.getSelectedItem().toString()), Integer.valueOf(txtRedValue.getText()), Integer.valueOf(txtGreenValue.getText()),
+							Integer.valueOf(txtBlueValue.getText()), Integer.valueOf(txtPoints.getText()));
 				} catch (NumberFormatException e1) {
 					error+=e1.getMessage();
 				} catch (InvalidInputException e1) {
@@ -721,8 +721,8 @@ public class Block223Page{
 			public void actionPerformed(ActionEvent e) {
 				error = "";
 				try {
-					Block223Controller.addBlock(Integer.valueOf(txtRedValue.toString()), Integer.valueOf(txtGreenValue.toString()),
-							Integer.valueOf(txtBlueValue.toString()), Integer.valueOf(txtPoints.toString()));
+					Block223Controller.addBlock(Integer.valueOf(txtRedValue.getText()), Integer.valueOf(txtGreenValue.getText()),
+							Integer.valueOf(txtBlueValue.getText()), Integer.valueOf(txtPoints.getText()));
 				} catch (NumberFormatException e1) {
 					error+= e1.getMessage();
 				} catch (InvalidInputException e1) {
@@ -741,7 +741,7 @@ public class Block223Page{
 		btnCreateGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				error = "";
-				String gameName = NewGameName.toString();
+				String gameName = NewGameName.getText();
 				try {
 					Block223Controller.createGame(gameName);
 				} catch (InvalidInputException e1) {
@@ -841,8 +841,8 @@ public class Block223Page{
 			public void actionPerformed(ActionEvent e) {
 				error = "";
 				try {
-					Block223Controller.positionBlock(Integer.valueOf(blockList.getSelectedItem().toString()), Integer.valueOf(txtLevel.toString()),
-							Integer.valueOf(txtHorizontalGridPosition.toString()), Integer.valueOf(txtVerticalGridPosition.toString()));
+					Block223Controller.positionBlock(Integer.valueOf(blockList.getSelectedItem().toString()), Integer.valueOf(txtLevel.getText()),
+							Integer.valueOf(txtHorizontalGridPosition.getText()), Integer.valueOf(txtVerticalGridPosition.getText()));
 				} catch (NumberFormatException e1) {
 					error = e1.getMessage();
 				} catch (InvalidInputException e1) {
@@ -857,11 +857,11 @@ public class Block223Page{
 			public void actionPerformed(ActionEvent e) {
 				error = "";
 				try {
-					Block223Controller.moveBlock(Integer.valueOf(txtLevel.toString()), 
-							Integer.valueOf(txtCurrentHorizontalGrid.toString()), 
-							Integer.valueOf(txtCurrentVerticalGrid.toString()), 
-							Integer.valueOf(txtNewHorizontalGrid.toString()), 
-							Integer.valueOf(txtNewVerticalGrid.toString()));
+					Block223Controller.moveBlock(Integer.valueOf(txtLevel.getText()), 
+							Integer.valueOf(txtCurrentHorizontalGrid.getText()), 
+							Integer.valueOf(txtCurrentVerticalGrid.getText()), 
+							Integer.valueOf(txtNewHorizontalGrid.getText()), 
+							Integer.valueOf(txtNewVerticalGrid.getText()));
 				} catch (NumberFormatException e1) {
 					error += e1.getMessage();
 				} catch (InvalidInputException e1) {
@@ -877,7 +877,7 @@ public class Block223Page{
 			public void actionPerformed(ActionEvent e) {
 				error = "";
 				try {
-					Block223Controller.removeBlock(Integer.valueOf(txtLevel.toString()), Integer.valueOf(txtHorGridPos.toString()), Integer.valueOf(txtVerGridPos.toString()));
+					Block223Controller.removeBlock(Integer.valueOf(txtLevel.getText()), Integer.valueOf(txtHorGridPos.getText()), Integer.valueOf(txtVerGridPos.getText()));
 				} catch (NumberFormatException e1) {
 					error += e1.getMessage();
 				} catch (InvalidInputException e1) {

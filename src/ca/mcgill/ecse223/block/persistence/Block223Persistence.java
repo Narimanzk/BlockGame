@@ -18,7 +18,7 @@ public class Block223Persistence {
 			block223 = new Block223(); //then a new Block223 needs to be created.
 		}
 		else {
-			 block223.reinitialize();
+			// block223.reinitialize();
 		}
 		return block223;
 	}

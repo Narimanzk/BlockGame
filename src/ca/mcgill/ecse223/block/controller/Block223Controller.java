@@ -411,6 +411,9 @@ public class Block223Controller {
 			throws InvalidInputException {
 		String error = "";
 		UserRole userRole = BlockApplication.getCurrentUserRole();
+		System.out.println("user output: " + username);
+		System.out.println("Pass input:" + playerPassword);
+		System.out.println("Admin input: " + adminPassword);
 		
 		if (userRole != null)
 			error += "Cannot login a user while a user is already logged in\n";
