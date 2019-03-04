@@ -444,10 +444,10 @@ public class Block223Page{
 		txtPointsEdit.setColumns(10);
 		txtPointsEdit.setBounds(225, 187, 130, 26);
 		EditBlockInGame.add(txtPointsEdit);
-		JButton btnEditBlock = new JButton("Edit Block");
+		JButton btnUpdateBlock = new JButton("Update Block");
 
-		btnEditBlock.setBounds(229, 221, 103, 29);
-		EditBlockInGame.add(btnEditBlock);
+		btnUpdateBlock.setBounds(229, 221, 103, 29);
+		EditBlockInGame.add(btnUpdateBlock);
 
 		JButton btnAddBlock = new JButton("Add Block");
 
@@ -773,7 +773,7 @@ public class Block223Page{
 		});
 
 		//EditBlock
-		btnEditBlock.addActionListener(new ActionListener() {
+		btnUpdateBlock.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				error = "";
 				try {
@@ -825,8 +825,8 @@ public class Block223Page{
 					error=e1.getMessage();
 				}
 				refreshData();
-				error = "";
 				if (error.length() == 0) {
+					error = "";
 					try {
 						Block223Controller.selectGame(NewGameName.getText());
 					} catch (InvalidInputException e1) {

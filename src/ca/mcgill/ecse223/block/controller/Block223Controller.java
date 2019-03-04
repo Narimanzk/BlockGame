@@ -199,6 +199,7 @@ public class Block223Controller {
 
 	// Charles McC
 	public static void deleteBlock(int id) throws InvalidInputException {
+		Block223 block223 = BlockApplication.getBlock223();
 		Game gameToChange = BlockApplication.getCurrentGame();
 		List<Block> blocks = gameToChange.getBlocks();
 		Block toDelete = null;
@@ -211,7 +212,8 @@ public class Block223Controller {
 		if (toDelete == null) {
 			throw new InvalidInputException("Block does not exist.");
 		}
-		BlockApplication.getCurrentGame().removeBlock(toDelete);// calling custom getBlock method
+		toDelete.delete();
+		//BlockApplication.getCurrentGame().removeBlock(toDelete);// calling custom getBlock method
 	}
 
 	// Charles L
@@ -267,6 +269,8 @@ public class Block223Controller {
 			throws InvalidInputException {
 		if (!(BlockApplication.getCurrentUserRole() instanceof Admin))
 			throw new InvalidInputException("Admin privileges are required to access game information. ");
+
+		Block223 block223 = BlockApplication.getBlock223();
 		Game game = BlockApplication.getCurrentGame();
 		if (game == null)
 			throw new InvalidInputException("A game must be selected to access its information. ");
@@ -319,6 +323,7 @@ public class Block223Controller {
 		// Error checking:
 		String error = "";
 
+		Block223 block223 = BlockApplication.getBlock223();
 		// Needs to be an admin.
 		if (!(BlockApplication.getCurrentUserRole() instanceof Admin))
 			error += "Admin privileges are required to move a block.";
@@ -366,6 +371,7 @@ public class Block223Controller {
 	public static void removeBlock(int level, int gridHorizontalPosition, int gridVerticalPosition)
 			throws InvalidInputException {
 
+		Block223 block223 = BlockApplication.getBlock223();
 		// Error checking:
 		String error = "";
 
@@ -390,7 +396,7 @@ public class Block223Controller {
 			Level editLevel = game.getLevel(level-1);
 			BlockAssignment moveBlock = findBlockAssigment(editLevel, gridHorizontalPosition, gridVerticalPosition);
 			if (moveBlock != null) {
-				editLevel.removeBlockAssignment(moveBlock);
+				moveBlock.delete();;
 			}
 		}
 		catch (RuntimeException e) {
