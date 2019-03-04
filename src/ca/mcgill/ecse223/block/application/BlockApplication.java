@@ -17,7 +17,8 @@ public class BlockApplication {
 		// start UI
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Block223Page().setVisible(true);
+            	Block223Page window =new Block223Page();
+            	window.frame.setVisible(true);
             }
         });
 	}

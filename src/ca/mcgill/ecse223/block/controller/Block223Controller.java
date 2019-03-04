@@ -411,9 +411,9 @@ public class Block223Controller {
 			throws InvalidInputException {
 		String error = "";
 		UserRole userRole = BlockApplication.getCurrentUserRole();
-
-		if (!(userRole instanceof Admin))
-			error += "Admin privileges are required to create a game\n";
+		
+		if (userRole != null)
+			error += "Cannot login a user while a user is already logged in\n";
 
 		if (playerPassword.equals(adminPassword))
 			error += "The passwords have to be different\n";
@@ -460,7 +460,6 @@ public class Block223Controller {
 		}
 		if (BlockApplication.getCurrentUserRole() == null)
 			throw new InvalidInputException("The username and password do not match\n");
-
 	}
 
 	// TUDOR
