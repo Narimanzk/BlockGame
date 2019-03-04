@@ -390,11 +390,11 @@ public class Block223Controller {
 		String error = "";
 		Block223 block223 = BlockApplication.getBlock223();
 		if (!(BlockApplication.getCurrentUserRole() instanceof Admin))
-			error += "Admin priviliges are required to save a game";
+			error += "Admin priviliges are required to save a game\n";
 		if (BlockApplication.getCurrentGame() == null)
-			error += "A game must be selected to save it";
+			error += "A game must be selected to save it\n";
 		if (BlockApplication.getCurrentGame().getAdmin() != BlockApplication.getCurrentUserRole())
-			error += "Only the admin who created the game can save it";
+			error += "Only the admin who created the game can save it\n";
 		if (error.length() > 0)
 			throw new InvalidInputException(error);
 
@@ -442,6 +442,7 @@ public class Block223Controller {
 		Block223Persistence.save(block223);
 
 	}
+
 
 	// TUDOR
 	public static void login(String username, String password) throws InvalidInputException {

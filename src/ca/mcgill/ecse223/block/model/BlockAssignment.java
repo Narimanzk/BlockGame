@@ -1,11 +1,11 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.29.0.4181.a593105a9 modeling language!*/
+/*This code was generated using the UMPLE 1.26.1-f40f105-3613 modeling language!*/
 
 package ca.mcgill.ecse223.block.model;
 import java.io.Serializable;
 
 // line 42 "../../../../../Block223Persistence.ump"
-// line 99 "../../../../../Block223.ump"
+// line 100 "../../../../../Block223.ump"
 public class BlockAssignment implements Serializable
 {
 
@@ -54,7 +54,7 @@ public class BlockAssignment implements Serializable
   public boolean setGridHorizontalPosition(int aGridHorizontalPosition)
   {
     boolean wasSet = false;
-    // line 103 "../../../../../Block223.ump"
+    // line 104 "../../../../../Block223.ump"
     //1 Column padding at each side
     	    int maxNumberHorizontalBlocks = (Game.PLAY_AREA_SIDE - 2 * Game.COLUMNS_PADDING) / Block.SIZE;
     	    if ( aGridHorizontalPosition <= 0 || aGridHorizontalPosition > maxNumberHorizontalBlocks ) {
@@ -69,7 +69,7 @@ public class BlockAssignment implements Serializable
   public boolean setGridVerticalPosition(int aGridVerticalPosition)
   {
     boolean wasSet = false;
-    // line 110 "../../../../../Block223.ump"
+    // line 111 "../../../../../Block223.ump"
     //1 Row padding at the top
     	    int maxNumberVerticalBlocks = (Game.PLAY_AREA_SIDE - Game.ROW_PADDING) / Block.SIZE;
     	    if ( aGridVerticalPosition <= 0 || aGridVerticalPosition > maxNumberVerticalBlocks ) {
@@ -90,22 +90,22 @@ public class BlockAssignment implements Serializable
   {
     return gridVerticalPosition;
   }
-  /* Code from template association_GetOne */
+
   public Level getLevel()
   {
     return level;
   }
-  /* Code from template association_GetOne */
+
   public Block getBlock()
   {
     return block;
   }
-  /* Code from template association_GetOne */
+
   public Game getGame()
   {
     return game;
   }
-  /* Code from template association_SetOneToMany */
+
   public boolean setLevel(Level aLevel)
   {
     boolean wasSet = false;
@@ -124,7 +124,7 @@ public class BlockAssignment implements Serializable
     wasSet = true;
     return wasSet;
   }
-  /* Code from template association_SetOneToMany */
+
   public boolean setBlock(Block aBlock)
   {
     boolean wasSet = false;
@@ -143,7 +143,7 @@ public class BlockAssignment implements Serializable
     wasSet = true;
     return wasSet;
   }
-  /* Code from template association_SetOneToMany */
+
   public boolean setGame(Game aGame)
   {
     boolean wasSet = false;
@@ -167,22 +167,13 @@ public class BlockAssignment implements Serializable
   {
     Level placeholderLevel = level;
     this.level = null;
-    if(placeholderLevel != null)
-    {
-      placeholderLevel.removeBlockAssignment(this);
-    }
+    placeholderLevel.removeBlockAssignment(this);
     Block placeholderBlock = block;
     this.block = null;
-    if(placeholderBlock != null)
-    {
-      placeholderBlock.removeBlockAssignment(this);
-    }
+    placeholderBlock.removeBlockAssignment(this);
     Game placeholderGame = game;
     this.game = null;
-    if(placeholderGame != null)
-    {
-      placeholderGame.removeBlockAssignment(this);
-    }
+    placeholderGame.removeBlockAssignment(this);
   }
 
 
@@ -199,7 +190,7 @@ public class BlockAssignment implements Serializable
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 45 "../../../../../Block223Persistence.ump"
+  // line 45 ../../../../../Block223Persistence.ump
   private static final long serialVersionUID = 1767133221150421445L ;
 
   

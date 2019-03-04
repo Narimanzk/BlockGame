@@ -1,12 +1,12 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.29.0.4181.a593105a9 modeling language!*/
+/*This code was generated using the UMPLE 1.26.1-f40f105-3613 modeling language!*/
 
 package ca.mcgill.ecse223.block.model;
 import java.io.Serializable;
 import java.util.*;
 
 // line 3 "../../../../../Block223Persistence.ump"
-// line 39 "../../../../../Block223.ump"
+// line 35 "../../../../../Block223.ump"
 public class Admin extends UserRole implements Serializable
 {
 
@@ -30,7 +30,7 @@ public class Admin extends UserRole implements Serializable
   //------------------------
   // INTERFACE
   //------------------------
-  /* Code from template association_GetMany */
+
   public Game getGame(int index)
   {
     Game aGame = games.get(index);
@@ -60,12 +60,12 @@ public class Admin extends UserRole implements Serializable
     int index = games.indexOf(aGame);
     return index;
   }
-  /* Code from template association_MinimumNumberOfMethod */
+
   public static int minimumNumberOfGames()
   {
     return 0;
   }
-  /* Code from template association_AddManyToOne */
+
   public Game addGame(String aName, int aNrBlocksPerLevel, Ball aBall, Paddle aPaddle, Block223 aBlock223)
   {
     return new Game(aName, aNrBlocksPerLevel, this, aBall, aPaddle, aBlock223);
@@ -100,7 +100,7 @@ public class Admin extends UserRole implements Serializable
     }
     return wasRemoved;
   }
-  /* Code from template association_AddIndexControlFunctions */
+
   public boolean addGameAt(Game aGame, int index)
   {  
     boolean wasAdded = false;
@@ -147,7 +147,7 @@ public class Admin extends UserRole implements Serializable
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 6 "../../../../../Block223Persistence.ump"
+  // line 6 ../../../../../Block223Persistence.ump
   private static final long serialVersionUID  = 2823474594938798171L ;
 
   

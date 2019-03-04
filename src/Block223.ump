@@ -6,6 +6,7 @@ class Block223{
    1 <@>- * User users;
    1 <@>- * UserRole roles;
    1 <@>- * Game games;
+
 }
 
 class User {
@@ -28,11 +29,7 @@ class User {
 class UserRole {
    abstract;
    password;
-   before constructor, setPassword{
-   		if (aPassword == null || aPassword.length() == 0){
-   			throw new RuntimeException("The player password needs to be specified.");
-   		}
-   	}
+
    		
 }
 
@@ -42,6 +39,11 @@ class Admin {
 
 class Player {
    isA UserRole;
+      before constructor, setPassword{
+   		if (aPassword == null || aPassword.length() == 0){
+   			throw new RuntimeException("The player password needs to be specified.");
+   		}
+   	}
 }
 
 class Game {

@@ -1,5 +1,5 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.29.0.4181.a593105a9 modeling language!*/
+/*This code was generated using the UMPLE 1.26.1-f40f105-3613 modeling language!*/
 
 package ca.mcgill.ecse223.block.model;
 import java.io.Serializable;
@@ -33,7 +33,7 @@ public class Block223 implements Serializable
   //------------------------
   // INTERFACE
   //------------------------
-  /* Code from template association_GetMany */
+
   public User getUser(int index)
   {
     User aUser = users.get(index);
@@ -63,7 +63,7 @@ public class Block223 implements Serializable
     int index = users.indexOf(aUser);
     return index;
   }
-  /* Code from template association_GetMany */
+
   public UserRole getRole(int index)
   {
     UserRole aRole = roles.get(index);
@@ -93,7 +93,7 @@ public class Block223 implements Serializable
     int index = roles.indexOf(aRole);
     return index;
   }
-  /* Code from template association_GetMany */
+
   public Game getGame(int index)
   {
     Game aGame = games.get(index);
@@ -123,12 +123,12 @@ public class Block223 implements Serializable
     int index = games.indexOf(aGame);
     return index;
   }
-  /* Code from template association_MinimumNumberOfMethod */
+
   public static int minimumNumberOfUsers()
   {
     return 0;
   }
-  /* Code from template association_AddManyToOne */
+
   public User addUser(String aUsername, UserRole... allRoles)
   {
     return new User(aUsername, this, allRoles);
@@ -163,7 +163,7 @@ public class Block223 implements Serializable
     }
     return wasRemoved;
   }
-  /* Code from template association_AddIndexControlFunctions */
+
   public boolean addUserAt(User aUser, int index)
   {  
     boolean wasAdded = false;
@@ -195,12 +195,12 @@ public class Block223 implements Serializable
     }
     return wasAdded;
   }
-  /* Code from template association_MinimumNumberOfMethod */
+
   public static int minimumNumberOfRoles()
   {
     return 0;
   }
-  /* Code from template association_AddManyToOne */
+
 
 
   public boolean addRole(UserRole aRole)
@@ -232,7 +232,7 @@ public class Block223 implements Serializable
     }
     return wasRemoved;
   }
-  /* Code from template association_AddIndexControlFunctions */
+
   public boolean addRoleAt(UserRole aRole, int index)
   {  
     boolean wasAdded = false;
@@ -264,12 +264,12 @@ public class Block223 implements Serializable
     }
     return wasAdded;
   }
-  /* Code from template association_MinimumNumberOfMethod */
+
   public static int minimumNumberOfGames()
   {
     return 0;
   }
-  /* Code from template association_AddManyToOne */
+
   public Game addGame(String aName, int aNrBlocksPerLevel, Admin aAdmin, Ball aBall, Paddle aPaddle)
   {
     return new Game(aName, aNrBlocksPerLevel, aAdmin, aBall, aPaddle, this);
@@ -304,7 +304,7 @@ public class Block223 implements Serializable
     }
     return wasRemoved;
   }
-  /* Code from template association_AddIndexControlFunctions */
+
   public boolean addGameAt(Game aGame, int index)
   {  
     boolean wasAdded = false;
@@ -372,7 +372,7 @@ public class Block223 implements Serializable
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 34 "../../../../../Block223Persistence.ump"
+  // line 34 ../../../../../Block223Persistence.ump
   private static final long serialVersionUID = -6594557003371779087L ;
 
   
