@@ -170,6 +170,17 @@ public class Block223Page{
 		btnDeleteGame.setBounds(265, 219, 157, 29);
 		AddEditGameMenu.add(btnDeleteGame);
 
+		JButton backAEGamePage = new JButton("Back");
+		backAEGamePage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				error = "";
+				errorMessage.setText(error);
+				AddEditGameMenu.setVisible(false);
+				mainMenu.setVisible(true);
+			}
+		});
+		backAEGamePage.setBounds(6, 6, 60, 29);
+		AddEditGameMenu.add(backAEGamePage);
 		/////////////////////////////////////////////////////////////////
 
 
@@ -208,17 +219,18 @@ public class Block223Page{
 		btnSaveChanges.setBounds(160, 160, 214, 29);
 		GeneralGameMenu.add(btnSaveChanges);
 
-		//"Back" button, should bring us back to the main menu.
-		JButton btnBack = new JButton("Back");
-		btnBack.addActionListener(new ActionListener() {
+		
+		JButton backGenGamePage = new JButton("Back");
+		backGenGamePage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AddEditGameMenu.setVisible(false);
+				error = "";
+				errorMessage.setText(error);
+				GeneralGameMenu.setVisible(false);
 				mainMenu.setVisible(true);
 			}
 		});
-		btnBack.setBounds(6, 6, 69, 29);
-		AddEditGameMenu.add(btnBack);
-
+		backAEGamePage.setBounds(6, 6, 60, 29);
+		AddEditGameMenu.add(backAEGamePage);
 		/////////////////////////////////////////////////////////////////
 
 		/////////////////////////////////////////////////////////////////
@@ -266,6 +278,17 @@ public class Block223Page{
 		lblDefineAGame.setBounds(209, 17, 185, 16);
 		AddGameSpecifyDetails.add(lblDefineAGame);
 
+		JButton backSpecDetailsPage = new JButton("Back");
+		backSpecDetailsPage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				error = "";
+				errorMessage.setText(error);
+				AddGameSpecifyDetails.setVisible(false);
+				GeneralGameMenu.setVisible(true);
+			}
+		});
+		backSpecDetailsPage.setBounds(6, 6, 60, 29);
+		AddGameSpecifyDetails.add(backSpecDetailsPage);
 		//First need to call selectGame with the game name
 		//Should take all these guys^ as parameters, and then call tudor's method:  setGameDetails
 		JButton btnDefine = new JButton("Define");
@@ -333,6 +356,17 @@ public class Block223Page{
 		btnUpdate.setBounds(197, 283, 117, 29);
 		UpdateGameMenu.add(btnUpdate);
 
+		JButton backUpdateMenu = new JButton("Back");
+		backUpdateMenu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				error = "";
+				errorMessage.setText(error);
+				UpdateGameMenu.setVisible(false);
+				GeneralGameMenu.setVisible(true);
+			}
+		});
+		backUpdateMenu.setBounds(6, 6, 60, 29);
+		UpdateGameMenu.add(backUpdateMenu);
 		/////////////////////////////////////////////////////////////////
 
 		/////////////////////////////////////////////////////////////////
@@ -421,6 +455,18 @@ public class Block223Page{
 		blockList.setBounds(302, 66, 52, 27);
 		EditBlockInGame.add(blockList);
 
+		
+		JButton backEditBlock = new JButton("Back");
+		backEditBlock.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				error = "";
+				errorMessage.setText(error);
+				EditBlockInGame.setVisible(false);
+				GeneralGameMenu.setVisible(true);
+			}
+		});
+		backEditBlock.setBounds(6, 6, 60, 29);
+		EditBlockInGame.add(backEditBlock);
 		/////////////////////////////////////////////////////////////////
 
 
@@ -454,6 +500,18 @@ public class Block223Page{
 		JLabel lblWelcomeToBlock = new JLabel("Welcome to Block 223!");
 		lblWelcomeToBlock.setBounds(191, 50, 204, 16);
 		RegisterMenu.add(lblWelcomeToBlock);
+		
+		JButton backRegisterMenu = new JButton("Back");
+		backRegisterMenu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				error = "";
+				errorMessage.setText(error);
+				RegisterMenu.setVisible(false);
+				loginPanel.setVisible(true);
+			}
+		});
+		backRegisterMenu.setBounds(6, 6, 60, 29);
+		RegisterMenu.add(backRegisterMenu);
 		/////////////////////////////////////////////////////////////////
 
 
@@ -569,7 +627,17 @@ public class Block223Page{
 		JLabel lblNewLabel = new JLabel("New label");
 		frame.getContentPane().add(lblNewLabel, "name_63047693751053");
 
-
+		JButton backEditBlockInLvl = new JButton("Back");
+		backEditBlockInLvl.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				error = "";
+				errorMessage.setText(error);
+				EditBlockWithinLevel.setVisible(false);
+				GeneralGameMenu.setVisible(true);
+			}
+		});
+		backEditBlockInLvl.setBounds(6, 6, 60, 29);
+		RegisterMenu.add(backEditBlockInLvl);
 		////////////////////////////////////////////////////////////////////////////////
 		//ALL BUTTONS:
 
@@ -613,6 +681,8 @@ public class Block223Page{
 		//Bring us to the registration page:
 		btnRegister.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				error = "";
+				errorMessage.setText(error);
 				loginPanel.setVisible(false);
 				RegisterMenu.setVisible(true);
 			}
@@ -621,6 +691,8 @@ public class Block223Page{
 		//When you click the Edit game button, this happens
 		btnAddEditGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				error = "";
+				errorMessage.setText(error);
 				mainMenu.setVisible(false);
 				AddEditGameMenu.setVisible(true);
 			}
@@ -631,6 +703,10 @@ public class Block223Page{
 			public void actionPerformed(ActionEvent e) {
 				Block223Controller.logout();
 				BlockApplication.resetBlock223();
+				error = "";
+				errorMessage.setText(error);
+				mainMenu.setVisible(false);
+				loginPanel.setVisible(true);
 			}
 		});
 
@@ -786,6 +862,8 @@ public class Block223Page{
 		//Travel to the edit block within a level menu.
 		btnEditBlocksWithin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				error = "";
+				errorMessage.setText(error);
 				GeneralGameMenu.setVisible(false);
 				EditBlockWithinLevel.setVisible(true);
 			}
@@ -794,6 +872,8 @@ public class Block223Page{
 		//Travel to the update game menu
 		btnUpdateGameDtails.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				error = "";
+				errorMessage.setText(error);
 				GeneralGameMenu.setVisible(false);
 				UpdateGameMenu.setVisible(true);
 			}
@@ -802,6 +882,8 @@ public class Block223Page{
 		//Travel to the edit block within a game menu.
 		btnChangeBlocksInGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				error = "";
+				errorMessage.setText(error);
 				GeneralGameMenu.setVisible(false);
 				EditBlockInGame.setVisible(true);
 			}
