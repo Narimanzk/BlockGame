@@ -41,7 +41,6 @@ public class Block223Controller {
 			throw new RuntimeException(error.trim());
 		}
 		Game game = new Game(name, 1, (Admin) userRole, 1, 1, 1, 10, 10, block223);
-
 	}
 
 	// TUDOR

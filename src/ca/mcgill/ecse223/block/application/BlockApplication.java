@@ -12,6 +12,7 @@ public class BlockApplication {
 	private static Block223 block223;
 	private static UserRole currentRole = null;
 	private static Game currentGame = null;
+	
 	public static void main(String[] args) {
 		// start UI
         java.awt.EventQueue.invokeLater(new Runnable() {
