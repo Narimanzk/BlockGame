@@ -35,7 +35,7 @@ class Block223{
   
   public void reinitialize() {
     Game.reinitializeGamesByName(this.getGames());
-    User.reinitializeUsersByName(this.getUsers());
+    User.reinitializeUsersByUsername(this.getUsers());
   }
 }
 
