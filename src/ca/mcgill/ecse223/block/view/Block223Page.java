@@ -114,14 +114,13 @@ public class Block223Page{
 		/////////////////////////////////////////////////////////////////
 		//Main Menu page
 		JPanel mainMenu = new JPanel();
-		
+
 		frame.getContentPane().add(mainMenu, "name_33113224405399");
 
 		//////Add/Edit game button////////////
 		JButton btnAddEditGame = new JButton("Add/Edit Game");
 		btnAddEditGame.setBounds(160, 128, 170, 29);
 		mainMenu.setLayout(null);
-		errorMessage.setVisible(true);
 		mainMenu.add(btnAddEditGame);
 
 
@@ -195,7 +194,7 @@ public class Block223Page{
 		//2. Affect blocks within a game
 		//3. Affect blocks within a level
 		//4. Save changes.
-		
+
 		JPanel GeneralGameMenu = new JPanel();
 		frame.getContentPane().add(GeneralGameMenu, "name_46221789659840");
 		GeneralGameMenu.setLayout(null);
@@ -636,10 +635,10 @@ public class Block223Page{
 			}
 		});
 		backEditBlockInLvl.setBounds(6, 6, 60, 29);
-		RegisterMenu.add(backEditBlockInLvl);
-		
-				JLabel lblNewLabel = new JLabel("New label");
-				frame.getContentPane().add(lblNewLabel, "name_63047693751053");
+		EditBlockWithinLevel.add(backEditBlockInLvl);
+
+		JLabel lblNewLabel = new JLabel("New label");
+		frame.getContentPane().add(lblNewLabel, "name_63047693751053");
 		////////////////////////////////////////////////////////////////////////////////
 		//ALL BUTTONS:
 
@@ -832,21 +831,21 @@ public class Block223Page{
 				refreshData();
 
 				error = null;
-//				if (error.length() == 0) {
-//					try {
-//						Block223Controller.selectGame(NewGameName.getText());
-//					} catch (InvalidInputException e1) {
-//						error=e1.getMessage();
-//					}
-//				}
-//				errorMessage.setText(error);
-//				System.out.println(error);
-//				System.out.println("Button press4");
-//				refreshData();
-//				if (error.length() == 0) {
-//					AddEditGameMenu.setVisible(false);
-//					AddGameSpecifyDetails.setVisible(true);
-//				}
+				//				if (error.length() == 0) {
+				//					try {
+				//						Block223Controller.selectGame(NewGameName.getText());
+				//					} catch (InvalidInputException e1) {
+				//						error=e1.getMessage();
+				//					}
+				//				}
+				//				errorMessage.setText(error);
+				//				System.out.println(error);
+				//				System.out.println("Button press4");
+				//				refreshData();
+				//				if (error.length() == 0) {
+				//					AddEditGameMenu.setVisible(false);
+				//					AddGameSpecifyDetails.setVisible(true);
+				//				}
 			}
 		});
 
@@ -994,27 +993,33 @@ public class Block223Page{
 				} catch (InvalidInputException e) {
 					e.printStackTrace();
 				};
+				
 				gameList.setSelectedIndex(-1);
-				blockList.removeAllItems();
-				try {
-					for (TOBlock block : Block223Controller.getBlocksOfCurrentDesignableGame()) {
-						blockList.addItem(block.getId());
-					}
-				} catch (InvalidInputException e) {
-					e.printStackTrace();
-				};
-				blockList.setSelectedIndex(-1);
 
+				blockList.removeAllItems();
 				//Make the exact same list twice, to be used in two different parents.
 				blockList2.removeAllItems();
-				try {
-					for (TOBlock block : Block223Controller.getBlocksOfCurrentDesignableGame()) {
-						blockList2.addItem(block.getId());
-					}
-				} catch (InvalidInputException e) {
-					e.printStackTrace();
-				};
-				blockList2.setSelectedIndex(-1);
+				
+				if (BlockApplication.getCurrentGame() != null) {
+					try {
+						for (TOBlock block : Block223Controller.getBlocksOfCurrentDesignableGame()) {
+							blockList.addItem(block.getId());
+						}
+					} catch (InvalidInputException e) {
+						e.printStackTrace();
+					};
+					blockList.setSelectedIndex(-1);
+
+
+					try {
+						for (TOBlock block : Block223Controller.getBlocksOfCurrentDesignableGame()) {
+							blockList2.addItem(block.getId());
+						}
+					} catch (InvalidInputException e) {
+						e.printStackTrace();
+					};
+					blockList2.setSelectedIndex(-1);
+				}
 			}
 		}
 

@@ -118,16 +118,19 @@ public class Block223Controller {
 		if (!(BlockApplication.getCurrentUserRole() instanceof Admin)) {
 			error += "Admin privileges are required to select a game.";
 		}
-		if (BlockApplication.getCurrentGame().getAdmin() != BlockApplication.getCurrentUserRole()) {
-			error += "Only the admin who created the game can select the game.";
-		}
-		if (error.length() > 0)
-			throw new InvalidInputException(error.trim());
-		
+		System.out.println("game got updated?: "+ BlockApplication.getCurrentGame());
+
 		Game game = findGame(name);
 		
 		if (game == null) {
 			error += "A game with name" + name + "does not exist.";
+		}
+
+		if (error.length() > 0)
+			throw new InvalidInputException(error.trim());
+		
+		if (!game.getAdmin().equals(BlockApplication.getCurrentUserRole())) {
+			error += "Only the admin who created the game can select the game.";
 		}
 		
 		if (error.length() > 0) {
