@@ -1,11 +1,11 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.26.1-f40f105-3613 modeling language!*/
+/*This code was generated using the UMPLE 1.29.0.4181.a593105a9 modeling language!*/
 
 package ca.mcgill.ecse223.block.model;
 import java.io.Serializable;
 
 // line 93 "../../../../../Block223Persistence.ump"
-// line 28 "../../../../../Block223.ump"
+// line 29 "../../../../../Block223.ump"
 public abstract class UserRole implements Serializable
 {
 
@@ -49,12 +49,12 @@ public abstract class UserRole implements Serializable
   {
     return password;
   }
-
+  /* Code from template association_GetOne */
   public Block223 getBlock223()
   {
     return block223;
   }
-
+  /* Code from template association_SetOneToMany */
   public boolean setBlock223(Block223 aBlock223)
   {
     boolean wasSet = false;
@@ -78,7 +78,10 @@ public abstract class UserRole implements Serializable
   {
     Block223 placeholderBlock223 = block223;
     this.block223 = null;
-    placeholderBlock223.removeRole(this);
+    if(placeholderBlock223 != null)
+    {
+      placeholderBlock223.removeRole(this);
+    }
   }
 
 
@@ -92,7 +95,7 @@ public abstract class UserRole implements Serializable
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 96 ../../../../../Block223Persistence.ump
+  // line 96 "../../../../../Block223Persistence.ump"
   private static final long serialVersionUID = 8217286007739980151L ;
 
   

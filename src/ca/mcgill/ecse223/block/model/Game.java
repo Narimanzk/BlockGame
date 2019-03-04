@@ -1,12 +1,12 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.26.1-f40f105-3613 modeling language!*/
+/*This code was generated using the UMPLE 1.29.0.4181.a593105a9 modeling language!*/
 
 package ca.mcgill.ecse223.block.model;
 import java.io.Serializable;
 import java.util.*;
 
 // line 48 "../../../../../Block223Persistence.ump"
-// line 48 "../../../../../Block223.ump"
+// line 49 "../../../../../Block223.ump"
 public class Game implements Serializable
 {
 
@@ -53,13 +53,13 @@ public class Game implements Serializable
 
   public Game(String aName, int aNrBlocksPerLevel, Admin aAdmin, Ball aBall, Paddle aPaddle, Block223 aBlock223)
   {
-    // line 57 "../../../../../Block223.ump"
+    // line 58 "../../../../../Block223.ump"
     if (aName == null || aName.length() == 0) {
     	  		throw new RuntimeException("The name of a game must be specified.");
     		}
     // END OF UMPLE BEFORE INJECTION
-    // line 62 "../../../../../Block223.ump"
-    if (nrBlocksPerLevel <= 0){
+    // line 63 "../../../../../Block223.ump"
+    if (aNrBlocksPerLevel <= 0){
       			throw new RuntimeException("The number of blocks per level must be greater than zero.");
       		}
     // END OF UMPLE BEFORE INJECTION
@@ -95,13 +95,13 @@ public class Game implements Serializable
 
   public Game(String aName, int aNrBlocksPerLevel, Admin aAdmin, int aMinBallSpeedXForBall, int aMinBallSpeedYForBall, double aBallSpeedIncreaseFactorForBall, int aMaxPaddleLengthForPaddle, int aMinPaddleLengthForPaddle, Block223 aBlock223)
   {
-    // line 57 "../../../../../Block223.ump"
+    // line 58 "../../../../../Block223.ump"
     if (aName == null || aName.length() == 0) {
     	  		throw new RuntimeException("The name of a game must be specified.");
     		}
     // END OF UMPLE BEFORE INJECTION
-    // line 62 "../../../../../Block223.ump"
-    if (nrBlocksPerLevel <= 0){
+    // line 63 "../../../../../Block223.ump"
+    if (aNrBlocksPerLevel <= 0){
       			throw new RuntimeException("The number of blocks per level must be greater than zero.");
       		}
     // END OF UMPLE BEFORE INJECTION
@@ -131,7 +131,7 @@ public class Game implements Serializable
   public boolean setName(String aName)
   {
     boolean wasSet = false;
-    // line 57 "../../../../../Block223.ump"
+    // line 58 "../../../../../Block223.ump"
     if (aName == null || aName.length() == 0) {
     	  		throw new RuntimeException("The name of a game must be specified.");
     		}
@@ -152,8 +152,8 @@ public class Game implements Serializable
   public boolean setNrBlocksPerLevel(int aNrBlocksPerLevel)
   {
     boolean wasSet = false;
-    // line 62 "../../../../../Block223.ump"
-    if (nrBlocksPerLevel <= 0){
+    // line 63 "../../../../../Block223.ump"
+    if (aNrBlocksPerLevel <= 0){
       			throw new RuntimeException("The number of blocks per level must be greater than zero.");
       		}
     // END OF UMPLE BEFORE INJECTION
@@ -166,12 +166,12 @@ public class Game implements Serializable
   {
     return name;
   }
-
+  /* Code from template attribute_GetUnique */
   public static Game getWithName(String aName)
   {
     return gamesByName.get(aName);
   }
-
+  /* Code from template attribute_HasUnique */
   public static boolean hasWithName(String aName)
   {
     return getWithName(aName) != null;
@@ -181,12 +181,12 @@ public class Game implements Serializable
   {
     return nrBlocksPerLevel;
   }
-
+  /* Code from template association_GetOne */
   public Admin getAdmin()
   {
     return admin;
   }
-
+  /* Code from template association_GetMany */
   public Block getBlock(int index)
   {
     Block aBlock = blocks.get(index);
@@ -216,10 +216,10 @@ public class Game implements Serializable
     int index = blocks.indexOf(aBlock);
     return index;
   }
-
+  /* Code from template association_GetMany */
   public Level getLevel(int index)
   {
-    // line 67 "../../../../../Block223.ump"
+    // line 68 "../../../../../Block223.ump"
     if ( index < 1 || index > levels.size()) {
     			throw new IndexOutOfBoundsException("Level" + index + "does not exist for the game");
     		}
@@ -251,7 +251,7 @@ public class Game implements Serializable
     int index = levels.indexOf(aLevel);
     return index;
   }
-
+  /* Code from template association_GetMany */
   public BlockAssignment getBlockAssignment(int index)
   {
     BlockAssignment aBlockAssignment = blockAssignments.get(index);
@@ -281,22 +281,22 @@ public class Game implements Serializable
     int index = blockAssignments.indexOf(aBlockAssignment);
     return index;
   }
-
+  /* Code from template association_GetOne */
   public Ball getBall()
   {
     return ball;
   }
-
+  /* Code from template association_GetOne */
   public Paddle getPaddle()
   {
     return paddle;
   }
-
+  /* Code from template association_GetOne */
   public Block223 getBlock223()
   {
     return block223;
   }
-
+  /* Code from template association_SetOneToMany */
   public boolean setAdmin(Admin aAdmin)
   {
     boolean wasSet = false;
@@ -315,12 +315,12 @@ public class Game implements Serializable
     wasSet = true;
     return wasSet;
   }
-
+  /* Code from template association_MinimumNumberOfMethod */
   public static int minimumNumberOfBlocks()
   {
     return 0;
   }
-
+  /* Code from template association_AddManyToOne */
   public Block addBlock(int aRed, int aGreen, int aBlue, int aPoints)
   {
     return new Block(aRed, aGreen, aBlue, aPoints, this);
@@ -355,7 +355,7 @@ public class Game implements Serializable
     }
     return wasRemoved;
   }
-
+  /* Code from template association_AddIndexControlFunctions */
   public boolean addBlockAt(Block aBlock, int index)
   {  
     boolean wasAdded = false;
@@ -387,23 +387,23 @@ public class Game implements Serializable
     }
     return wasAdded;
   }
-
+  /* Code from template association_IsNumberOfValidMethod */
   public boolean isNumberOfLevelsValid()
   {
     boolean isValid = numberOfLevels() >= minimumNumberOfLevels() && numberOfLevels() <= maximumNumberOfLevels();
     return isValid;
   }
-
+  /* Code from template association_MinimumNumberOfMethod */
   public static int minimumNumberOfLevels()
   {
     return 1;
   }
-
+  /* Code from template association_MaximumNumberOfMethod */
   public static int maximumNumberOfLevels()
   {
     return 99;
   }
-
+  /* Code from template association_AddMNToOnlyOne */
   public Level addLevel()
   {
     if (numberOfLevels() >= maximumNumberOfLevels())
@@ -463,7 +463,7 @@ public class Game implements Serializable
     wasRemoved = true;
     return wasRemoved;
   }
-
+  /* Code from template association_AddIndexControlFunctions */
   public boolean addLevelAt(Level aLevel, int index)
   {  
     boolean wasAdded = false;
@@ -495,12 +495,12 @@ public class Game implements Serializable
     }
     return wasAdded;
   }
-
+  /* Code from template association_MinimumNumberOfMethod */
   public static int minimumNumberOfBlockAssignments()
   {
     return 0;
   }
-
+  /* Code from template association_AddManyToOne */
   public BlockAssignment addBlockAssignment(int aGridHorizontalPosition, int aGridVerticalPosition, Level aLevel, Block aBlock)
   {
     return new BlockAssignment(aGridHorizontalPosition, aGridVerticalPosition, aLevel, aBlock, this);
@@ -535,7 +535,7 @@ public class Game implements Serializable
     }
     return wasRemoved;
   }
-
+  /* Code from template association_AddIndexControlFunctions */
   public boolean addBlockAssignmentAt(BlockAssignment aBlockAssignment, int index)
   {  
     boolean wasAdded = false;
@@ -567,7 +567,7 @@ public class Game implements Serializable
     }
     return wasAdded;
   }
-
+  /* Code from template association_SetOneToMany */
   public boolean setBlock223(Block223 aBlock223)
   {
     boolean wasSet = false;
@@ -592,7 +592,10 @@ public class Game implements Serializable
     gamesByName.remove(getName());
     Admin placeholderAdmin = admin;
     this.admin = null;
-    placeholderAdmin.removeGame(this);
+    if(placeholderAdmin != null)
+    {
+      placeholderAdmin.removeGame(this);
+    }
     while (blocks.size() > 0)
     {
       Block aBlock = blocks.get(blocks.size() - 1);
@@ -628,7 +631,10 @@ public class Game implements Serializable
     }
     Block223 placeholderBlock223 = block223;
     this.block223 = null;
-    placeholderBlock223.removeGame(this);
+    if(placeholderBlock223 != null)
+    {
+      placeholderBlock223.removeGame(this);
+    }
   }
 
   // line 54 "../../../../../Block223Persistence.ump"
@@ -655,7 +661,7 @@ public class Game implements Serializable
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 51 ../../../../../Block223Persistence.ump
+  // line 51 "../../../../../Block223Persistence.ump"
   private static final long serialVersionUID = 6884475053231046252L ;
 
   

@@ -41,6 +41,7 @@ public class Block223Controller {
 			throw new RuntimeException(error.trim());
 		}
 		Game game = new Game(name, 1, (Admin) userRole, 1, 1, 1, 10, 10, block223);
+		block223.addGame(game);
 	}
 
 	// TUDOR
@@ -113,6 +114,7 @@ public class Block223Controller {
 	// Narry
 	public static void selectGame(String name) throws InvalidInputException {
 		String error = "";
+		
 		if (!(BlockApplication.getCurrentUserRole() instanceof Admin)) {
 			error += "Admin privileges are required to select a game.";
 		}
@@ -121,10 +123,13 @@ public class Block223Controller {
 		}
 		if (error.length() > 0)
 			throw new InvalidInputException(error.trim());
+		
 		Game game = findGame(name);
+		
 		if (game == null) {
 			error += "A game with name" + name + "does not exist.";
 		}
+		
 		if (error.length() > 0) {
 			throw new InvalidInputException(error.trim());
 		}
@@ -378,10 +383,15 @@ public class Block223Controller {
 			throw new InvalidInputException(error.trim());
 
 		Game game = BlockApplication.getCurrentGame();
-		Level editLevel = game.getLevel(level);
-		BlockAssignment moveBlock = findBlockAssigment(editLevel, gridHorizontalPosition, gridVerticalPosition);
-		if (moveBlock != null) {
-			editLevel.removeBlockAssignment(moveBlock);
+		try {
+			Level editLevel = game.getLevel(level);
+			BlockAssignment moveBlock = findBlockAssigment(editLevel, gridHorizontalPosition, gridVerticalPosition);
+			if (moveBlock != null) {
+				editLevel.removeBlockAssignment(moveBlock);
+			}
+		}
+		catch (RuntimeException e) {
+			return;
 		}
 	}
 
@@ -497,7 +507,6 @@ public class Block223Controller {
 		List<TOGame> result = new ArrayList<TOGame>();
 		List<Game> games = block223.getGames();
 		for (Game game : games) {
-			System.out.println("game is: " + game.toString());
 			Admin gameAdmin = game.getAdmin();
 			if (gameAdmin.equals(admin)) {
 				TOGame to = new TOGame(game.getName(), game.getLevels().size(), game.getNrBlocksPerLevel(),
@@ -630,8 +639,7 @@ public class Block223Controller {
 		Game foundGame = null;
 		for (Game game : BlockApplication.getBlock223().getGames()) {
 			if (game.getName().equals(name)) {
-				foundGame = game;
-				break;
+				return game;
 			}
 		}
 		return foundGame;

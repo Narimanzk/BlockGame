@@ -1,12 +1,12 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.26.1-f40f105-3613 modeling language!*/
+/*This code was generated using the UMPLE 1.29.0.4181.a593105a9 modeling language!*/
 
 package ca.mcgill.ecse223.block.model;
 import java.io.Serializable;
 import java.util.*;
 
 // line 80 "../../../../../Block223Persistence.ump"
-// line 11 "../../../../../Block223.ump"
+// line 12 "../../../../../Block223.ump"
 public class User implements Serializable
 {
 
@@ -33,12 +33,12 @@ public class User implements Serializable
 
   public User(String aUsername, Block223 aBlock223, UserRole... allRoles)
   {
-    // line 15 "../../../../../Block223.ump"
+    // line 16 "../../../../../Block223.ump"
     if(getWithUsername(aUsername) != null){
        			throw new RuntimeException("The username has already been taken");
        		}
     // END OF UMPLE BEFORE INJECTION
-    // line 20 "../../../../../Block223.ump"
+    // line 21 "../../../../../Block223.ump"
     if (aUsername == null || aUsername.length() == 0) {
     	  		throw new RuntimeException("The username must be specified.");
     		}
@@ -67,12 +67,12 @@ public class User implements Serializable
   public boolean setUsername(String aUsername)
   {
     boolean wasSet = false;
-    // line 15 "../../../../../Block223.ump"
+    // line 16 "../../../../../Block223.ump"
     if(getWithUsername(aUsername) != null){
        			throw new RuntimeException("The username has already been taken");
        		}
     // END OF UMPLE BEFORE INJECTION
-    // line 20 "../../../../../Block223.ump"
+    // line 21 "../../../../../Block223.ump"
     if (aUsername == null || aUsername.length() == 0) {
     	  		throw new RuntimeException("The username must be specified.");
     		}
@@ -94,17 +94,17 @@ public class User implements Serializable
   {
     return username;
   }
-
+  /* Code from template attribute_GetUnique */
   public static User getWithUsername(String aUsername)
   {
     return usersByUsername.get(aUsername);
   }
-
+  /* Code from template attribute_HasUnique */
   public static boolean hasWithUsername(String aUsername)
   {
     return getWithUsername(aUsername) != null;
   }
-
+  /* Code from template association_GetMany */
   public UserRole getRole(int index)
   {
     UserRole aRole = roles.get(index);
@@ -134,22 +134,22 @@ public class User implements Serializable
     int index = roles.indexOf(aRole);
     return index;
   }
-
+  /* Code from template association_GetOne */
   public Block223 getBlock223()
   {
     return block223;
   }
-
+  /* Code from template association_MinimumNumberOfMethod */
   public static int minimumNumberOfRoles()
   {
     return 1;
   }
-
+  /* Code from template association_MaximumNumberOfMethod */
   public static int maximumNumberOfRoles()
   {
     return 2;
   }
-
+  /* Code from template association_AddUnidirectionalMN */
   public boolean addRole(UserRole aRole)
   {
     boolean wasAdded = false;
@@ -179,7 +179,7 @@ public class User implements Serializable
     wasRemoved = true;
     return wasRemoved;
   }
-
+  /* Code from template association_SetUnidirectionalMN */
   public boolean setRoles(UserRole... newRoles)
   {
     boolean wasSet = false;
@@ -203,7 +203,7 @@ public class User implements Serializable
     wasSet = true;
     return wasSet;
   }
-
+  /* Code from template association_AddIndexControlFunctions */
   public boolean addRoleAt(UserRole aRole, int index)
   {  
     boolean wasAdded = false;
@@ -235,7 +235,7 @@ public class User implements Serializable
     }
     return wasAdded;
   }
-
+  /* Code from template association_SetOneToMany */
   public boolean setBlock223(Block223 aBlock223)
   {
     boolean wasSet = false;
@@ -261,7 +261,10 @@ public class User implements Serializable
     roles.clear();
     Block223 placeholderBlock223 = block223;
     this.block223 = null;
-    placeholderBlock223.removeUser(this);
+    if(placeholderBlock223 != null)
+    {
+      placeholderBlock223.removeUser(this);
+    }
   }
 
   // line 86 "../../../../../Block223Persistence.ump"
@@ -283,7 +286,7 @@ public class User implements Serializable
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 83 ../../../../../Block223Persistence.ump
+  // line 83 "../../../../../Block223Persistence.ump"
   private static final long serialVersionUID = 4789044649628261312L ;
 
   

@@ -114,12 +114,14 @@ public class Block223Page{
 		/////////////////////////////////////////////////////////////////
 		//Main Menu page
 		JPanel mainMenu = new JPanel();
+		
 		frame.getContentPane().add(mainMenu, "name_33113224405399");
 
 		//////Add/Edit game button////////////
 		JButton btnAddEditGame = new JButton("Add/Edit Game");
 		btnAddEditGame.setBounds(160, 128, 170, 29);
 		mainMenu.setLayout(null);
+		errorMessage.setVisible(true);
 		mainMenu.add(btnAddEditGame);
 
 
@@ -159,7 +161,7 @@ public class Block223Page{
 		btnCreateGame.setBounds(45, 178, 157, 29);
 		AddEditGameMenu.add(btnCreateGame);
 		//JComboBox, should have all the game names!
-		gameList.setBounds(370, 146, 52, 27);
+		gameList.setBounds(276, 146, 146, 27);
 		AddEditGameMenu.add(gameList);
 
 		//Select game button, should take the name from the combo box^.
@@ -193,9 +195,11 @@ public class Block223Page{
 		//2. Affect blocks within a game
 		//3. Affect blocks within a level
 		//4. Save changes.
+		
 		JPanel GeneralGameMenu = new JPanel();
 		frame.getContentPane().add(GeneralGameMenu, "name_46221789659840");
 		GeneralGameMenu.setLayout(null);
+		errorMessage.setVisible(true);
 
 		JButton btnUpdateGameDtails = new JButton("Update Game");
 		btnUpdateGameDtails.setBounds(160, 70, 214, 29);
@@ -295,8 +299,6 @@ public class Block223Page{
 		JButton btnDefine = new JButton("Define");
 		btnDefine.setBounds(197, 248, 117, 29);
 		AddGameSpecifyDetails.add(btnDefine);
-
-
 
 		/////////////////////////////////////////////////////////////////
 
@@ -453,7 +455,7 @@ public class Block223Page{
 		btnAddBlock.setBounds(17, 221, 117, 29);
 		EditBlockInGame.add(btnAddBlock);
 
-		blockList.setBounds(302, 66, 52, 27);
+		blockList.setBounds(293, 66, 61, 27);
 		EditBlockInGame.add(blockList);
 
 
@@ -472,7 +474,6 @@ public class Block223Page{
 
 
 		/////////////////////////////////////////////////////////////////
-
 		//Register Menu
 		JPanel RegisterMenu = new JPanel();
 		frame.getContentPane().add(RegisterMenu, "name_46244369728357");
@@ -618,15 +619,12 @@ public class Block223Page{
 		EditBlockWithinLevel.add(frmtdtxtfldMask);
 
 		blockList2 = new JComboBox<Integer>();
-		blockList2.setBounds(92, 50, 52, 27);
+		blockList2.setBounds(95, 50, 86, 27);
 		EditBlockWithinLevel.add(blockList2);
 
 		JLabel lblLevel = new JLabel("Level:");
 		lblLevel.setBounds(418, 27, 61, 16);
 		EditBlockWithinLevel.add(lblLevel);
-
-		JLabel lblNewLabel = new JLabel("New label");
-		frame.getContentPane().add(lblNewLabel, "name_63047693751053");
 
 		JButton backEditBlockInLvl = new JButton("Back");
 		backEditBlockInLvl.addActionListener(new ActionListener() {
@@ -639,6 +637,9 @@ public class Block223Page{
 		});
 		backEditBlockInLvl.setBounds(6, 6, 60, 29);
 		RegisterMenu.add(backEditBlockInLvl);
+		
+				JLabel lblNewLabel = new JLabel("New label");
+				frame.getContentPane().add(lblNewLabel, "name_63047693751053");
 		////////////////////////////////////////////////////////////////////////////////
 		//ALL BUTTONS:
 
@@ -817,31 +818,35 @@ public class Block223Page{
 		//When you click "create game", this happens
 		btnCreateGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				error = "";
-				String gameName = NewGameName.getText();
+				error = null;
 				try {
-					Block223Controller.createGame(gameName);
+					Block223Controller.createGame(NewGameName.getText());
 				} catch (InvalidInputException e1) {
-					error+=e1.getMessage();
+					error=e1.getMessage();
 				} catch (RuntimeException e1) {
-					error+=e1.getMessage();
+					error=e1.getMessage();
 				}
-
+				errorMessage.setText(error);
+				System.out.println(error);
 				System.out.println("Button press3");
-				if (error.length() == 0) {
-					try {
-						Block223Controller.selectGame(gameName);
-					} catch (InvalidInputException e1) {
-						error+=e1.getMessage();
-					}
-				}
-				System.out.println("Button press4");
 				refreshData();
-				NewGameName.setText("");
-				if (error.length() == 0) {
-					AddEditGameMenu.setVisible(false);
-					AddGameSpecifyDetails.setVisible(true);
-				}
+
+				error = null;
+//				if (error.length() == 0) {
+//					try {
+//						Block223Controller.selectGame(NewGameName.getText());
+//					} catch (InvalidInputException e1) {
+//						error=e1.getMessage();
+//					}
+//				}
+//				errorMessage.setText(error);
+//				System.out.println(error);
+//				System.out.println("Button press4");
+//				refreshData();
+//				if (error.length() == 0) {
+//					AddEditGameMenu.setVisible(false);
+//					AddGameSpecifyDetails.setVisible(true);
+//				}
 			}
 		});
 
@@ -967,7 +972,6 @@ public class Block223Page{
 				} catch (NumberFormatException e1) {
 					error += e1.getMessage();
 				} catch (InvalidInputException e1) {
-					// TODO Auto-generated catch block
 					error += e1.getMessage();
 				}
 				refreshData();
@@ -991,7 +995,6 @@ public class Block223Page{
 					e.printStackTrace();
 				};
 				gameList.setSelectedIndex(-1);
-
 				blockList.removeAllItems();
 				try {
 					for (TOBlock block : Block223Controller.getBlocksOfCurrentDesignableGame()) {

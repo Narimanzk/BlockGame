@@ -1,5 +1,5 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.26.1-f40f105-3613 modeling language!*/
+/*This code was generated using the UMPLE 1.29.0.4181.a593105a9 modeling language!*/
 
 package ca.mcgill.ecse223.block.model;
 import java.io.Serializable;
@@ -10,7 +10,7 @@ import java.util.*;
  * Each level is filled up with random blocks just before playing the level to reach the nrBlocksPerLevel defined in Game
  */
 // line 62 "../../../../../Block223Persistence.ump"
-// line 97 "../../../../../Block223.ump"
+// line 98 "../../../../../Block223.ump"
 public class Level implements Serializable
 {
 
@@ -39,12 +39,12 @@ public class Level implements Serializable
   //------------------------
   // INTERFACE
   //------------------------
-
+  /* Code from template association_GetOne */
   public Game getGame()
   {
     return game;
   }
-
+  /* Code from template association_GetMany */
   public BlockAssignment getBlockAssignment(int index)
   {
     BlockAssignment aBlockAssignment = blockAssignments.get(index);
@@ -74,7 +74,7 @@ public class Level implements Serializable
     int index = blockAssignments.indexOf(aBlockAssignment);
     return index;
   }
-
+  /* Code from template association_SetOneToAtMostN */
   public boolean setGame(Game aGame)
   {
     boolean wasSet = false;
@@ -105,12 +105,12 @@ public class Level implements Serializable
     wasSet = true;
     return wasSet;
   }
-
+  /* Code from template association_MinimumNumberOfMethod */
   public static int minimumNumberOfBlockAssignments()
   {
     return 0;
   }
-
+  /* Code from template association_AddManyToOne */
   public BlockAssignment addBlockAssignment(int aGridHorizontalPosition, int aGridVerticalPosition, Block aBlock, Game aGame)
   {
     return new BlockAssignment(aGridHorizontalPosition, aGridVerticalPosition, this, aBlock, aGame);
@@ -145,7 +145,7 @@ public class Level implements Serializable
     }
     return wasRemoved;
   }
-
+  /* Code from template association_AddIndexControlFunctions */
   public boolean addBlockAssignmentAt(BlockAssignment aBlockAssignment, int index)
   {  
     boolean wasAdded = false;
@@ -182,7 +182,10 @@ public class Level implements Serializable
   {
     Game placeholderGame = game;
     this.game = null;
-    placeholderGame.removeLevel(this);
+    if(placeholderGame != null)
+    {
+      placeholderGame.removeLevel(this);
+    }
     for(int i=blockAssignments.size(); i > 0; i--)
     {
       BlockAssignment aBlockAssignment = blockAssignments.get(i - 1);
@@ -194,7 +197,7 @@ public class Level implements Serializable
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 65 ../../../../../Block223Persistence.ump
+  // line 65 "../../../../../Block223Persistence.ump"
   private static final long serialVersionUID = 1870656644376309407L ;
 
   

@@ -60,7 +60,7 @@ class Game {
 		}
 	}
 	before constructor, setNrBlocksPerLevel{
-		if (nrBlocksPerLevel <= 0){
+		if (aNrBlocksPerLevel <= 0){
   			throw new RuntimeException("The number of blocks per level must be greater than zero.");
   		}
   	}
