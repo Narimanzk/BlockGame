@@ -70,6 +70,11 @@ public class User
        			throw new RuntimeException("The username has already been taken");
        		}
     // END OF UMPLE BEFORE INJECTION
+    // line 19 "../../../../../Block223.ump"
+    if (aUsername == null || aUsername.length() == 0) {
+    	  		throw new RuntimeException("The username must be specified.");
+    		}
+    // END OF UMPLE BEFORE INJECTION
     String anOldUsername = getUsername();
     if (hasWithUsername(aUsername)) {
       return wasSet;

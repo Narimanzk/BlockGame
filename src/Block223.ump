@@ -15,7 +15,7 @@ class User {
    			throw new RuntimeException("The username has already been taken");
    		}
    	}
-   	before constructor, setName {
+   	before constructor, setUsername {
     	if (aUsername == null || aUsername.length() == 0) {
 	  		throw new RuntimeException("The username must be specified.");
 		}
