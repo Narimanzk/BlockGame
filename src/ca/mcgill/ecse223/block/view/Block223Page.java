@@ -672,7 +672,6 @@ public class Block223Page{
 				txtrUsername.setText("");
 				txtrPassword.setText("");
 				if (error == null || error.length() == 0) {
-					errorMessage.setVisible(false);
 					loginPanel.setVisible(false);
 					mainMenu.setVisible(true);
 				}
@@ -817,7 +816,7 @@ public class Block223Page{
 		//When you click "create game", this happens
 		btnCreateGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				error = null;
+				error = "";
 				try {
 					Block223Controller.createGame(NewGameName.getText());
 				} catch (InvalidInputException e1) {
@@ -825,27 +824,20 @@ public class Block223Page{
 				} catch (RuntimeException e1) {
 					error=e1.getMessage();
 				}
-				errorMessage.setText(error);
-				System.out.println(error);
-				System.out.println("Button press3");
 				refreshData();
-
-				error = null;
-				//				if (error.length() == 0) {
-				//					try {
-				//						Block223Controller.selectGame(NewGameName.getText());
-				//					} catch (InvalidInputException e1) {
-				//						error=e1.getMessage();
-				//					}
-				//				}
-				//				errorMessage.setText(error);
-				//				System.out.println(error);
-				//				System.out.println("Button press4");
-				//				refreshData();
-				//				if (error.length() == 0) {
-				//					AddEditGameMenu.setVisible(false);
-				//					AddGameSpecifyDetails.setVisible(true);
-				//				}
+				error = "";
+				if (error.length() == 0) {
+					try {
+						Block223Controller.selectGame(NewGameName.getText());
+					} catch (InvalidInputException e1) {
+						error=e1.getMessage();
+					}
+				}
+				refreshData();
+				if (error.length() == 0) {
+					AddEditGameMenu.setVisible(false);
+					AddGameSpecifyDetails.setVisible(true);
+				}
 			}
 		});
 
@@ -993,13 +985,13 @@ public class Block223Page{
 				} catch (InvalidInputException e) {
 					e.printStackTrace();
 				};
-				
+
 				gameList.setSelectedIndex(-1);
 
 				blockList.removeAllItems();
 				//Make the exact same list twice, to be used in two different parents.
 				blockList2.removeAllItems();
-				
+
 				if (BlockApplication.getCurrentGame() != null) {
 					try {
 						for (TOBlock block : Block223Controller.getBlocksOfCurrentDesignableGame()) {

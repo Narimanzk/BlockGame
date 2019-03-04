@@ -460,6 +460,8 @@ public class Block223Controller {
 	// TUDOR
 	public static void login(String username, String password) throws InvalidInputException {
 		String error = "";
+
+		Block223 block223 = BlockApplication.getBlock223();
 		UserRole userRole = BlockApplication.getCurrentUserRole();
 
 		System.out.println("user output to login: " + username);
