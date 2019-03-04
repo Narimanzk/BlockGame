@@ -414,7 +414,7 @@ public class Block223Controller {
 		System.out.println("user output: " + username);
 		System.out.println("Pass input:" + playerPassword);
 		System.out.println("Admin input: " + adminPassword);
-		
+
 		if (userRole != null)
 			error += "Cannot register a new user while a user is already logged in\n";
 
@@ -426,13 +426,19 @@ public class Block223Controller {
 		}
 
 		Block223 block223 = BlockApplication.getBlock223();
-		Player player = new Player(playerPassword, block223);
-		User user = new User(username, block223, player);
+		try {
+			Player player = new Player(playerPassword, block223);
+			User user = new User(username, block223, player);
 
-		if (adminPassword != null && adminPassword != "") {
-			Admin admin = new Admin(adminPassword, block223);
-			user.addRole(admin);
+			if (adminPassword != null && adminPassword != "") {
+				Admin admin = new Admin(adminPassword, block223);
+				user.addRole(admin);
+			}
 		}
+		catch (RuntimeException e) {
+			throw new InvalidInputException(e.getMessage());
+		}
+
 		Block223Persistence.save(block223);
 
 	}
