@@ -490,6 +490,7 @@ public class Block223Controller {
 		List<TOGame> result = new ArrayList<TOGame>();
 		List<Game> games = block223.getGames();
 		for (Game game : games) {
+			System.out.println("game is: " + game.toString());
 			Admin gameAdmin = game.getAdmin();
 			if (gameAdmin.equals(admin)) {
 				TOGame to = new TOGame(game.getName(), game.getLevels().size(), game.getNrBlocksPerLevel(),

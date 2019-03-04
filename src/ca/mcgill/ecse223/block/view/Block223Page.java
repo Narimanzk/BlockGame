@@ -826,6 +826,8 @@ public class Block223Page{
 				} catch (RuntimeException e1) {
 					error+=e1.getMessage();
 				}
+
+				System.out.println("Button press3");
 				if (error.length() == 0) {
 					try {
 						Block223Controller.selectGame(gameName);
@@ -833,6 +835,7 @@ public class Block223Page{
 						error+=e1.getMessage();
 					}
 				}
+				System.out.println("Button press4");
 				refreshData();
 				NewGameName.setText("");
 				if (error.length() == 0) {
@@ -975,10 +978,13 @@ public class Block223Page{
 	protected void refreshData() {
 		errorMessage.setText(error);
 		if (error == null || error.length() == 0) {
-			gameList.removeAllItems();
+			System.out.println(Block223Controller.getUserMode().getMode().toString());
 			if (Block223Controller.getUserMode().getMode() == TOUserMode.Mode.Design){
+
+				gameList.removeAllItems();
 				try {
 					for (TOGame game : Block223Controller.getDesignableGames()) {
+						System.out.println(game.getName());
 						gameList.addItem(game.getName());
 					}
 				} catch (InvalidInputException e) {
