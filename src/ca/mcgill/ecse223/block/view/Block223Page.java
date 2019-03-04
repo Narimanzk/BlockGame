@@ -923,7 +923,7 @@ public class Block223Page{
 			public void actionPerformed(ActionEvent e) {
 				error = "";
 				try {
-					Block223Controller.positionBlock(Integer.valueOf(blockList.getSelectedItem().toString()), Integer.valueOf(txtLevel.getText()),
+					Block223Controller.positionBlock(Integer.valueOf(blockList2.getSelectedItem().toString()), Integer.valueOf(txtLevel.getText()),
 							Integer.valueOf(txtHorizontalGridPosition.getText()), Integer.valueOf(txtVerticalGridPosition.getText()));
 				} catch (NumberFormatException e1) {
 					error = e1.getMessage();
@@ -952,7 +952,6 @@ public class Block223Page{
 				refreshData();
 			}
 		});
-
 
 		//Remove a block
 		btnRemoveBlock.addActionListener(new ActionListener() {

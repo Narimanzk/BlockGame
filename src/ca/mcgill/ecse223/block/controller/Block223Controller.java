@@ -337,7 +337,7 @@ public class Block223Controller {
 
 		Level editLevel;
 		try {
-			editLevel = game.getLevel(level);
+			editLevel = game.getLevel(level-1);
 		} catch (IndexOutOfBoundsException e) {
 			throw new InvalidInputException(e.getMessage());
 		}
@@ -346,13 +346,13 @@ public class Block223Controller {
 
 		// Throw error if there's no block at x and y
 		if (moveBlock == null)
-			throw new InvalidInputException("A block does not exist at location " + oldGridHorizontalPosition + " /"
+			throw new InvalidInputException("A block does not exist at location" + oldGridHorizontalPosition + " /"
 					+ oldGridVerticalPosition + ".");
 
 		// Throw error if there's already a block at x and y
 		if (findBlockAssigment(editLevel, newGridHorizontalPosition, newGridVerticalPosition) != null) {
 			throw new InvalidInputException(
-					"A block already exists at position " + newGridHorizontalPosition + "/" + newGridVerticalPosition);
+					"A block already exists at position" + newGridHorizontalPosition + "/" + newGridVerticalPosition);
 		}
 		try {
 			moveBlock.setGridHorizontalPosition(newGridHorizontalPosition);
@@ -387,7 +387,7 @@ public class Block223Controller {
 
 		Game game = BlockApplication.getCurrentGame();
 		try {
-			Level editLevel = game.getLevel(level);
+			Level editLevel = game.getLevel(level-1);
 			BlockAssignment moveBlock = findBlockAssigment(editLevel, gridHorizontalPosition, gridVerticalPosition);
 			if (moveBlock != null) {
 				editLevel.removeBlockAssignment(moveBlock);
