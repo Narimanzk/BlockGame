@@ -31,7 +31,7 @@ class Block{
 class Block223{
   depend java.io.Serializable;
   isA Serializable;
-  private static final long serialVersionUID = 6594557003371779087L;
+  private static final long serialVersionUID = -6594557003371779087L;
   
   public void reinitialize() {
     Game.reinitializeGamesByName(this.getGames());

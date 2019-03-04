@@ -3,7 +3,7 @@
 
 package ca.mcgill.ecse223.block.model;
 
-// line 98 "../../../../../Block223.ump"
+// line 99 "../../../../../Block223.ump"
 public class BlockAssignment
 {
 
@@ -52,7 +52,7 @@ public class BlockAssignment
   public boolean setGridHorizontalPosition(int aGridHorizontalPosition)
   {
     boolean wasSet = false;
-    // line 102 "../../../../../Block223.ump"
+    // line 103 "../../../../../Block223.ump"
     //1 Column padding at each side
     	    int maxNumberHorizontalBlocks = (Game.PLAY_AREA_SIDE - 2 * Game.COLUMNS_PADDING) / Block.SIZE;
     	    if ( aGridHorizontalPosition <= 0 || aGridHorizontalPosition > maxNumberHorizontalBlocks ) {
@@ -67,7 +67,7 @@ public class BlockAssignment
   public boolean setGridVerticalPosition(int aGridVerticalPosition)
   {
     boolean wasSet = false;
-    // line 109 "../../../../../Block223.ump"
+    // line 110 "../../../../../Block223.ump"
     //1 Row padding at the top
     	    int maxNumberVerticalBlocks = (Game.PLAY_AREA_SIDE - Game.ROW_PADDING) / Block.SIZE;
     	    if ( aGridVerticalPosition <= 0 || aGridVerticalPosition > maxNumberVerticalBlocks ) {

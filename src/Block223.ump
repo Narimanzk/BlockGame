@@ -1,7 +1,8 @@
 namespace ca.mcgill.ecse223.block.model;
+
 use Block223Persistence;
 
-class Block223 {
+class Block223{
    1 <@>- * User users;
    1 <@>- * UserRole roles;
    1 <@>- * Game games;

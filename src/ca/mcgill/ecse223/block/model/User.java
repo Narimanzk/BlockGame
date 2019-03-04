@@ -4,7 +4,7 @@
 package ca.mcgill.ecse223.block.model;
 import java.util.*;
 
-// line 10 "../../../../../Block223.ump"
+// line 11 "../../../../../Block223.ump"
 public class User
 {
 
@@ -31,12 +31,12 @@ public class User
 
   public User(String aUsername, Block223 aBlock223, UserRole... allRoles)
   {
-    // line 14 "../../../../../Block223.ump"
+    // line 15 "../../../../../Block223.ump"
     if(getWithUsername(aUsername) != null){
        			throw new RuntimeException("The username has already been taken");
        		}
     // END OF UMPLE BEFORE INJECTION
-    // line 19 "../../../../../Block223.ump"
+    // line 20 "../../../../../Block223.ump"
     if (aUsername == null || aUsername.length() == 0) {
     	  		throw new RuntimeException("The username must be specified.");
     		}
@@ -65,7 +65,7 @@ public class User
   public boolean setUsername(String aUsername)
   {
     boolean wasSet = false;
-    // line 14 "../../../../../Block223.ump"
+    // line 15 "../../../../../Block223.ump"
     if(getWithUsername(aUsername) != null){
        			throw new RuntimeException("The username has already been taken");
        		}

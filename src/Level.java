@@ -1,10 +1,11 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.29.0.4181.a593105a9 modeling language!*/
 
-package ca.mcgill.ecse223.block.model;
 
-// line 43 "../../../../../Block223.ump"
-public class Player extends UserRole
+import java.io.Serializable;
+
+// line 62 "Block223Persistence.ump"
+public class Level implements Serializable
 {
 
   //------------------------
@@ -15,18 +16,22 @@ public class Player extends UserRole
   // CONSTRUCTOR
   //------------------------
 
-  public Player(String aPassword, Block223 aBlock223)
-  {
-    super(aPassword, aBlock223);
-  }
+  public Level()
+  {}
 
   //------------------------
   // INTERFACE
   //------------------------
 
   public void delete()
-  {
-    super.delete();
-  }
+  {}
+  
+  //------------------------
+  // DEVELOPER CODE - PROVIDED AS-IS
+  //------------------------
+  
+  // line 65 "Block223Persistence.ump"
+  private static final long serialVersionUID = 1870656644376309407L ;
 
+  
 }
