@@ -416,7 +416,7 @@ public class Block223Controller {
 		System.out.println("Admin input: " + adminPassword);
 		
 		if (userRole != null)
-			error += "Cannot login a user while a user is already logged in\n";
+			error += "Cannot register a new user while a user is already logged in\n";
 
 		if (playerPassword.equals(adminPassword))
 			error += "The passwords have to be different\n";
@@ -442,6 +442,8 @@ public class Block223Controller {
 		String error = "";
 		UserRole userRole = BlockApplication.getCurrentUserRole();
 
+		System.out.println("user output to login: " + username);
+		System.out.println("Pass input to login:" + password);
 		if (userRole != null)
 			error += "Cannot login a user while a user is already logged in\n";
 		if (User.getWithUsername(username) == null)
@@ -457,7 +459,8 @@ public class Block223Controller {
 
 		for (UserRole aRole : roles) {
 			String rolePassword = aRole.getPassword();
-			if (rolePassword == password) {
+			System.out.println("rolePassword: "+ rolePassword);
+			if (rolePassword.equals(password)) {
 				BlockApplication.setCurrentUserRole(aRole);
 			}
 		}

@@ -20,6 +20,7 @@ import ca.mcgill.ecse223.block.controller.Block223Controller;
 import ca.mcgill.ecse223.block.controller.InvalidInputException;
 import ca.mcgill.ecse223.block.controller.TOBlock;
 import ca.mcgill.ecse223.block.controller.TOGame;
+import ca.mcgill.ecse223.block.controller.TOUserMode;
 
 import javax.swing.JFormattedTextField;
 import javax.swing.SwingConstants;
@@ -66,7 +67,7 @@ public class Block223Page{
 		errorMessage = new JLabel();
 		errorMessage.setVerticalAlignment(SwingConstants.BOTTOM);
 		errorMessage.setForeground(Color.RED);
-		
+
 		blockList = new JComboBox<Integer>();
 		blockList2 = new JComboBox<Integer>();
 		gameList = new JComboBox<String>();
@@ -219,7 +220,7 @@ public class Block223Page{
 		btnSaveChanges.setBounds(160, 160, 214, 29);
 		GeneralGameMenu.add(btnSaveChanges);
 
-		
+
 		JButton backGenGamePage = new JButton("Back");
 		backGenGamePage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -455,7 +456,7 @@ public class Block223Page{
 		blockList.setBounds(302, 66, 52, 27);
 		EditBlockInGame.add(blockList);
 
-		
+
 		JButton backEditBlock = new JButton("Back");
 		backEditBlock.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -500,7 +501,7 @@ public class Block223Page{
 		JLabel lblWelcomeToBlock = new JLabel("Welcome to Block 223!");
 		lblWelcomeToBlock.setBounds(191, 50, 204, 16);
 		RegisterMenu.add(lblWelcomeToBlock);
-		
+
 		JButton backRegisterMenu = new JButton("Back");
 		backRegisterMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -623,7 +624,7 @@ public class Block223Page{
 		JLabel lblLevel = new JLabel("Level:");
 		lblLevel.setBounds(418, 27, 61, 16);
 		EditBlockWithinLevel.add(lblLevel);
-		
+
 		JLabel lblNewLabel = new JLabel("New label");
 		frame.getContentPane().add(lblNewLabel, "name_63047693751053");
 
@@ -975,36 +976,41 @@ public class Block223Page{
 		errorMessage.setText(error);
 		if (error == null || error.length() == 0) {
 			gameList.removeAllItems();
-			try {
-				for (TOGame game : Block223Controller.getDesignableGames()) {
-					gameList.addItem(game.getName());
-				}
-			} catch (InvalidInputException e) {
-				e.printStackTrace();
-			};
-			gameList.setSelectedIndex(-1);
+			if (Block223Controller.getUserMode().getMode() == TOUserMode.Mode.Design){
+				try {
+					for (TOGame game : Block223Controller.getDesignableGames()) {
+						gameList.addItem(game.getName());
+					}
+				} catch (InvalidInputException e) {
+					e.printStackTrace();
+				};
+				gameList.setSelectedIndex(-1);
 
-			blockList.removeAllItems();
-			try {
-				for (TOBlock block : Block223Controller.getBlocksOfCurrentDesignableGame()) {
-					blockList.addItem(block.getId());
-				}
-			} catch (InvalidInputException e) {
-				e.printStackTrace();
-			};
-			blockList.setSelectedIndex(-1);
+				blockList.removeAllItems();
+				try {
+					for (TOBlock block : Block223Controller.getBlocksOfCurrentDesignableGame()) {
+						blockList.addItem(block.getId());
+					}
+				} catch (InvalidInputException e) {
+					e.printStackTrace();
+				};
+				blockList.setSelectedIndex(-1);
 
-			//Make the exact same list twice, to be used in two different parents.
-			blockList2.removeAllItems();
-			try {
-				for (TOBlock block : Block223Controller.getBlocksOfCurrentDesignableGame()) {
-					blockList2.addItem(block.getId());
-				}
-			} catch (InvalidInputException e) {
-				e.printStackTrace();
-			};
-			blockList2.setSelectedIndex(-1);
+				//Make the exact same list twice, to be used in two different parents.
+				blockList2.removeAllItems();
+				try {
+					for (TOBlock block : Block223Controller.getBlocksOfCurrentDesignableGame()) {
+						blockList2.addItem(block.getId());
+					}
+				} catch (InvalidInputException e) {
+					e.printStackTrace();
+				};
+				blockList2.setSelectedIndex(-1);
+			}
 		}
 
 	}
 }
+
+
+
