@@ -12,7 +12,6 @@ public class BlockApplication {
 	private static Block223 block223;
 	private static UserRole currentRole = null;
 	private static Game currentGame = null;
-	private static Admin curAdmin = null;
 	
 	public static void main(String[] args) {
 		// start UI
@@ -37,12 +36,6 @@ public class BlockApplication {
 	public static void setCurrentUserRole(UserRole aUserRole) {
 		currentRole = aUserRole;
 		
-	}
-	public static void setCurAdmin(Admin anAdmin) {
-		curAdmin = anAdmin;	
-	}
-	public static Admin getCurAdmin() {
-		return curAdmin;
 	}
 	public static UserRole getCurrentUserRole() {
 		return currentRole;
