@@ -85,7 +85,6 @@ public class Block223Controller {
 			level.delete();
 			size = levels.size();
 		}
-
 	}
 
 	// Narry

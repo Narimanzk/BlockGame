@@ -66,7 +66,7 @@ class Game {
   	}
   	before getLevel {
     	if ( index < 0 || index > (levels.size()-1)) {
-			throw new IndexOutOfBoundsException("Level " + index + " does not exist for the game");
+			throw new IndexOutOfBoundsException("Level " + index+1 + " does not exist for the game");
 		}
 	}
 			

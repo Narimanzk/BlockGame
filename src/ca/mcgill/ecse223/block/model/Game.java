@@ -221,7 +221,7 @@ public class Game implements Serializable
   {
     // line 68 "../../../../../Block223.ump"
     if ( index < 0 || index > (levels.size()-1)) {
-    			throw new IndexOutOfBoundsException("Level " + index + " does not exist for the game");
+    			throw new IndexOutOfBoundsException("Level " + index+1 + " does not exist for the game");
     		}
     // END OF UMPLE BEFORE INJECTION
     Level aLevel = levels.get(index);

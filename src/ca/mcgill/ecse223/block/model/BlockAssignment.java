@@ -76,6 +76,7 @@ public class BlockAssignment implements Serializable
     		//1 paddle at the bottom
     		//1 ball at the bottom
     		//Vertical distance necessary below the paddle
+    		
     	    int maxNumberVerticalBlocks = (Game.PLAY_AREA_SIDE + Game.ROW_PADDING - Paddle.PADDLE_WIDTH - Paddle.VERTICAL_DISTANCE - Ball.BALL_DIAMETER - Game.WALL_PADDING) / (Block.SIZE+Game.ROW_PADDING);
     	    if ( aGridVerticalPosition <= 0 || aGridVerticalPosition > maxNumberVerticalBlocks ) {
     	 		throw new RuntimeException("The vertical position must be between 1 and " + maxNumberVerticalBlocks + ".");
