@@ -31,13 +31,13 @@ public class Block223Controller {
 		Game aGame = findGame(name);
 
 		if (!(userRole instanceof Admin)) {
-			error += "Admin privileges are required to create a game\n";
+			error += "Admin privileges are required to create a game.";
 		}
 		if (error.length() > 0) {
 			throw new InvalidInputException(error.trim());
 		}
 		if (aGame != null) {
-			error += "The name of a game must be unique\n";
+			error += "The name of a game must be unique.";
 			throw new RuntimeException(error.trim());
 		}
 		Game game = new Game(name, 1, (Admin) userRole, 1, 1, 1, 10, 10, block223);
@@ -53,13 +53,13 @@ public class Block223Controller {
 		Game aGame = BlockApplication.getCurrentGame();
 
 		if (!(userRole instanceof Admin))
-			error += "Admin privileges are required to create a game\n";
+			error += "Admin privileges are required to create a game.";
 		if (aGame == null)
-			error += "A game must be selected to define game settings\n";
+			error += "A game must be selected to define game settings.";
 		if (aGame.getAdmin() != BlockApplication.getCurrentUserRole())
-			error += "Only the admin who create the game can define its game settings\n";
+			error += "Only the admin who create the game can define its game settings.";
 		if (nrLevels < 1 || nrLevels > 99)
-			error += "The number of levels must be between 1 and 99\n";
+			error += "The number of levels must be between 1 and 99.";
 		if (error.length() > 0) {
 			throw new InvalidInputException(error.trim());
 		}
@@ -93,7 +93,7 @@ public class Block223Controller {
 		if (!(BlockApplication.getCurrentUserRole() instanceof Admin)) {
 			error += "Admin privileges are required to delete a game.";
 		}
-		if (BlockApplication.getCurrentGame().getAdmin() != BlockApplication.getCurrentUserRole()) {
+		if (!BlockApplication.getCurrentGame().getAdmin().equals(BlockApplication.getCurrentUserRole())) {
 			error += "Only the admin who created the game can delete the game.";
 		}
 		if (error.length() > 0)
@@ -121,7 +121,7 @@ public class Block223Controller {
 		Game game = findGame(name);
 		
 		if (game == null) {
-			error += "A game with name" + name + "does not exist.";
+			error += "A game with name " + name + " does not exist.";
 		}
 
 		if (error.length() > 0)
@@ -292,7 +292,7 @@ public class Block223Controller {
 
 		if (findBlockAssigment(aLevel, gridHorizontalPosition, gridVerticalPosition) != null) {
 			throw new InvalidInputException(
-					"A block already exists at position " + gridHorizontalPosition + "/" + gridVerticalPosition);
+					"A block already exists at position " + gridHorizontalPosition + "/" + gridVerticalPosition + ".");
 		}
 
 		Block foundBlock = null;
