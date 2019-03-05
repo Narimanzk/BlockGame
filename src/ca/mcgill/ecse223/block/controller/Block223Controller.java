@@ -118,7 +118,6 @@ public class Block223Controller {
 		if (!(BlockApplication.getCurrentUserRole() instanceof Admin)) {
 			error += "Admin privileges are required to select a game.";
 		}
-		System.out.println("game got updated?: "+ BlockApplication.getCurrentGame());
 
 		Game game = findGame(name);
 		
@@ -332,7 +331,7 @@ public class Block223Controller {
 			error += "A game must be selected to move a block.";
 		}
 		// The admin must be the admin of the current game.
-		if (BlockApplication.getCurrentGame().getAdmin() != BlockApplication.getCurrentUserRole())
+		if (!BlockApplication.getCurrentGame().getAdmin().equals(BlockApplication.getCurrentUserRole()))
 			error += "Only the admin who created the game can move a block.";
 
 		if (error.length() > 0)
@@ -351,15 +350,17 @@ public class Block223Controller {
 
 		// Throw error if there's no block at x and y
 		if (moveBlock == null)
-			throw new InvalidInputException("A block does not exist at location" + oldGridHorizontalPosition + " /"
+			throw new InvalidInputException("A block does not exist at location " + oldGridHorizontalPosition + "/"
 					+ oldGridVerticalPosition + ".");
 
 		// Throw error if there's already a block at x and y
 		if (findBlockAssigment(editLevel, newGridHorizontalPosition, newGridVerticalPosition) != null) {
 			throw new InvalidInputException(
-					"A block already exists at position" + newGridHorizontalPosition + "/" + newGridVerticalPosition);
+					"A block already exists at position " + newGridHorizontalPosition + "/" + newGridVerticalPosition);
 		}
 		try {
+			//This is weird because if only the vertical position doesn't work it'll set X anyway
+			//But prof wants it to catch in the umple before the "set" call, so it has to be this way.
 			moveBlock.setGridHorizontalPosition(newGridHorizontalPosition);
 			moveBlock.setGridVerticalPosition(newGridVerticalPosition);
 		} catch (RuntimeException e) {
@@ -374,18 +375,15 @@ public class Block223Controller {
 		Block223 block223 = BlockApplication.getBlock223();
 		// Error checking:
 		String error = "";
-
 		// Needs to be an admin.
 		if (!(BlockApplication.getCurrentUserRole() instanceof Admin))
 			error += "Admin privileges are required to move a block.";
-
 		// Game needs to be set.
 		if (BlockApplication.getCurrentGame() == null) {
 			error += "A game must be selected to move a block.";
 		}
-
 		// The admin must be the admin of the current game.
-		if (BlockApplication.getCurrentGame().getAdmin() != BlockApplication.getCurrentUserRole())
+		if (!BlockApplication.getCurrentGame().getAdmin().equals(BlockApplication.getCurrentUserRole()))
 			error += "Only the admin who created the game can move a block.";
 
 		if (error.length() > 0)
@@ -430,9 +428,6 @@ public class Block223Controller {
 			throws InvalidInputException {
 		String error = "";
 		UserRole userRole = BlockApplication.getCurrentUserRole();
-		System.out.println("user output: " + username);
-		System.out.println("Pass input:" + playerPassword);
-		System.out.println("Admin input: " + adminPassword);
 
 		if (userRole != null)
 			error += "Cannot register a new user while a user is already logged in\n";
@@ -469,9 +464,6 @@ public class Block223Controller {
 
 		Block223 block223 = BlockApplication.getBlock223();
 		UserRole userRole = BlockApplication.getCurrentUserRole();
-
-		System.out.println("user output to login: " + username);
-		System.out.println("Pass input to login:" + password);
 		if (userRole != null)
 			error += "Cannot login a user while a user is already logged in\n";
 		if (User.getWithUsername(username) == null)
@@ -484,10 +476,8 @@ public class Block223Controller {
 		BlockApplication.resetBlock223();
 		User user = User.getWithUsername(username);
 		List<UserRole> roles = user.getRoles();
-
 		for (UserRole aRole : roles) {
 			String rolePassword = aRole.getPassword();
-			System.out.println("rolePassword: "+ rolePassword);
 			if (rolePassword.equals(password)) {
 				BlockApplication.setCurrentUserRole(aRole);
 			}

@@ -55,8 +55,9 @@ public class BlockAssignment implements Serializable
   {
     boolean wasSet = false;
     // line 105 "../../../../../Block223.ump"
-    //1 Column padding at each side
-    	    int maxNumberHorizontalBlocks = (Game.PLAY_AREA_SIDE - 2 * Game.COLUMNS_PADDING) / Block.SIZE;
+    //One column padding between each block=>(Max# - 1) column paddings
+    	   	//1 wall padding on each side=> 2 wall paddings
+    	    int maxNumberHorizontalBlocks = (Game.PLAY_AREA_SIDE + Game.COLUMNS_PADDING - 2 * Game.WALL_PADDING) / (Block.SIZE+Game.COLUMNS_PADDING);
     	    if ( aGridHorizontalPosition <= 0 || aGridHorizontalPosition > maxNumberHorizontalBlocks ) {
     			throw new RuntimeException("The horizontal position must be between 1 and " + maxNumberHorizontalBlocks + ".");
     		}
@@ -69,9 +70,13 @@ public class BlockAssignment implements Serializable
   public boolean setGridVerticalPosition(int aGridVerticalPosition)
   {
     boolean wasSet = false;
-    // line 112 "../../../../../Block223.ump"
-    //1 Row padding at the top
-    	    int maxNumberVerticalBlocks = (Game.PLAY_AREA_SIDE - Game.ROW_PADDING) / Block.SIZE;
+    // line 113 "../../../../../Block223.ump"
+    //1 Row between each block = > ( Max# - 1) row paddings
+    		//1 wall padding at the top
+    		//1 paddle at the bottom
+    		//1 ball at the bottom
+    		//Vertical distance necessary below the paddle
+    	    int maxNumberVerticalBlocks = (Game.PLAY_AREA_SIDE + Game.ROW_PADDING - Paddle.PADDLE_WIDTH - Paddle.VERTICAL_DISTANCE - Ball.BALL_DIAMETER - Game.WALL_PADDING) / (Block.SIZE+Game.ROW_PADDING);
     	    if ( aGridVerticalPosition <= 0 || aGridVerticalPosition > maxNumberVerticalBlocks ) {
     	 		throw new RuntimeException("The vertical position must be between 1 and " + maxNumberVerticalBlocks + ".");
     		}
