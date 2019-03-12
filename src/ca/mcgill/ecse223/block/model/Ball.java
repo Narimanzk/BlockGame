@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.*;
 
 // line 9 "../../../../../Block223Persistence.ump"
-// line 128 "../../../../../Block223.ump"
+// line 134 "../../../../../Block223.ump"
 public class Ball implements Serializable
 {
 
@@ -34,21 +34,6 @@ public class Ball implements Serializable
 
   public Ball(int aMinBallSpeedX, int aMinBallSpeedY, double aBallSpeedIncreaseFactor, Game aGame)
   {
-    // line 134 "../../../../../Block223.ump"
-    if (aMinBallSpeedX <= 0){
-      			throw new RuntimeException("The minimum speed of the ball mut be greater than zero.");
-      		}
-    // END OF UMPLE BEFORE INJECTION
-    // line 139 "../../../../../Block223.ump"
-    if (aMinBallSpeedY <= 0){
-      			throw new RuntimeException("The minimum speed of the ball mut be greater than zero.");
-      		}
-    // END OF UMPLE BEFORE INJECTION
-    // line 144 "../../../../../Block223.ump"
-    if (aBallSpeedIncreaseFactor <= 0){
-      			throw new RuntimeException("The speed increase factor of the ball mut be greater than zero.");
-      		}
-    // END OF UMPLE BEFORE INJECTION
     minBallSpeedX = aMinBallSpeedX;
     minBallSpeedY = aMinBallSpeedY;
     ballSpeedIncreaseFactor = aBallSpeedIncreaseFactor;
@@ -61,21 +46,6 @@ public class Ball implements Serializable
 
   public Ball(int aMinBallSpeedX, int aMinBallSpeedY, double aBallSpeedIncreaseFactor, String aNameForGame, int aNrBlocksPerLevelForGame, Admin aAdminForGame, Paddle aPaddleForGame, Block223 aBlock223ForGame)
   {
-    // line 134 "../../../../../Block223.ump"
-    if (aMinBallSpeedX <= 0){
-      			throw new RuntimeException("The minimum speed of the ball mut be greater than zero.");
-      		}
-    // END OF UMPLE BEFORE INJECTION
-    // line 139 "../../../../../Block223.ump"
-    if (aMinBallSpeedY <= 0){
-      			throw new RuntimeException("The minimum speed of the ball mut be greater than zero.");
-      		}
-    // END OF UMPLE BEFORE INJECTION
-    // line 144 "../../../../../Block223.ump"
-    if (aBallSpeedIncreaseFactor <= 0){
-      			throw new RuntimeException("The speed increase factor of the ball mut be greater than zero.");
-      		}
-    // END OF UMPLE BEFORE INJECTION
     minBallSpeedX = aMinBallSpeedX;
     minBallSpeedY = aMinBallSpeedY;
     ballSpeedIncreaseFactor = aBallSpeedIncreaseFactor;
@@ -89,11 +59,6 @@ public class Ball implements Serializable
   public boolean setMinBallSpeedX(int aMinBallSpeedX)
   {
     boolean wasSet = false;
-    // line 134 "../../../../../Block223.ump"
-    if (aMinBallSpeedX <= 0){
-      			throw new RuntimeException("The minimum speed of the ball mut be greater than zero.");
-      		}
-    // END OF UMPLE BEFORE INJECTION
     minBallSpeedX = aMinBallSpeedX;
     wasSet = true;
     return wasSet;
@@ -102,11 +67,6 @@ public class Ball implements Serializable
   public boolean setMinBallSpeedY(int aMinBallSpeedY)
   {
     boolean wasSet = false;
-    // line 139 "../../../../../Block223.ump"
-    if (aMinBallSpeedY <= 0){
-      			throw new RuntimeException("The minimum speed of the ball mut be greater than zero.");
-      		}
-    // END OF UMPLE BEFORE INJECTION
     minBallSpeedY = aMinBallSpeedY;
     wasSet = true;
     return wasSet;
@@ -115,11 +75,6 @@ public class Ball implements Serializable
   public boolean setBallSpeedIncreaseFactor(double aBallSpeedIncreaseFactor)
   {
     boolean wasSet = false;
-    // line 144 "../../../../../Block223.ump"
-    if (aBallSpeedIncreaseFactor <= 0){
-      			throw new RuntimeException("The speed increase factor of the ball mut be greater than zero.");
-      		}
-    // END OF UMPLE BEFORE INJECTION
     ballSpeedIncreaseFactor = aBallSpeedIncreaseFactor;
     wasSet = true;
     return wasSet;

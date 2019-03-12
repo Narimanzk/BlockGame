@@ -7,7 +7,7 @@ import ca.mcgill.ecse223.block.model.*;
 import ca.mcgill.ecse223.block.persistence.Block223Persistence;
 import ca.mcgill.ecse223.block.view.Block223Page;
 
-public class BlockApplication {
+public class Block223Application {
 	
 	private static Block223 block223;
 	private static UserRole currentRole = null;

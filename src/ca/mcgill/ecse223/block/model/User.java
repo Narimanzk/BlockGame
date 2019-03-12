@@ -33,16 +33,6 @@ public class User implements Serializable
 
   public User(String aUsername, Block223 aBlock223, UserRole... allRoles)
   {
-    // line 16 "../../../../../Block223.ump"
-    if(getWithUsername(aUsername) != null){
-       			throw new RuntimeException("The username has already been taken");
-       		}
-    // END OF UMPLE BEFORE INJECTION
-    // line 21 "../../../../../Block223.ump"
-    if (aUsername == null || aUsername.length() == 0) {
-    	  		throw new RuntimeException("The username must be specified.");
-    		}
-    // END OF UMPLE BEFORE INJECTION
     if (!setUsername(aUsername))
     {
       throw new RuntimeException("Cannot create due to duplicate username");
@@ -67,16 +57,6 @@ public class User implements Serializable
   public boolean setUsername(String aUsername)
   {
     boolean wasSet = false;
-    // line 16 "../../../../../Block223.ump"
-    if(getWithUsername(aUsername) != null){
-       			throw new RuntimeException("The username has already been taken");
-       		}
-    // END OF UMPLE BEFORE INJECTION
-    // line 21 "../../../../../Block223.ump"
-    if (aUsername == null || aUsername.length() == 0) {
-    	  		throw new RuntimeException("The username must be specified.");
-    		}
-    // END OF UMPLE BEFORE INJECTION
     String anOldUsername = getUsername();
     if (hasWithUsername(aUsername)) {
       return wasSet;

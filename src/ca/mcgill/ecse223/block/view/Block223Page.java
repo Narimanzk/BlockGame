@@ -15,7 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
-import ca.mcgill.ecse223.block.application.BlockApplication;
+import ca.mcgill.ecse223.block.application.Block223Application;
 import ca.mcgill.ecse223.block.controller.Block223Controller;
 import ca.mcgill.ecse223.block.controller.InvalidInputException;
 import ca.mcgill.ecse223.block.controller.TOBlock;
@@ -702,7 +702,7 @@ public class Block223Page{
 		btnLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Block223Controller.logout();
-				BlockApplication.resetBlock223();
+				Block223Application.resetBlock223();
 				error = "";
 				errorMessage.setText(error);
 				mainMenu.setVisible(false);
@@ -991,7 +991,7 @@ public class Block223Page{
 				//Make the exact same list twice, to be used in two different parents.
 				blockList2.removeAllItems();
 
-				if (BlockApplication.getCurrentGame() != null) {
+				if (Block223Application.getCurrentGame() != null) {
 					try {
 						for (TOBlock block : Block223Controller.getBlocksOfCurrentDesignableGame()) {
 							blockList.addItem(block.getId());

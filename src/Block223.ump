@@ -12,6 +12,7 @@ class Block223{
 class User {
    unique username;
    1 -> 1..2 UserRole roles;
+   /*
    before constructor, setUsername{
    		if(getWithUsername(aUsername) != null){
    			throw new RuntimeException("The username has already been taken");
@@ -22,7 +23,7 @@ class User {
 	  		throw new RuntimeException("The username must be specified.");
 		}
 	}
-   	
+   	*/
    		
 }
 
@@ -39,11 +40,13 @@ class Admin {
 
 class Player {
    isA UserRole;
+   /*
       before constructor, setPassword{
    		if (aPassword == null || aPassword.length() == 0){
    			throw new RuntimeException("The player password needs to be specified.");
    		}
    	}
+   	*/
 }
 
 class Game {
@@ -54,6 +57,7 @@ class Game {
    const Integer COLUMNS_PADDING = 5;
    const Integer ROW_PADDING = 2;
    unique name;
+   /*
    before constructor, setName {
     	if (aName == null || aName.length() == 0) {
 	  		throw new RuntimeException("The name of a game must be specified.");
@@ -69,7 +73,7 @@ class Game {
 			throw new IndexOutOfBoundsException("Level " + index+1 + " does not exist for the game");
 		}
 	}
-			
+	*/		
 		
    Integer nrBlocksPerLevel;
    * -- 1 Admin admin;
@@ -101,6 +105,7 @@ class Level {
 class BlockAssignment {
    Integer gridHorizontalPosition;
    Integer gridVerticalPosition;
+   /*
    before setGridHorizontalPosition {
 	   	//One column padding between each block=>(Max# - 1) column paddings
 	   	//1 wall padding on each side=> 2 wall paddings
@@ -121,6 +126,7 @@ class BlockAssignment {
 	 		throw new RuntimeException("The vertical position must be between 1 and " + maxNumberVerticalBlocks + ".");
 		}
 	}
+	*/
    * -- 1 Level level;
    * -- 1 Block block;
 }
@@ -130,6 +136,7 @@ class Ball {
    Integer minBallSpeedX;
    Integer minBallSpeedY;
    Double ballSpeedIncreaseFactor;
+   /*
    	before constructor, setMinBallSpeedX{
 		if (aMinBallSpeedX <= 0){
   			throw new RuntimeException("The minimum speed of the ball mut be greater than zero.");
@@ -145,7 +152,7 @@ class Ball {
   			throw new RuntimeException("The speed increase factor of the ball mut be greater than zero.");
   		}
   	}
-   
+   */
 }
 
 class Paddle {
@@ -153,6 +160,7 @@ class Paddle {
    const Integer VERTICAL_DISTANCE = 30;
    Integer maxPaddleLength;
    Integer minPaddleLength;
+   /*
    	before constructor, setMaxPaddleLength{
 		if (aMaxPaddleLength <= 0 || aMaxPaddleLength > 390){
   			throw new RuntimeException("The maximum length of the paddle be greater than zero and less than or equal to 390.");
@@ -163,5 +171,5 @@ class Paddle {
   			throw new RuntimeException("The minimum length of the paddle be greater than zero.");
   		}
   	}
-   
+   */
 }
