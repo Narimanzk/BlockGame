@@ -1,0 +1,59 @@
+class Play{
+   const Integer MIN_NR_LEVELS = 1;
+   const Integer MAX_NR_LEVELS = 99; // this is somewhat redundant because the max multiplicity is enforced by Umple
+   const Integer PLAY_AREA_SIDE = 390; // play area is now constant
+   const Integer WALL_PADDING = 10;
+   const Integer COLUMNS_PADDING = 5;
+   const Integer ROW_PADDING = 2;
+   unique name;	
+   Integer nrBlocksPerLevel;
+   1 <@>- * Block blocks;
+   1 <@>- 1..99 Level levels;
+   1 <@>- * BlockAssignment blockAssignments;
+   1 <@>- 1 Ball ball;
+   1 <@>- 1 Paddle paddle;
+   1 <@>- 1 Player;
+
+}
+class Ball{
+	const Integer BALL_DIAMETER = 10;
+	Integer xSpeed;
+	Integer ySpeed;
+	Double speedIncreaseFactor;
+	Integer xPos;
+	Integer yPos;
+}
+class Paddle{
+	const Integer PADDLE_WIDTH = 5;
+	const Integer VERTICAL_DISTANCE = 30;
+	Integer xPos;
+	Integer yPos;
+	Integer curLength;	
+
+}
+class Player{
+	Integer points;
+	Integer livesLeft;
+	String name;
+}
+class Block {
+   const Integer MIN_COLOR = 0;
+   const Integer MAX_COLOR = 255;
+   const Integer MIN_POINTS = 1;
+   const Integer MAX_POINTS = 1000; 
+   const Integer SIZE = 20;
+   autounique id;
+   Integer red;
+   Integer green;
+   Integer blue;
+   Integer points;
+}
+class Level {
+}
+class BlockAssignment {
+   Integer gridHorizontalPosition;
+   Integer gridVerticalPosition;
+   * -- 1 Level level;
+   * -- 1 Block block;
+}
+
