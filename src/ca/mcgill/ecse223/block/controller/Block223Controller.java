@@ -381,7 +381,7 @@ public class Block223Controller {
 		// Throw error if there's already a block at x and y
 		if (findBlockAssigment(editLevel, newGridHorizontalPosition, newGridVerticalPosition) != null) {
 			throw new InvalidInputException(
-					"A block already exists at position " + newGridHorizontalPosition + "/" + newGridVerticalPosition);
+					"A block already exists at location " + newGridHorizontalPosition + "/" + newGridVerticalPosition + ".");
 		}
 		try {
 			//This is weird because if only the vertical position doesn't work it'll set X anyway
