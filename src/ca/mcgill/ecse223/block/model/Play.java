@@ -2,12 +2,10 @@
 /*This code was generated using the UMPLE 1.29.0.4181.a593105a9 modeling language!*/
 
 package ca.mcgill.ecse223.block.model;
-import java.io.Serializable;
 import java.util.*;
 
-// line 48 "../../../../../Block223Persistence.ump"
-// line 53 "../../../../../Block223.ump"
-public class Game implements Serializable
+// line 1 "../../../../../Block223Play.ump"
+public class Play
 {
 
   //------------------------
@@ -28,80 +26,65 @@ public class Game implements Serializable
   public static final int WALL_PADDING = 10;
   public static final int COLUMNS_PADDING = 5;
   public static final int ROW_PADDING = 2;
-  private static Map<String, Game> gamesByName = new HashMap<String, Game>();
+  private static Map<String, Play> playsByName = new HashMap<String, Play>();
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
-  //Game Attributes
+  //Play Attributes
   private String name;
   private int nrBlocksPerLevel;
 
-  //Game Associations
-  private Admin admin;
+  //Play Associations
   private List<Block> blocks;
   private List<Level> levels;
   private List<BlockAssignment> blockAssignments;
   private Ball ball;
   private Paddle paddle;
-  private Block223 block223;
+  private Player player;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Game(String aName, int aNrBlocksPerLevel, Admin aAdmin, Ball aBall, Paddle aPaddle, Block223 aBlock223)
+  public Play(String aName, int aNrBlocksPerLevel, Ball aBall, Paddle aPaddle, Player aPlayer)
   {
     nrBlocksPerLevel = aNrBlocksPerLevel;
     if (!setName(aName))
     {
       throw new RuntimeException("Cannot create due to duplicate name");
     }
-    boolean didAddAdmin = setAdmin(aAdmin);
-    if (!didAddAdmin)
-    {
-      throw new RuntimeException("Unable to create game due to admin");
-    }
     blocks = new ArrayList<Block>();
     levels = new ArrayList<Level>();
     blockAssignments = new ArrayList<BlockAssignment>();
-    if (aBall == null || aBall.getGame() != null)
+    if (aBall == null || aBall.getPlay() != null)
     {
-      throw new RuntimeException("Unable to create Game due to aBall");
+      throw new RuntimeException("Unable to create Play due to aBall");
     }
     ball = aBall;
-    if (aPaddle == null || aPaddle.getGame() != null)
+    if (aPaddle == null || aPaddle.getPlay() != null)
     {
-      throw new RuntimeException("Unable to create Game due to aPaddle");
+      throw new RuntimeException("Unable to create Play due to aPaddle");
     }
     paddle = aPaddle;
-    boolean didAddBlock223 = setBlock223(aBlock223);
-    if (!didAddBlock223)
+    if (aPlayer == null || aPlayer.getPlay() != null)
     {
-      throw new RuntimeException("Unable to create game due to block223");
+      throw new RuntimeException("Unable to create Play due to aPlayer");
     }
+    player = aPlayer;
   }
 
-  public Game(String aName, int aNrBlocksPerLevel, Admin aAdmin, int aXSpeedForBall, int aYSpeedForBall, int aXPosForBall, int aYPosForBall, int aMinBallSpeedXForBall, int aMinBallSpeedYForBall, double aBallSpeedIncreaseFactorForBall, Play aPlayForBall, int aXPosForPaddle, int aYPosForPaddle, int aCurLengthForPaddle, int aMaxPaddleLengthForPaddle, int aMinPaddleLengthForPaddle, Play aPlayForPaddle, Block223 aBlock223)
+  public Play(String aName, int aNrBlocksPerLevel, int aXSpeedForBall, int aYSpeedForBall, int aXPosForBall, int aYPosForBall, int aMinBallSpeedXForBall, int aMinBallSpeedYForBall, double aBallSpeedIncreaseFactorForBall, Game aGameForBall, int aXPosForPaddle, int aYPosForPaddle, int aCurLengthForPaddle, int aMaxPaddleLengthForPaddle, int aMinPaddleLengthForPaddle, Game aGameForPaddle, String aPasswordForPlayer, Block223 aBlock223ForPlayer, int aPointsForPlayer, int aLivesLeftForPlayer, String aNameForPlayer)
   {
     name = aName;
     nrBlocksPerLevel = aNrBlocksPerLevel;
-    boolean didAddAdmin = setAdmin(aAdmin);
-    if (!didAddAdmin)
-    {
-      throw new RuntimeException("Unable to create game due to admin");
-    }
     blocks = new ArrayList<Block>();
     levels = new ArrayList<Level>();
     blockAssignments = new ArrayList<BlockAssignment>();
-    ball = new Ball(aXSpeedForBall, aYSpeedForBall, aXPosForBall, aYPosForBall, aMinBallSpeedXForBall, aMinBallSpeedYForBall, aBallSpeedIncreaseFactorForBall, aPlayForBall, this);
-    paddle = new Paddle(aXPosForPaddle, aYPosForPaddle, aCurLengthForPaddle, aMaxPaddleLengthForPaddle, aMinPaddleLengthForPaddle, aPlayForPaddle, this);
-    boolean didAddBlock223 = setBlock223(aBlock223);
-    if (!didAddBlock223)
-    {
-      throw new RuntimeException("Unable to create game due to block223");
-    }
+    ball = new Ball(aXSpeedForBall, aYSpeedForBall, aXPosForBall, aYPosForBall, aMinBallSpeedXForBall, aMinBallSpeedYForBall, aBallSpeedIncreaseFactorForBall, this, aGameForBall);
+    paddle = new Paddle(aXPosForPaddle, aYPosForPaddle, aCurLengthForPaddle, aMaxPaddleLengthForPaddle, aMinPaddleLengthForPaddle, this, aGameForPaddle);
+    player = new Player(aPasswordForPlayer, aBlock223ForPlayer, aPointsForPlayer, aLivesLeftForPlayer, aNameForPlayer, this);
   }
 
   //------------------------
@@ -118,9 +101,9 @@ public class Game implements Serializable
     name = aName;
     wasSet = true;
     if (anOldName != null) {
-      gamesByName.remove(anOldName);
+      playsByName.remove(anOldName);
     }
-    gamesByName.put(aName, this);
+    playsByName.put(aName, this);
     return wasSet;
   }
 
@@ -137,9 +120,9 @@ public class Game implements Serializable
     return name;
   }
   /* Code from template attribute_GetUnique */
-  public static Game getWithName(String aName)
+  public static Play getWithName(String aName)
   {
-    return gamesByName.get(aName);
+    return playsByName.get(aName);
   }
   /* Code from template attribute_HasUnique */
   public static boolean hasWithName(String aName)
@@ -147,31 +130,9 @@ public class Game implements Serializable
     return getWithName(aName) != null;
   }
 
-  /**
-   * before constructor, setName {
-   * if (aName == null || aName.length() == 0) {
-   * throw new RuntimeException("The name of a game must be specified.");
-   * }
-   * 
-   * before constructor, setNrBlocksPerLevel{
-   * if (aNrBlocksPerLevel <= 0){
-   * throw new RuntimeException("The number of blocks per level must be greater than zero.");
-   * }
-   * }
-   * before getLevel {
-   * if ( index < 0 || index > (levels.size()-1)) {
-   * throw new IndexOutOfBoundsException("Level " + index+1 + " does not exist for the game");
-   * }
-   * 
-   */
   public int getNrBlocksPerLevel()
   {
     return nrBlocksPerLevel;
-  }
-  /* Code from template association_GetOne */
-  public Admin getAdmin()
-  {
-    return admin;
   }
   /* Code from template association_GetMany */
   public Block getBlock(int index)
@@ -274,28 +235,9 @@ public class Game implements Serializable
     return paddle;
   }
   /* Code from template association_GetOne */
-  public Block223 getBlock223()
+  public Player getPlayer()
   {
-    return block223;
-  }
-  /* Code from template association_SetOneToMany */
-  public boolean setAdmin(Admin aAdmin)
-  {
-    boolean wasSet = false;
-    if (aAdmin == null)
-    {
-      return wasSet;
-    }
-
-    Admin existingAdmin = admin;
-    admin = aAdmin;
-    if (existingAdmin != null && !existingAdmin.equals(aAdmin))
-    {
-      existingAdmin.removeGame(this);
-    }
-    admin.addGame(this);
-    wasSet = true;
-    return wasSet;
+    return player;
   }
   /* Code from template association_MinimumNumberOfMethod */
   public static int minimumNumberOfBlocks()
@@ -303,20 +245,20 @@ public class Game implements Serializable
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Block addBlock(int aRed, int aGreen, int aBlue, int aPoints, Play aPlay)
+  public Block addBlock(int aRed, int aGreen, int aBlue, int aPoints, Game aGame)
   {
-    return new Block(aRed, aGreen, aBlue, aPoints, aPlay, this);
+    return new Block(aRed, aGreen, aBlue, aPoints, this, aGame);
   }
 
   public boolean addBlock(Block aBlock)
   {
     boolean wasAdded = false;
     if (blocks.contains(aBlock)) { return false; }
-    Game existingGame = aBlock.getGame();
-    boolean isNewGame = existingGame != null && !this.equals(existingGame);
-    if (isNewGame)
+    Play existingPlay = aBlock.getPlay();
+    boolean isNewPlay = existingPlay != null && !this.equals(existingPlay);
+    if (isNewPlay)
     {
-      aBlock.setGame(this);
+      aBlock.setPlay(this);
     }
     else
     {
@@ -329,8 +271,8 @@ public class Game implements Serializable
   public boolean removeBlock(Block aBlock)
   {
     boolean wasRemoved = false;
-    //Unable to remove aBlock, as it must always have a game
-    if (!this.equals(aBlock.getGame()))
+    //Unable to remove aBlock, as it must always have a play
+    if (!this.equals(aBlock.getPlay()))
     {
       blocks.remove(aBlock);
       wasRemoved = true;
@@ -386,7 +328,7 @@ public class Game implements Serializable
     return 99;
   }
   /* Code from template association_AddMNToOnlyOne */
-  public Level addLevel(Play aPlay)
+  public Level addLevel(Game aGame)
   {
     if (numberOfLevels() >= maximumNumberOfLevels())
     {
@@ -394,7 +336,7 @@ public class Game implements Serializable
     }
     else
     {
-      return new Level(aPlay, this);
+      return new Level(this, aGame);
     }
   }
 
@@ -407,17 +349,17 @@ public class Game implements Serializable
       return wasAdded;
     }
 
-    Game existingGame = aLevel.getGame();
-    boolean isNewGame = existingGame != null && !this.equals(existingGame);
+    Play existingPlay = aLevel.getPlay();
+    boolean isNewPlay = existingPlay != null && !this.equals(existingPlay);
 
-    if (isNewGame && existingGame.numberOfLevels() <= minimumNumberOfLevels())
+    if (isNewPlay && existingPlay.numberOfLevels() <= minimumNumberOfLevels())
     {
       return wasAdded;
     }
 
-    if (isNewGame)
+    if (isNewPlay)
     {
-      aLevel.setGame(this);
+      aLevel.setPlay(this);
     }
     else
     {
@@ -430,13 +372,13 @@ public class Game implements Serializable
   public boolean removeLevel(Level aLevel)
   {
     boolean wasRemoved = false;
-    //Unable to remove aLevel, as it must always have a game
-    if (this.equals(aLevel.getGame()))
+    //Unable to remove aLevel, as it must always have a play
+    if (this.equals(aLevel.getPlay()))
     {
       return wasRemoved;
     }
 
-    //game already at minimum (1)
+    //play already at minimum (1)
     if (numberOfLevels() <= minimumNumberOfLevels())
     {
       return wasRemoved;
@@ -483,20 +425,20 @@ public class Game implements Serializable
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public BlockAssignment addBlockAssignment(int aGridHorizontalPosition, int aGridVerticalPosition, Level aLevel, Block aBlock, Play aPlay)
+  public BlockAssignment addBlockAssignment(int aGridHorizontalPosition, int aGridVerticalPosition, Level aLevel, Block aBlock, Game aGame)
   {
-    return new BlockAssignment(aGridHorizontalPosition, aGridVerticalPosition, aLevel, aBlock, aPlay, this);
+    return new BlockAssignment(aGridHorizontalPosition, aGridVerticalPosition, aLevel, aBlock, this, aGame);
   }
 
   public boolean addBlockAssignment(BlockAssignment aBlockAssignment)
   {
     boolean wasAdded = false;
     if (blockAssignments.contains(aBlockAssignment)) { return false; }
-    Game existingGame = aBlockAssignment.getGame();
-    boolean isNewGame = existingGame != null && !this.equals(existingGame);
-    if (isNewGame)
+    Play existingPlay = aBlockAssignment.getPlay();
+    boolean isNewPlay = existingPlay != null && !this.equals(existingPlay);
+    if (isNewPlay)
     {
-      aBlockAssignment.setGame(this);
+      aBlockAssignment.setPlay(this);
     }
     else
     {
@@ -509,8 +451,8 @@ public class Game implements Serializable
   public boolean removeBlockAssignment(BlockAssignment aBlockAssignment)
   {
     boolean wasRemoved = false;
-    //Unable to remove aBlockAssignment, as it must always have a game
-    if (!this.equals(aBlockAssignment.getGame()))
+    //Unable to remove aBlockAssignment, as it must always have a play
+    if (!this.equals(aBlockAssignment.getPlay()))
     {
       blockAssignments.remove(aBlockAssignment);
       wasRemoved = true;
@@ -549,35 +491,10 @@ public class Game implements Serializable
     }
     return wasAdded;
   }
-  /* Code from template association_SetOneToMany */
-  public boolean setBlock223(Block223 aBlock223)
-  {
-    boolean wasSet = false;
-    if (aBlock223 == null)
-    {
-      return wasSet;
-    }
-
-    Block223 existingBlock223 = block223;
-    block223 = aBlock223;
-    if (existingBlock223 != null && !existingBlock223.equals(aBlock223))
-    {
-      existingBlock223.removeGame(this);
-    }
-    block223.addGame(this);
-    wasSet = true;
-    return wasSet;
-  }
 
   public void delete()
   {
-    gamesByName.remove(getName());
-    Admin placeholderAdmin = admin;
-    this.admin = null;
-    if(placeholderAdmin != null)
-    {
-      placeholderAdmin.removeGame(this);
-    }
+    playsByName.remove(getName());
     while (blocks.size() > 0)
     {
       Block aBlock = blocks.get(blocks.size() - 1);
@@ -611,20 +528,11 @@ public class Game implements Serializable
     {
       existingPaddle.delete();
     }
-    Block223 placeholderBlock223 = block223;
-    this.block223 = null;
-    if(placeholderBlock223 != null)
+    Player existingPlayer = player;
+    player = null;
+    if (existingPlayer != null)
     {
-      placeholderBlock223.removeGame(this);
-    }
-  }
-
-  // line 54 "../../../../../Block223Persistence.ump"
-   public static  void reinitializeGamesByName(List<Game> games){
-    gamesByName = new HashMap<String, Game>();
-    for (Game game : games) {
-      Block.reinitializeAutouniqueID(game.getBlocks());
-      gamesByName.put(game.getName(), game);
+      existingPlayer.delete();
     }
   }
 
@@ -634,17 +542,8 @@ public class Game implements Serializable
     return super.toString() + "["+
             "name" + ":" + getName()+ "," +
             "nrBlocksPerLevel" + ":" + getNrBlocksPerLevel()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "admin = "+(getAdmin()!=null?Integer.toHexString(System.identityHashCode(getAdmin())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "ball = "+(getBall()!=null?Integer.toHexString(System.identityHashCode(getBall())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "paddle = "+(getPaddle()!=null?Integer.toHexString(System.identityHashCode(getPaddle())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "block223 = "+(getBlock223()!=null?Integer.toHexString(System.identityHashCode(getBlock223())):"null");
-  }  
-  //------------------------
-  // DEVELOPER CODE - PROVIDED AS-IS
-  //------------------------
-  
-  // line 51 "../../../../../Block223Persistence.ump"
-  private static final long serialVersionUID = 6884475053231046252L ;
-
-  
+            "  " + "player = "+(getPlayer()!=null?Integer.toHexString(System.identityHashCode(getPlayer())):"null");
+  }
 }

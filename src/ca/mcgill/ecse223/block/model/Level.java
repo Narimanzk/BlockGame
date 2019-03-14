@@ -10,7 +10,8 @@ import java.util.*;
  * Each level is filled up with random blocks just before playing the level to reach the nrBlocksPerLevel defined in Game
  */
 // line 62 "../../../../../Block223Persistence.ump"
-// line 102 "../../../../../Block223.ump"
+// line 37 "../../../../../Block223Play.ump"
+// line 103 "../../../../../Block223.ump"
 public class Level implements Serializable
 {
 
@@ -19,6 +20,7 @@ public class Level implements Serializable
   //------------------------
 
   //Level Associations
+  private Play play;
   private Game game;
   private List<BlockAssignment> blockAssignments;
 
@@ -26,8 +28,13 @@ public class Level implements Serializable
   // CONSTRUCTOR
   //------------------------
 
-  public Level(Game aGame)
+  public Level(Play aPlay, Game aGame)
   {
+    boolean didAddPlay = setPlay(aPlay);
+    if (!didAddPlay)
+    {
+      throw new RuntimeException("Unable to create level due to play");
+    }
     boolean didAddGame = setGame(aGame);
     if (!didAddGame)
     {
@@ -39,6 +46,11 @@ public class Level implements Serializable
   //------------------------
   // INTERFACE
   //------------------------
+  /* Code from template association_GetOne */
+  public Play getPlay()
+  {
+    return play;
+  }
   /* Code from template association_GetOne */
   public Game getGame()
   {
@@ -73,6 +85,37 @@ public class Level implements Serializable
   {
     int index = blockAssignments.indexOf(aBlockAssignment);
     return index;
+  }
+  /* Code from template association_SetOneToAtMostN */
+  public boolean setPlay(Play aPlay)
+  {
+    boolean wasSet = false;
+    //Must provide play to level
+    if (aPlay == null)
+    {
+      return wasSet;
+    }
+
+    //play already at maximum (99)
+    if (aPlay.numberOfLevels() >= Play.maximumNumberOfLevels())
+    {
+      return wasSet;
+    }
+    
+    Play existingPlay = play;
+    play = aPlay;
+    if (existingPlay != null && !existingPlay.equals(aPlay))
+    {
+      boolean didRemove = existingPlay.removeLevel(this);
+      if (!didRemove)
+      {
+        play = existingPlay;
+        return wasSet;
+      }
+    }
+    play.addLevel(this);
+    wasSet = true;
+    return wasSet;
   }
   /* Code from template association_SetOneToAtMostN */
   public boolean setGame(Game aGame)
@@ -111,9 +154,9 @@ public class Level implements Serializable
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public BlockAssignment addBlockAssignment(int aGridHorizontalPosition, int aGridVerticalPosition, Block aBlock, Game aGame)
+  public BlockAssignment addBlockAssignment(int aGridHorizontalPosition, int aGridVerticalPosition, Block aBlock, Play aPlay, Game aGame)
   {
-    return new BlockAssignment(aGridHorizontalPosition, aGridVerticalPosition, this, aBlock, aGame);
+    return new BlockAssignment(aGridHorizontalPosition, aGridVerticalPosition, this, aBlock, aPlay, aGame);
   }
 
   public boolean addBlockAssignment(BlockAssignment aBlockAssignment)
@@ -180,6 +223,12 @@ public class Level implements Serializable
 
   public void delete()
   {
+    Play placeholderPlay = play;
+    this.play = null;
+    if(placeholderPlay != null)
+    {
+      placeholderPlay.removeLevel(this);
+    }
     Game placeholderGame = game;
     this.game = null;
     if(placeholderGame != null)

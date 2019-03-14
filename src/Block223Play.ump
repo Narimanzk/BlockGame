@@ -16,16 +16,12 @@ class Play{
 
 }
 class Ball{
-	const Integer BALL_DIAMETER = 10;
 	Integer xSpeed;
 	Integer ySpeed;
-	Double speedIncreaseFactor;
 	Integer xPos;
 	Integer yPos;
 }
 class Paddle{
-	const Integer PADDLE_WIDTH = 5;
-	const Integer VERTICAL_DISTANCE = 30;
 	Integer xPos;
 	Integer yPos;
 	Integer curLength;	
@@ -37,23 +33,9 @@ class Player{
 	String name;
 }
 class Block {
-   const Integer MIN_COLOR = 0;
-   const Integer MAX_COLOR = 255;
-   const Integer MIN_POINTS = 1;
-   const Integer MAX_POINTS = 1000; 
-   const Integer SIZE = 20;
-   autounique id;
-   Integer red;
-   Integer green;
-   Integer blue;
-   Integer points;
 }
 class Level {
 }
 class BlockAssignment {
-   Integer gridHorizontalPosition;
-   Integer gridVerticalPosition;
-   * -- 1 Level level;
-   * -- 1 Block block;
 }
 
