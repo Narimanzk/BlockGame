@@ -174,3 +174,9 @@ class Paddle {
   	}
    */
 }
+
+class HallOfFame{
+ 1 -- 1 Game game;
+ 1 -- 0..10 Player players;
+ 
+}

@@ -7,27 +7,29 @@ class Play{
    const Integer ROW_PADDING = 2;
    unique name;	
    Integer nrBlocksPerLevel;
-   1 <@>- * Block blocks;
-   1 <@>- 1..99 Level levels;
-   1 <@>- * BlockAssignment blockAssignments;
-   1 <@>- 1 Ball ball;
-   1 <@>- 1 Paddle paddle;
-   1 <@>- 1 Player;
+   1 -> 1..99 Level levels;
+   /*1 -> * BlockAssignment blockAssignments;*/
+   1 -> 1 BallInPlay ball;
+   1 -> 1 PaddleInPlay paddle;
+   1 -> 1 PlayerInPlay;
 
 }
-class Ball{
+class BallInPlay{
+	1 -> 1 Ball ball;
 	Integer xSpeed;
 	Integer ySpeed;
 	Integer xPos;
 	Integer yPos;
 }
-class Paddle{
+class PaddleInPlay{
+	1 -> 1 Paddle paddle;
 	Integer xPos;
 	Integer yPos;
 	Integer curLength;	
 
 }
-class Player{
+class PlayerInPlay{
+	1 -> 1 Player player;
 	Integer points;
 	Integer livesLeft;
 	String name;
