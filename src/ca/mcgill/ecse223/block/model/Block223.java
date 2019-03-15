@@ -5,8 +5,11 @@ package ca.mcgill.ecse223.block.model;
 import java.io.Serializable;
 import java.util.*;
 
+/**
+ * use Block223StateMachine;
+ */
 // line 31 "../../../../../Block223Persistence.ump"
-// line 6 "../../../../../Block223.ump"
+// line 7 "../../../../../Block223.ump"
 public class Block223 implements Serializable
 {
 
@@ -270,9 +273,9 @@ public class Block223 implements Serializable
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Game addGame(String aName, int aNrBlocksPerLevel, Admin aAdmin, Ball aBall, Paddle aPaddle)
+  public Game addGame(String aName, int aNrBlocksPerLevel, Admin aAdmin, Ball aBall, Paddle aPaddle, HallOfFame aHallOfFame)
   {
-    return new Game(aName, aNrBlocksPerLevel, aAdmin, aBall, aPaddle, this);
+    return new Game(aName, aNrBlocksPerLevel, aAdmin, aBall, aPaddle, this, aHallOfFame);
   }
 
   public boolean addGame(Game aGame)

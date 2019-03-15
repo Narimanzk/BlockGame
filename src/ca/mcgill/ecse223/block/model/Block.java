@@ -6,8 +6,7 @@ import java.io.Serializable;
 import java.util.*;
 
 // line 15 "../../../../../Block223Persistence.ump"
-// line 35 "../../../../../Block223Play.ump"
-// line 88 "../../../../../Block223.ump"
+// line 89 "../../../../../Block223.ump"
 public class Block implements Serializable
 {
 
@@ -36,7 +35,6 @@ public class Block implements Serializable
   private int id;
 
   //Block Associations
-  private Play play;
   private Game game;
   private List<BlockAssignment> blockAssignments;
 
@@ -44,18 +42,13 @@ public class Block implements Serializable
   // CONSTRUCTOR
   //------------------------
 
-  public Block(int aRed, int aGreen, int aBlue, int aPoints, Play aPlay, Game aGame)
+  public Block(int aRed, int aGreen, int aBlue, int aPoints, Game aGame)
   {
     red = aRed;
     green = aGreen;
     blue = aBlue;
     points = aPoints;
     id = nextId++;
-    boolean didAddPlay = setPlay(aPlay);
-    if (!didAddPlay)
-    {
-      throw new RuntimeException("Unable to create block due to play");
-    }
     boolean didAddGame = setGame(aGame);
     if (!didAddGame)
     {
@@ -125,11 +118,6 @@ public class Block implements Serializable
     return id;
   }
   /* Code from template association_GetOne */
-  public Play getPlay()
-  {
-    return play;
-  }
-  /* Code from template association_GetOne */
   public Game getGame()
   {
     return game;
@@ -165,25 +153,6 @@ public class Block implements Serializable
     return index;
   }
   /* Code from template association_SetOneToMany */
-  public boolean setPlay(Play aPlay)
-  {
-    boolean wasSet = false;
-    if (aPlay == null)
-    {
-      return wasSet;
-    }
-
-    Play existingPlay = play;
-    play = aPlay;
-    if (existingPlay != null && !existingPlay.equals(aPlay))
-    {
-      existingPlay.removeBlock(this);
-    }
-    play.addBlock(this);
-    wasSet = true;
-    return wasSet;
-  }
-  /* Code from template association_SetOneToMany */
   public boolean setGame(Game aGame)
   {
     boolean wasSet = false;
@@ -208,9 +177,9 @@ public class Block implements Serializable
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public BlockAssignment addBlockAssignment(int aGridHorizontalPosition, int aGridVerticalPosition, Level aLevel, Play aPlay, Game aGame)
+  public BlockAssignment addBlockAssignment(int aGridHorizontalPosition, int aGridVerticalPosition, Level aLevel, Game aGame)
   {
-    return new BlockAssignment(aGridHorizontalPosition, aGridVerticalPosition, aLevel, this, aPlay, aGame);
+    return new BlockAssignment(aGridHorizontalPosition, aGridVerticalPosition, aLevel, this, aGame);
   }
 
   public boolean addBlockAssignment(BlockAssignment aBlockAssignment)
@@ -277,12 +246,6 @@ public class Block implements Serializable
 
   public void delete()
   {
-    Play placeholderPlay = play;
-    this.play = null;
-    if(placeholderPlay != null)
-    {
-      placeholderPlay.removeBlock(this);
-    }
     Game placeholderGame = game;
     this.game = null;
     if(placeholderGame != null)
@@ -316,7 +279,6 @@ public class Block implements Serializable
             "green" + ":" + getGreen()+ "," +
             "blue" + ":" + getBlue()+ "," +
             "points" + ":" + getPoints()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "play = "+(getPlay()!=null?Integer.toHexString(System.identityHashCode(getPlay())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "game = "+(getGame()!=null?Integer.toHexString(System.identityHashCode(getGame())):"null");
   }  
   //------------------------

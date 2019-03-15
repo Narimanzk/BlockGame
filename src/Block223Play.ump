@@ -15,29 +15,23 @@ class Play{
 
 }
 class BallInPlay{
-	1 -> 1 Ball ball;
-	Integer xSpeed;
-	Integer ySpeed;
-	Integer xPos;
-	Integer yPos;
+	isA Ball;
+	Integer xCurSpeed;
+	Integer yCurSpeed;
+	Integer xCurPos;
+	Integer yCurPos;
 }
 class PaddleInPlay{
-	1 -> 1 Paddle paddle;
-	Integer xPos;
-	Integer yPos;
+	isA Paddle;
+	Integer xCurPos;
+	Integer yCurPos;
 	Integer curLength;	
 
 }
 class PlayerInPlay{
-	1 -> 1 Player player;
+	isA Player;
 	Integer points;
 	Integer livesLeft;
-	String name;
 }
-class Block {
-}
-class Level {
-}
-class BlockAssignment {
-}
+
 

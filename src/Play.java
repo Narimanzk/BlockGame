@@ -1,10 +1,10 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.29.0.4181.a593105a9 modeling language!*/
 
-package ca.mcgill.ecse223.block.model;
+
 import java.util.*;
 
-// line 1 "../../../../../Block223Play.ump"
+// line 1 "Block223Play.ump"
 public class Play
 {
 

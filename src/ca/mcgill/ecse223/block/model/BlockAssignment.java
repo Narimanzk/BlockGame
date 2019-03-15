@@ -5,8 +5,7 @@ package ca.mcgill.ecse223.block.model;
 import java.io.Serializable;
 
 // line 42 "../../../../../Block223Persistence.ump"
-// line 39 "../../../../../Block223Play.ump"
-// line 106 "../../../../../Block223.ump"
+// line 107 "../../../../../Block223.ump"
 public class BlockAssignment implements Serializable
 {
 
@@ -21,14 +20,13 @@ public class BlockAssignment implements Serializable
   //BlockAssignment Associations
   private Level level;
   private Block block;
-  private Play play;
   private Game game;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public BlockAssignment(int aGridHorizontalPosition, int aGridVerticalPosition, Level aLevel, Block aBlock, Play aPlay, Game aGame)
+  public BlockAssignment(int aGridHorizontalPosition, int aGridVerticalPosition, Level aLevel, Block aBlock, Game aGame)
   {
     gridHorizontalPosition = aGridHorizontalPosition;
     gridVerticalPosition = aGridVerticalPosition;
@@ -41,11 +39,6 @@ public class BlockAssignment implements Serializable
     if (!didAddBlock)
     {
       throw new RuntimeException("Unable to create blockAssignment due to block");
-    }
-    boolean didAddPlay = setPlay(aPlay);
-    if (!didAddPlay)
-    {
-      throw new RuntimeException("Unable to create blockAssignment due to play");
     }
     boolean didAddGame = setGame(aGame);
     if (!didAddGame)
@@ -94,11 +87,6 @@ public class BlockAssignment implements Serializable
     return block;
   }
   /* Code from template association_GetOne */
-  public Play getPlay()
-  {
-    return play;
-  }
-  /* Code from template association_GetOne */
   public Game getGame()
   {
     return game;
@@ -142,25 +130,6 @@ public class BlockAssignment implements Serializable
     return wasSet;
   }
   /* Code from template association_SetOneToMany */
-  public boolean setPlay(Play aPlay)
-  {
-    boolean wasSet = false;
-    if (aPlay == null)
-    {
-      return wasSet;
-    }
-
-    Play existingPlay = play;
-    play = aPlay;
-    if (existingPlay != null && !existingPlay.equals(aPlay))
-    {
-      existingPlay.removeBlockAssignment(this);
-    }
-    play.addBlockAssignment(this);
-    wasSet = true;
-    return wasSet;
-  }
-  /* Code from template association_SetOneToMany */
   public boolean setGame(Game aGame)
   {
     boolean wasSet = false;
@@ -194,12 +163,6 @@ public class BlockAssignment implements Serializable
     {
       placeholderBlock.removeBlockAssignment(this);
     }
-    Play placeholderPlay = play;
-    this.play = null;
-    if(placeholderPlay != null)
-    {
-      placeholderPlay.removeBlockAssignment(this);
-    }
     Game placeholderGame = game;
     this.game = null;
     if(placeholderGame != null)
@@ -216,7 +179,6 @@ public class BlockAssignment implements Serializable
             "gridVerticalPosition" + ":" + getGridVerticalPosition()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "level = "+(getLevel()!=null?Integer.toHexString(System.identityHashCode(getLevel())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "block = "+(getBlock()!=null?Integer.toHexString(System.identityHashCode(getBlock())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "play = "+(getPlay()!=null?Integer.toHexString(System.identityHashCode(getPlay())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "game = "+(getGame()!=null?Integer.toHexString(System.identityHashCode(getGame())):"null");
   }  
   //------------------------

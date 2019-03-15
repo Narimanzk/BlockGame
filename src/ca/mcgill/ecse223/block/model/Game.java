@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.*;
 
 // line 48 "../../../../../Block223Persistence.ump"
-// line 53 "../../../../../Block223.ump"
+// line 54 "../../../../../Block223.ump"
 public class Game implements Serializable
 {
 
@@ -46,12 +46,13 @@ public class Game implements Serializable
   private Ball ball;
   private Paddle paddle;
   private Block223 block223;
+  private HallOfFame hallOfFame;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Game(String aName, int aNrBlocksPerLevel, Admin aAdmin, Ball aBall, Paddle aPaddle, Block223 aBlock223)
+  public Game(String aName, int aNrBlocksPerLevel, Admin aAdmin, Ball aBall, Paddle aPaddle, Block223 aBlock223, HallOfFame aHallOfFame)
   {
     nrBlocksPerLevel = aNrBlocksPerLevel;
     if (!setName(aName))
@@ -81,9 +82,14 @@ public class Game implements Serializable
     {
       throw new RuntimeException("Unable to create game due to block223");
     }
+    if (aHallOfFame == null || aHallOfFame.getGame() != null)
+    {
+      throw new RuntimeException("Unable to create Game due to aHallOfFame");
+    }
+    hallOfFame = aHallOfFame;
   }
 
-  public Game(String aName, int aNrBlocksPerLevel, Admin aAdmin, int aXSpeedForBall, int aYSpeedForBall, int aXPosForBall, int aYPosForBall, int aMinBallSpeedXForBall, int aMinBallSpeedYForBall, double aBallSpeedIncreaseFactorForBall, Play aPlayForBall, int aXPosForPaddle, int aYPosForPaddle, int aCurLengthForPaddle, int aMaxPaddleLengthForPaddle, int aMinPaddleLengthForPaddle, Play aPlayForPaddle, Block223 aBlock223)
+  public Game(String aName, int aNrBlocksPerLevel, Admin aAdmin, int aMinBallSpeedXForBall, int aMinBallSpeedYForBall, double aBallSpeedIncreaseFactorForBall, int aMaxPaddleLengthForPaddle, int aMinPaddleLengthForPaddle, Block223 aBlock223)
   {
     name = aName;
     nrBlocksPerLevel = aNrBlocksPerLevel;
@@ -95,13 +101,14 @@ public class Game implements Serializable
     blocks = new ArrayList<Block>();
     levels = new ArrayList<Level>();
     blockAssignments = new ArrayList<BlockAssignment>();
-    ball = new Ball(aXSpeedForBall, aYSpeedForBall, aXPosForBall, aYPosForBall, aMinBallSpeedXForBall, aMinBallSpeedYForBall, aBallSpeedIncreaseFactorForBall, aPlayForBall, this);
-    paddle = new Paddle(aXPosForPaddle, aYPosForPaddle, aCurLengthForPaddle, aMaxPaddleLengthForPaddle, aMinPaddleLengthForPaddle, aPlayForPaddle, this);
+    ball = new Ball(aMinBallSpeedXForBall, aMinBallSpeedYForBall, aBallSpeedIncreaseFactorForBall, this);
+    paddle = new Paddle(aMaxPaddleLengthForPaddle, aMinPaddleLengthForPaddle, this);
     boolean didAddBlock223 = setBlock223(aBlock223);
     if (!didAddBlock223)
     {
       throw new RuntimeException("Unable to create game due to block223");
     }
+    hallOfFame = new HallOfFame(this);
   }
 
   //------------------------
@@ -278,6 +285,11 @@ public class Game implements Serializable
   {
     return block223;
   }
+  /* Code from template association_GetOne */
+  public HallOfFame getHallOfFame()
+  {
+    return hallOfFame;
+  }
   /* Code from template association_SetOneToMany */
   public boolean setAdmin(Admin aAdmin)
   {
@@ -303,9 +315,9 @@ public class Game implements Serializable
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Block addBlock(int aRed, int aGreen, int aBlue, int aPoints, Play aPlay)
+  public Block addBlock(int aRed, int aGreen, int aBlue, int aPoints)
   {
-    return new Block(aRed, aGreen, aBlue, aPoints, aPlay, this);
+    return new Block(aRed, aGreen, aBlue, aPoints, this);
   }
 
   public boolean addBlock(Block aBlock)
@@ -386,7 +398,7 @@ public class Game implements Serializable
     return 99;
   }
   /* Code from template association_AddMNToOnlyOne */
-  public Level addLevel(Play aPlay)
+  public Level addLevel()
   {
     if (numberOfLevels() >= maximumNumberOfLevels())
     {
@@ -394,7 +406,7 @@ public class Game implements Serializable
     }
     else
     {
-      return new Level(aPlay, this);
+      return new Level(this);
     }
   }
 
@@ -483,9 +495,9 @@ public class Game implements Serializable
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public BlockAssignment addBlockAssignment(int aGridHorizontalPosition, int aGridVerticalPosition, Level aLevel, Block aBlock, Play aPlay)
+  public BlockAssignment addBlockAssignment(int aGridHorizontalPosition, int aGridVerticalPosition, Level aLevel, Block aBlock)
   {
-    return new BlockAssignment(aGridHorizontalPosition, aGridVerticalPosition, aLevel, aBlock, aPlay, this);
+    return new BlockAssignment(aGridHorizontalPosition, aGridVerticalPosition, aLevel, aBlock, this);
   }
 
   public boolean addBlockAssignment(BlockAssignment aBlockAssignment)
@@ -617,6 +629,12 @@ public class Game implements Serializable
     {
       placeholderBlock223.removeGame(this);
     }
+    HallOfFame existingHallOfFame = hallOfFame;
+    hallOfFame = null;
+    if (existingHallOfFame != null)
+    {
+      existingHallOfFame.delete();
+    }
   }
 
   // line 54 "../../../../../Block223Persistence.ump"
@@ -637,7 +655,8 @@ public class Game implements Serializable
             "  " + "admin = "+(getAdmin()!=null?Integer.toHexString(System.identityHashCode(getAdmin())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "ball = "+(getBall()!=null?Integer.toHexString(System.identityHashCode(getBall())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "paddle = "+(getPaddle()!=null?Integer.toHexString(System.identityHashCode(getPaddle())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "block223 = "+(getBlock223()!=null?Integer.toHexString(System.identityHashCode(getBlock223())):"null");
+            "  " + "block223 = "+(getBlock223()!=null?Integer.toHexString(System.identityHashCode(getBlock223())):"null") + System.getProperties().getProperty("line.separator") +
+            "  " + "hallOfFame = "+(getHallOfFame()!=null?Integer.toHexString(System.identityHashCode(getHallOfFame())):"null");
   }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
