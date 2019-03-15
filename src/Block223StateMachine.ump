@@ -1,75 +1,98 @@
 class Play{
-	Boolean isTest;
-
+	Boolean isTest; 
 	Status{
 		Idle{
 			//Start the game:
 			
 			StartGame/{
 				isTest = false; 
+				initalizePaddlePosition(); //Place the paddle in the middle, 30 units above.
+				dropBallFromStartingPoint();	//Drop the ball from the starting point.
+				
 			}->Playing;
 			//Test the game:
 			
 			TestGame/{
 				isTest = true;
+				initalizePaddlePosition(); //Place the paddle in the middle, 30 units above.
+				dropBallFromStartingPoint();	//Drop the ball from the starting point.
+				
 			}->Playing;
 			
 		}
 		Playing{
-			//Entry condition:
+
+			//Entry:
 			
 			do{
 			
-				initalizePaddlePosition(); //Place the paddle in the middle, 30 units above.
-				dropBallFromStartingPoint();	//Drop the ball from the starting point.
-				
+			ballMoving(); 
+			paddleMoving();
+			
 			}
-			//If you press pause:
 			
 			Pause[spaceIsPressed()]/{
-			//save state of game
-			//set speeds to 0
+			//set speeds to 0 as entry
+			
 			}->Paused;
 			
 			//If the game ends and we were testing
 			
-			GameEnd[isTest && (numBlocks == 0 || numLives == 0)]{
+			GameEnd[isTest && (GameInPlay.getBlocksOnTheField().size() == 0 || PlayerInPlay.getLivesLeft() == 0)]/{
 			}->Idle;
 			
 			//If the game ends and we were playing for real
 			
-			GameEnd[!isTest && (numBlocks == 0 || numLives == 0)]{
+			GameEnd[!isTest && (GameInPlay.getBlocksOnTheField().size() == 0 || PlayerInPlay.getLivesLeft() == 0)]/{
 			}->End;
 			
-			BallMoving(); //thread
-			PaddleMoving(); //thread
+		
+			//If the ball is out of bounds and we have >1 life left
+							
+			BallOutOfBounds[isBlockOutOfBounds(BallInPlay.get(xCurPos),BallInPlay.get(yCurPos)) && PlayerInPlay.getLivesLeft > 1]/{
+			deductLives();
+			}->Paused;
+			
+			
+			//UMPLE WILL MERGE THE FOLLOWING TWO INTO ONE METHOD:
+			
+			//If the ball is out of bounds and we have 1 life left
+				
+			BallOutOfBounds[isBlockOutOfBounds(BallInPlay.get(xCurPos),BallInPlay.get(yCurPos)) && PlayerInPlay.getLivesLeft == 1]/{
+			
+			deductLives();
+			}->End;
+			//If the ball is in open space
+				
+			BallHitNothing[isBallInSpace(BallInPlay.get(xCurPos),BallInPlay.get(yCurPos))]/{
+			}->Playing;
 			
 			//BallHitBLock
-			BallHitBlock[isABlockHit(ballInPlay.get(xCurPos),ballInPlay.get(yCurPos))]/{
+			BallHitBlock[isABlockHit(BallInPlay.get(xCurPos),BallInPlay.get(yCurPos))]/{
 			//isBlockHit is a private method that we create
 			
 				numBlocks=numBlocks-1;
 				redirectBall();
-				removeBlockAssignment(ballInPlay.get(xCurPos),ballInPlay.get(yCurPos)));
+				removeBlockAssignment(BallInPlay.get(xCurPos),BallInPlay.get(yCurPos))); //Points will be added within this method
+				
 			}->Playing;
 			
 			//BallHitPaddleOrWall:
-			BallHitPaddleOrWall[isaWallOrPaddleHit(ballInPlay.get(xCurPos),ballInPlay.get(yCurPos))]/{
+			BallHitPaddleOrWall[isaWallOrPaddleHit(BallInPlay.get(xCurPos),BallInPlay.get(yCurPos))]/{
 			//Within the guard is a private method we created to determine if the ball hit a wall/paddle
 			
 			redirectBall();
 			}->Playing;
-			
-			//
-			
-			
 		}
+		
 		Paused{
 			do { 
+				pauseGame();
 				saveGameState(); 
 			}
-			Unpause[spaceIsPressed()]{
-			//resume state of game
+			
+			Unpause[spaceIsPressed()]/{
+				unpauseGame();
 			}->Playing;
 		}
 		End{

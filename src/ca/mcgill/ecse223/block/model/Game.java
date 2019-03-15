@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.*;
 
 // line 48 "../../../../../Block223Persistence.ump"
-// line 54 "../../../../../Block223.ump"
+// line 55 "../../../../../Block223.ump"
 public class Game implements Serializable
 {
 
