@@ -1,0 +1,50 @@
+class Play{
+	Boolean isTest;
+
+	Status{
+		Idle{
+			Play/{
+				isTest = false; 
+			}->Playing;
+			TestGame/{
+				isTest = true;
+			}->Playing;
+		}
+		Playing{
+			do{
+				setBallInMotion();	
+			}
+			Pause[spaceIsPressed()]/{
+			//save state of game
+			//set speeds to 0
+			}->Paused;
+			
+			GameEnd[isTest && (numBlocks == 0 || numLives == 0)]{
+			}->Idle;
+			GameEnd[!isTest && (numBlocks == 0 || numLives == 0)]{
+			}->End;
+			
+			BallMoving(); //thread
+			PaddleMoving(); //thread
+			
+			BallHitBlock[isBlockHit()]/{
+				numBlocks--;
+				redirectBall();
+				removeBlockAssignment();
+			}->Playing;
+		}
+		Paused{
+			do { 
+				saveGameState(); 
+			}
+			Unpause[spaceIsPressed()]{
+			//resume state of game
+			}->Playing;
+		}
+		End{
+			do{
+				updateHallOfFame(); //Update the hall of fame with stats.
+			}
+		}
+	}
+}

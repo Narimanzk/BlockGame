@@ -14,7 +14,7 @@ public class HallOfFame
 
   //HallOfFame Associations
   private Game game;
-  private List<Player> players;
+  private List<PlayerInPlay> players;
 
   //------------------------
   // CONSTRUCTOR
@@ -27,13 +27,13 @@ public class HallOfFame
       throw new RuntimeException("Unable to create HallOfFame due to aGame");
     }
     game = aGame;
-    players = new ArrayList<Player>();
+    players = new ArrayList<PlayerInPlay>();
   }
 
   public HallOfFame(String aNameForGame, int aNrBlocksPerLevelForGame, Admin aAdminForGame, Ball aBallForGame, Paddle aPaddleForGame, Block223 aBlock223ForGame)
   {
     game = new Game(aNameForGame, aNrBlocksPerLevelForGame, aAdminForGame, aBallForGame, aPaddleForGame, aBlock223ForGame, this);
-    players = new ArrayList<Player>();
+    players = new ArrayList<PlayerInPlay>();
   }
 
   //------------------------
@@ -45,15 +45,15 @@ public class HallOfFame
     return game;
   }
   /* Code from template association_GetMany */
-  public Player getPlayer(int index)
+  public PlayerInPlay getPlayer(int index)
   {
-    Player aPlayer = players.get(index);
+    PlayerInPlay aPlayer = players.get(index);
     return aPlayer;
   }
 
-  public List<Player> getPlayers()
+  public List<PlayerInPlay> getPlayers()
   {
-    List<Player> newPlayers = Collections.unmodifiableList(players);
+    List<PlayerInPlay> newPlayers = Collections.unmodifiableList(players);
     return newPlayers;
   }
 
@@ -69,7 +69,7 @@ public class HallOfFame
     return has;
   }
 
-  public int indexOfPlayer(Player aPlayer)
+  public int indexOfPlayer(PlayerInPlay aPlayer)
   {
     int index = players.indexOf(aPlayer);
     return index;
@@ -80,12 +80,12 @@ public class HallOfFame
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Player addPlayer(String aPassword, Block223 aBlock223)
+  public PlayerInPlay addPlayer(String aPassword, Block223 aBlock223, int aPoints, int aLivesLeft)
   {
-    return new Player(aPassword, aBlock223, this);
+    return new PlayerInPlay(aPassword, aBlock223, aPoints, aLivesLeft, this);
   }
 
-  public boolean addPlayer(Player aPlayer)
+  public boolean addPlayer(PlayerInPlay aPlayer)
   {
     boolean wasAdded = false;
     if (players.contains(aPlayer)) { return false; }
@@ -103,7 +103,7 @@ public class HallOfFame
     return wasAdded;
   }
 
-  public boolean removePlayer(Player aPlayer)
+  public boolean removePlayer(PlayerInPlay aPlayer)
   {
     boolean wasRemoved = false;
     //Unable to remove aPlayer, as it must always have a hallOfFame
@@ -115,7 +115,7 @@ public class HallOfFame
     return wasRemoved;
   }
   /* Code from template association_AddIndexControlFunctions */
-  public boolean addPlayerAt(Player aPlayer, int index)
+  public boolean addPlayerAt(PlayerInPlay aPlayer, int index)
   {  
     boolean wasAdded = false;
     if(addPlayer(aPlayer))
@@ -129,7 +129,7 @@ public class HallOfFame
     return wasAdded;
   }
 
-  public boolean addOrMovePlayerAt(Player aPlayer, int index)
+  public boolean addOrMovePlayerAt(PlayerInPlay aPlayer, int index)
   {
     boolean wasAdded = false;
     if(players.contains(aPlayer))
@@ -157,7 +157,7 @@ public class HallOfFame
     }
     for(int i=players.size(); i > 0; i--)
     {
-      Player aPlayer = players.get(i - 1);
+      PlayerInPlay aPlayer = players.get(i - 1);
       aPlayer.delete();
     }
   }

@@ -3,7 +3,7 @@
 
 package ca.mcgill.ecse223.block.model;
 
-// line 17 "../../../../../Block223Play.ump"
+// line 1 "../../../../../Block223Play.ump"
 public class BallInPlay extends Ball
 {
 

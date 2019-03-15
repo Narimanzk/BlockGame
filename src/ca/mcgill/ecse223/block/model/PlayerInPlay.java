@@ -3,7 +3,7 @@
 
 package ca.mcgill.ecse223.block.model;
 
-// line 31 "../../../../../Block223Play.ump"
+// line 15 "../../../../../Block223Play.ump"
 public class PlayerInPlay extends Player
 {
 
@@ -15,15 +15,23 @@ public class PlayerInPlay extends Player
   private int points;
   private int livesLeft;
 
+  //PlayerInPlay Associations
+  private HallOfFame hallOfFame;
+
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public PlayerInPlay(String aPassword, Block223 aBlock223, HallOfFame aHallOfFame, int aPoints, int aLivesLeft)
+  public PlayerInPlay(String aPassword, Block223 aBlock223, int aPoints, int aLivesLeft, HallOfFame aHallOfFame)
   {
-    super(aPassword, aBlock223, aHallOfFame);
+    super(aPassword, aBlock223);
     points = aPoints;
     livesLeft = aLivesLeft;
+    boolean didAddHallOfFame = setHallOfFame(aHallOfFame);
+    if (!didAddHallOfFame)
+    {
+      throw new RuntimeException("Unable to create player due to hallOfFame");
+    }
   }
 
   //------------------------
@@ -55,9 +63,39 @@ public class PlayerInPlay extends Player
   {
     return livesLeft;
   }
+  /* Code from template association_GetOne */
+  public HallOfFame getHallOfFame()
+  {
+    return hallOfFame;
+  }
+  /* Code from template association_SetOneToMany */
+  public boolean setHallOfFame(HallOfFame aHallOfFame)
+  {
+    boolean wasSet = false;
+    if (aHallOfFame == null)
+    {
+      return wasSet;
+    }
+
+    HallOfFame existingHallOfFame = hallOfFame;
+    hallOfFame = aHallOfFame;
+    if (existingHallOfFame != null && !existingHallOfFame.equals(aHallOfFame))
+    {
+      existingHallOfFame.removePlayer(this);
+    }
+    hallOfFame.addPlayer(this);
+    wasSet = true;
+    return wasSet;
+  }
 
   public void delete()
   {
+    HallOfFame placeholderHallOfFame = hallOfFame;
+    this.hallOfFame = null;
+    if(placeholderHallOfFame != null)
+    {
+      placeholderHallOfFame.removePlayer(this);
+    }
     super.delete();
   }
 
@@ -66,6 +104,7 @@ public class PlayerInPlay extends Player
   {
     return super.toString() + "["+
             "points" + ":" + getPoints()+ "," +
-            "livesLeft" + ":" + getLivesLeft()+ "]";
+            "livesLeft" + ":" + getLivesLeft()+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "hallOfFame = "+(getHallOfFame()!=null?Integer.toHexString(System.identityHashCode(getHallOfFame())):"null");
   }
 }
