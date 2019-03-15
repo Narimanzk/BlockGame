@@ -14,6 +14,7 @@ public class PlayerInPlay extends Player
   //PlayerInPlay Attributes
   private int points;
   private int livesLeft;
+  private String name;
 
   //PlayerInPlay Associations
   private HallOfFame hallOfFame;
@@ -22,11 +23,12 @@ public class PlayerInPlay extends Player
   // CONSTRUCTOR
   //------------------------
 
-  public PlayerInPlay(String aPassword, Block223 aBlock223, int aPoints, int aLivesLeft, HallOfFame aHallOfFame)
+  public PlayerInPlay(String aPassword, Block223 aBlock223, int aPoints, int aLivesLeft, String aName, HallOfFame aHallOfFame)
   {
     super(aPassword, aBlock223);
     points = aPoints;
     livesLeft = aLivesLeft;
+    name = aName;
     boolean didAddHallOfFame = setHallOfFame(aHallOfFame);
     if (!didAddHallOfFame)
     {
@@ -54,6 +56,14 @@ public class PlayerInPlay extends Player
     return wasSet;
   }
 
+  public boolean setName(String aName)
+  {
+    boolean wasSet = false;
+    name = aName;
+    wasSet = true;
+    return wasSet;
+  }
+
   public int getPoints()
   {
     return points;
@@ -62,6 +72,11 @@ public class PlayerInPlay extends Player
   public int getLivesLeft()
   {
     return livesLeft;
+  }
+
+  public String getName()
+  {
+    return name;
   }
   /* Code from template association_GetOne */
   public HallOfFame getHallOfFame()
@@ -104,7 +119,8 @@ public class PlayerInPlay extends Player
   {
     return super.toString() + "["+
             "points" + ":" + getPoints()+ "," +
-            "livesLeft" + ":" + getLivesLeft()+ "]" + System.getProperties().getProperty("line.separator") +
+            "livesLeft" + ":" + getLivesLeft()+ "," +
+            "name" + ":" + getName()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "hallOfFame = "+(getHallOfFame()!=null?Integer.toHexString(System.identityHashCode(getHallOfFame())):"null");
   }
 }

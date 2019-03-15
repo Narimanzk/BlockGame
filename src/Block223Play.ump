@@ -16,6 +16,7 @@ class PlayerInPlay{
 	isA Player;
 	Integer points;
 	Integer livesLeft;
+	String name;
 }
 
 class BlockInPlay{

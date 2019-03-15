@@ -49,7 +49,7 @@ class Play{
 		
 			//If the ball is out of bounds and we have >1 life left
 							
-			BallOutOfBounds[isBlockOutOfBounds(BallInPlay.get(xCurPos),BallInPlay.get(yCurPos)) && PlayerInPlay.getLivesLeft > 1]/{
+			BallOutOfBounds[isBlockOutOfBounds(BallInPlay.getXCurPos(),allInPlay.getYCurPos()) && PlayerInPlay.getLivesLeft() > 1]/{
 			deductLives();
 			}->Paused;
 			
@@ -58,27 +58,27 @@ class Play{
 			
 			//If the ball is out of bounds and we have 1 life left
 				
-			BallOutOfBounds[isBlockOutOfBounds(BallInPlay.get(xCurPos),BallInPlay.get(yCurPos)) && PlayerInPlay.getLivesLeft == 1]/{
+			BallOutOfBounds[isBlockOutOfBounds(BallInPlay.getXCurPos(),allInPlay.getYCurPos()) && PlayerInPlay.getLivesLeft() == 1]/{
 			
 			deductLives();
 			}->End;
 			//If the ball is in open space
 				
-			BallHitNothing[isBallInSpace(BallInPlay.get(xCurPos),BallInPlay.get(yCurPos))]/{
+			BallHitNothing[isBallInSpace(BallInPlay.getXCurPos(),allInPlay.getYCurPos())]/{
 			}->Playing;
 			
 			//BallHitBLock
-			BallHitBlock[isABlockHit(BallInPlay.get(xCurPos),BallInPlay.get(yCurPos))]/{
+			BallHitBlock[isABlockHit(BallInPlay.getXCurPos(),allInPlay.getYCurPos())]/{
 			//isBlockHit is a private method that we create
 			
 				numBlocks=numBlocks-1;
 				redirectBall();
-				removeBlockAssignment(BallInPlay.get(xCurPos),BallInPlay.get(yCurPos))); //Points will be added within this method
+				removeBlockAssignment(BallInPlay.getXCurPos(),BallInPlay.getYCurPos()); //Points will be added within this method
 				
 			}->Playing;
 			
 			//BallHitPaddleOrWall:
-			BallHitPaddleOrWall[isaWallOrPaddleHit(BallInPlay.get(xCurPos),BallInPlay.get(yCurPos))]/{
+			BallHitPaddleOrWall[isaWallOrPaddleHit(BallInPlay.getXCurPos(),allInPlay.getYCurPos())]/{
 			//Within the guard is a private method we created to determine if the ball hit a wall/paddle
 			
 			redirectBall();
@@ -95,6 +95,7 @@ class Play{
 				unpauseGame();
 			}->Playing;
 		}
+		
 		End{
 			do{
 				updateHallOfFame(); //Update the hall of fame with stats.

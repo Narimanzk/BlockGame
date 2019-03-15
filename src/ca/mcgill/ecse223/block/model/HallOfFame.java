@@ -80,9 +80,9 @@ public class HallOfFame
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public PlayerInPlay addEntry(String aPassword, Block223 aBlock223, int aPoints, int aLivesLeft)
+  public PlayerInPlay addEntry(String aPassword, Block223 aBlock223, int aPoints, int aLivesLeft, String aName)
   {
-    return new PlayerInPlay(aPassword, aBlock223, aPoints, aLivesLeft, this);
+    return new PlayerInPlay(aPassword, aBlock223, aPoints, aLivesLeft, aName, this);
   }
 
   public boolean addEntry(PlayerInPlay aEntry)

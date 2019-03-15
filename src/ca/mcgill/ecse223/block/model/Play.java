@@ -177,7 +177,7 @@ public class Play
     switch (aStatus)
     {
       case Playing:
-        if (isBlockOutOfBounds(BallInPlay.get(xCurPos),BallInPlay.get(yCurPos))&&PlayerInPlay.getLivesLeft>1)
+        if (isBlockOutOfBounds(BallInPlay.getXCurPos(),allInPlay.getYCurPos())&&PlayerInPlay.getLivesLeft()>1)
         {
           exitStatus();
         // line 52 "../../../../../Block223StateMachine.ump"
@@ -186,7 +186,7 @@ public class Play
           wasEventProcessed = true;
           break;
         }
-        if (isBlockOutOfBounds(BallInPlay.get(xCurPos),BallInPlay.get(yCurPos))&&PlayerInPlay.getLivesLeft==1)
+        if (isBlockOutOfBounds(BallInPlay.getXCurPos(),allInPlay.getYCurPos())&&PlayerInPlay.getLivesLeft()==1)
         {
           exitStatus();
         // line 61 "../../../../../Block223StateMachine.ump"
@@ -211,7 +211,7 @@ public class Play
     switch (aStatus)
     {
       case Playing:
-        if (isBallInSpace(BallInPlay.get(xCurPos),BallInPlay.get(yCurPos)))
+        if (isBallInSpace(BallInPlay.getXCurPos(),allInPlay.getYCurPos()))
         {
           exitStatus();
         // line 67 "../../../../../Block223StateMachine.ump"
@@ -236,7 +236,7 @@ public class Play
     switch (aStatus)
     {
       case Playing:
-        if (isABlockHit(BallInPlay.get(xCurPos),BallInPlay.get(yCurPos)))
+        if (isABlockHit(BallInPlay.getXCurPos(),allInPlay.getYCurPos()))
         {
           exitStatus();
         // line 71 "../../../../../Block223StateMachine.ump"
@@ -244,7 +244,7 @@ public class Play
 			
 				numBlocks=numBlocks-1;
 				redirectBall();
-				removeBlockAssignment(BallInPlay.get(xCurPos),BallInPlay.get(yCurPos))); //Points will be added within this method
+				removeBlockAssignment(BallInPlay.getXCurPos(),BallInPlay.getYCurPos()); //Points will be added within this method
           setStatus(Status.Playing);
           wasEventProcessed = true;
           break;
@@ -265,7 +265,7 @@ public class Play
     switch (aStatus)
     {
       case Playing:
-        if (isaWallOrPaddleHit(BallInPlay.get(xCurPos),BallInPlay.get(yCurPos)))
+        if (isaWallOrPaddleHit(BallInPlay.getXCurPos(),allInPlay.getYCurPos()))
         {
           exitStatus();
         // line 81 "../../../../../Block223StateMachine.ump"
@@ -378,7 +378,7 @@ public class Play
   {
     try
     {
-      // line 99 "../../../../../Block223StateMachine.ump"
+      // line 100 "../../../../../Block223StateMachine.ump"
       updateHallOfFame(); //Update the hall of fame with stats.
       Thread.sleep(1);
     }
