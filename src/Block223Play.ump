@@ -8,7 +8,7 @@ class BallInPlay{
 class PaddleInPlay{
 	isA Paddle;
 	Integer xCurPos;
-	Integer yCurPos;
+	Integer yPos = Game.PLAY_AREA_SIDE - 30;
 	Integer curLength;	
 
 }
@@ -17,5 +17,15 @@ class PlayerInPlay{
 	Integer points;
 	Integer livesLeft;
 }
+
+class BlockInPlay{
+	isA BlockAssignment;
+}
+
+class GameInPlay{
+	1--* BlockInPlay blocksOnTheField;
+}
+
+
 
 

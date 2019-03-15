@@ -14,7 +14,7 @@ public class HallOfFame
 
   //HallOfFame Associations
   private Game game;
-  private List<PlayerInPlay> players;
+  private List<PlayerInPlay> entries;
 
   //------------------------
   // CONSTRUCTOR
@@ -27,13 +27,13 @@ public class HallOfFame
       throw new RuntimeException("Unable to create HallOfFame due to aGame");
     }
     game = aGame;
-    players = new ArrayList<PlayerInPlay>();
+    entries = new ArrayList<PlayerInPlay>();
   }
 
   public HallOfFame(String aNameForGame, int aNrBlocksPerLevelForGame, Admin aAdminForGame, Ball aBallForGame, Paddle aPaddleForGame, Block223 aBlock223ForGame)
   {
     game = new Game(aNameForGame, aNrBlocksPerLevelForGame, aAdminForGame, aBallForGame, aPaddleForGame, aBlock223ForGame, this);
-    players = new ArrayList<PlayerInPlay>();
+    entries = new ArrayList<PlayerInPlay>();
   }
 
   //------------------------
@@ -45,104 +45,104 @@ public class HallOfFame
     return game;
   }
   /* Code from template association_GetMany */
-  public PlayerInPlay getPlayer(int index)
+  public PlayerInPlay getEntry(int index)
   {
-    PlayerInPlay aPlayer = players.get(index);
-    return aPlayer;
+    PlayerInPlay aEntry = entries.get(index);
+    return aEntry;
   }
 
-  public List<PlayerInPlay> getPlayers()
+  public List<PlayerInPlay> getEntries()
   {
-    List<PlayerInPlay> newPlayers = Collections.unmodifiableList(players);
-    return newPlayers;
+    List<PlayerInPlay> newEntries = Collections.unmodifiableList(entries);
+    return newEntries;
   }
 
-  public int numberOfPlayers()
+  public int numberOfEntries()
   {
-    int number = players.size();
+    int number = entries.size();
     return number;
   }
 
-  public boolean hasPlayers()
+  public boolean hasEntries()
   {
-    boolean has = players.size() > 0;
+    boolean has = entries.size() > 0;
     return has;
   }
 
-  public int indexOfPlayer(PlayerInPlay aPlayer)
+  public int indexOfEntry(PlayerInPlay aEntry)
   {
-    int index = players.indexOf(aPlayer);
+    int index = entries.indexOf(aEntry);
     return index;
   }
   /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfPlayers()
+  public static int minimumNumberOfEntries()
   {
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public PlayerInPlay addPlayer(String aPassword, Block223 aBlock223, int aPoints, int aLivesLeft)
+  public PlayerInPlay addEntry(String aPassword, Block223 aBlock223, int aPoints, int aLivesLeft)
   {
     return new PlayerInPlay(aPassword, aBlock223, aPoints, aLivesLeft, this);
   }
 
-  public boolean addPlayer(PlayerInPlay aPlayer)
+  public boolean addEntry(PlayerInPlay aEntry)
   {
     boolean wasAdded = false;
-    if (players.contains(aPlayer)) { return false; }
-    HallOfFame existingHallOfFame = aPlayer.getHallOfFame();
+    if (entries.contains(aEntry)) { return false; }
+    HallOfFame existingHallOfFame = aEntry.getHallOfFame();
     boolean isNewHallOfFame = existingHallOfFame != null && !this.equals(existingHallOfFame);
     if (isNewHallOfFame)
     {
-      aPlayer.setHallOfFame(this);
+      aEntry.setHallOfFame(this);
     }
     else
     {
-      players.add(aPlayer);
+      entries.add(aEntry);
     }
     wasAdded = true;
     return wasAdded;
   }
 
-  public boolean removePlayer(PlayerInPlay aPlayer)
+  public boolean removeEntry(PlayerInPlay aEntry)
   {
     boolean wasRemoved = false;
-    //Unable to remove aPlayer, as it must always have a hallOfFame
-    if (!this.equals(aPlayer.getHallOfFame()))
+    //Unable to remove aEntry, as it must always have a hallOfFame
+    if (!this.equals(aEntry.getHallOfFame()))
     {
-      players.remove(aPlayer);
+      entries.remove(aEntry);
       wasRemoved = true;
     }
     return wasRemoved;
   }
   /* Code from template association_AddIndexControlFunctions */
-  public boolean addPlayerAt(PlayerInPlay aPlayer, int index)
+  public boolean addEntryAt(PlayerInPlay aEntry, int index)
   {  
     boolean wasAdded = false;
-    if(addPlayer(aPlayer))
+    if(addEntry(aEntry))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfPlayers()) { index = numberOfPlayers() - 1; }
-      players.remove(aPlayer);
-      players.add(index, aPlayer);
+      if(index > numberOfEntries()) { index = numberOfEntries() - 1; }
+      entries.remove(aEntry);
+      entries.add(index, aEntry);
       wasAdded = true;
     }
     return wasAdded;
   }
 
-  public boolean addOrMovePlayerAt(PlayerInPlay aPlayer, int index)
+  public boolean addOrMoveEntryAt(PlayerInPlay aEntry, int index)
   {
     boolean wasAdded = false;
-    if(players.contains(aPlayer))
+    if(entries.contains(aEntry))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfPlayers()) { index = numberOfPlayers() - 1; }
-      players.remove(aPlayer);
-      players.add(index, aPlayer);
+      if(index > numberOfEntries()) { index = numberOfEntries() - 1; }
+      entries.remove(aEntry);
+      entries.add(index, aEntry);
       wasAdded = true;
     } 
     else 
     {
-      wasAdded = addPlayerAt(aPlayer, index);
+      wasAdded = addEntryAt(aEntry, index);
     }
     return wasAdded;
   }
@@ -155,10 +155,10 @@ public class HallOfFame
     {
       existingGame.delete();
     }
-    for(int i=players.size(); i > 0; i--)
+    for(int i=entries.size(); i > 0; i--)
     {
-      PlayerInPlay aPlayer = players.get(i - 1);
-      aPlayer.delete();
+      PlayerInPlay aEntry = entries.get(i - 1);
+      aEntry.delete();
     }
   }
 

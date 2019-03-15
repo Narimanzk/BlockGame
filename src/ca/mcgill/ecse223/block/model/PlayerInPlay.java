@@ -30,7 +30,7 @@ public class PlayerInPlay extends Player
     boolean didAddHallOfFame = setHallOfFame(aHallOfFame);
     if (!didAddHallOfFame)
     {
-      throw new RuntimeException("Unable to create player due to hallOfFame");
+      throw new RuntimeException("Unable to create entry due to hallOfFame");
     }
   }
 
@@ -81,9 +81,9 @@ public class PlayerInPlay extends Player
     hallOfFame = aHallOfFame;
     if (existingHallOfFame != null && !existingHallOfFame.equals(aHallOfFame))
     {
-      existingHallOfFame.removePlayer(this);
+      existingHallOfFame.removeEntry(this);
     }
-    hallOfFame.addPlayer(this);
+    hallOfFame.addEntry(this);
     wasSet = true;
     return wasSet;
   }
@@ -94,7 +94,7 @@ public class PlayerInPlay extends Player
     this.hallOfFame = null;
     if(placeholderHallOfFame != null)
     {
-      placeholderHallOfFame.removePlayer(this);
+      placeholderHallOfFame.removeEntry(this);
     }
     super.delete();
   }

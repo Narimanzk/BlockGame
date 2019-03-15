@@ -13,18 +13,18 @@ public class PaddleInPlay extends Paddle
 
   //PaddleInPlay Attributes
   private int xCurPos;
-  private int yCurPos;
+  private int yPos;
   private int curLength;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public PaddleInPlay(int aMaxPaddleLength, int aMinPaddleLength, Game aGame, int aXCurPos, int aYCurPos, int aCurLength)
+  public PaddleInPlay(int aMaxPaddleLength, int aMinPaddleLength, Game aGame, int aXCurPos, int aCurLength)
   {
     super(aMaxPaddleLength, aMinPaddleLength, aGame);
     xCurPos = aXCurPos;
-    yCurPos = aYCurPos;
+    yPos = Game.PLAY_AREA_SIDE - 30;
     curLength = aCurLength;
   }
 
@@ -40,10 +40,10 @@ public class PaddleInPlay extends Paddle
     return wasSet;
   }
 
-  public boolean setYCurPos(int aYCurPos)
+  public boolean setYPos(int aYPos)
   {
     boolean wasSet = false;
-    yCurPos = aYCurPos;
+    yPos = aYPos;
     wasSet = true;
     return wasSet;
   }
@@ -61,9 +61,9 @@ public class PaddleInPlay extends Paddle
     return xCurPos;
   }
 
-  public int getYCurPos()
+  public int getYPos()
   {
-    return yCurPos;
+    return yPos;
   }
 
   public int getCurLength()
@@ -81,7 +81,7 @@ public class PaddleInPlay extends Paddle
   {
     return super.toString() + "["+
             "xCurPos" + ":" + getXCurPos()+ "," +
-            "yCurPos" + ":" + getYCurPos()+ "," +
+            "yPos" + ":" + getYPos()+ "," +
             "curLength" + ":" + getCurLength()+ "]";
   }
 }

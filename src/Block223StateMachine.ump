@@ -3,35 +3,66 @@ class Play{
 
 	Status{
 		Idle{
-			Play/{
+			//Start the game:
+			
+			StartGame/{
 				isTest = false; 
 			}->Playing;
+			//Test the game:
+			
 			TestGame/{
 				isTest = true;
 			}->Playing;
+			
 		}
 		Playing{
+			//Entry condition:
+			
 			do{
-				setBallInMotion();	
+			
+				initalizePaddlePosition(); //Place the paddle in the middle, 30 units above.
+				dropBallFromStartingPoint();	//Drop the ball from the starting point.
+				
 			}
+			//If you press pause:
+			
 			Pause[spaceIsPressed()]/{
 			//save state of game
 			//set speeds to 0
 			}->Paused;
 			
+			//If the game ends and we were testing
+			
 			GameEnd[isTest && (numBlocks == 0 || numLives == 0)]{
 			}->Idle;
+			
+			//If the game ends and we were playing for real
+			
 			GameEnd[!isTest && (numBlocks == 0 || numLives == 0)]{
 			}->End;
 			
 			BallMoving(); //thread
 			PaddleMoving(); //thread
 			
-			BallHitBlock[isBlockHit()]/{
-				numBlocks--;
+			//BallHitBLock
+			BallHitBlock[isABlockHit(ballInPlay.get(xCurPos),ballInPlay.get(yCurPos))]/{
+			//isBlockHit is a private method that we create
+			
+				numBlocks=numBlocks-1;
 				redirectBall();
-				removeBlockAssignment();
+				removeBlockAssignment(ballInPlay.get(xCurPos),ballInPlay.get(yCurPos)));
 			}->Playing;
+			
+			//BallHitPaddleOrWall:
+			BallHitPaddleOrWall[isaWallOrPaddleHit(ballInPlay.get(xCurPos),ballInPlay.get(yCurPos))]/{
+			//Within the guard is a private method we created to determine if the ball hit a wall/paddle
+			
+			redirectBall();
+			}->Playing;
+			
+			//
+			
+			
 		}
 		Paused{
 			do { 
