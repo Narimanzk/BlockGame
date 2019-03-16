@@ -1,5 +1,9 @@
 class Play{
 	Boolean isTest; 
+	1 -- 1 BallInPlay ball;
+	1 -- 1 PaddleInPlay paddle;
+	1 -- 1 GameInPlay game;
+	
 	Status{
 		Idle{
 			//Start the game:

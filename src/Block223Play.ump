@@ -7,6 +7,9 @@ class BallInPlay{
 }
 class PaddleInPlay{
 	isA Paddle;
+	
+	
+   const Integer PADDLE_MOVEMENT_SPEED = 1;
 	Integer xCurPos;
 	Integer yPos = Game.PLAY_AREA_SIDE - 30;
 	Integer curLength;	

@@ -4,7 +4,7 @@
 package ca.mcgill.ecse223.block.model;
 import java.util.*;
 
-// line 26 "../../../../../Block223Play.ump"
+// line 29 "../../../../../Block223Play.ump"
 public class GameInPlay
 {
 
@@ -14,14 +14,26 @@ public class GameInPlay
 
   //GameInPlay Associations
   private List<BlockInPlay> blocksOnTheField;
+  private Play play;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public GameInPlay()
+  public GameInPlay(Play aPlay)
   {
     blocksOnTheField = new ArrayList<BlockInPlay>();
+    if (aPlay == null || aPlay.getGame() != null)
+    {
+      throw new RuntimeException("Unable to create GameInPlay due to aPlay");
+    }
+    play = aPlay;
+  }
+
+  public GameInPlay(boolean aIsTestForPlay, BallInPlay aBallForPlay, PaddleInPlay aPaddleForPlay)
+  {
+    blocksOnTheField = new ArrayList<BlockInPlay>();
+    play = new Play(aIsTestForPlay, aBallForPlay, aPaddleForPlay, this);
   }
 
   //------------------------
@@ -56,6 +68,11 @@ public class GameInPlay
   {
     int index = blocksOnTheField.indexOf(aBlocksOnTheField);
     return index;
+  }
+  /* Code from template association_GetOne */
+  public Play getPlay()
+  {
+    return play;
   }
   /* Code from template association_MinimumNumberOfMethod */
   public static int minimumNumberOfBlocksOnTheField()
@@ -136,6 +153,12 @@ public class GameInPlay
     {
       BlockInPlay aBlocksOnTheField = blocksOnTheField.get(i - 1);
       aBlocksOnTheField.delete();
+    }
+    Play existingPlay = play;
+    play = null;
+    if (existingPlay != null)
+    {
+      existingPlay.delete();
     }
   }
 

@@ -17,17 +17,35 @@ public class BallInPlay extends Ball
   private int xCurPos;
   private int yCurPos;
 
+  //BallInPlay Associations
+  private Play play;
+
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public BallInPlay(int aMinBallSpeedX, int aMinBallSpeedY, double aBallSpeedIncreaseFactor, Game aGame, int aXCurSpeed, int aYCurSpeed, int aXCurPos, int aYCurPos)
+  public BallInPlay(int aMinBallSpeedX, int aMinBallSpeedY, double aBallSpeedIncreaseFactor, Game aGame, int aXCurSpeed, int aYCurSpeed, int aXCurPos, int aYCurPos, Play aPlay)
   {
     super(aMinBallSpeedX, aMinBallSpeedY, aBallSpeedIncreaseFactor, aGame);
     xCurSpeed = aXCurSpeed;
     yCurSpeed = aYCurSpeed;
     xCurPos = aXCurPos;
     yCurPos = aYCurPos;
+    if (aPlay == null || aPlay.getBall() != null)
+    {
+      throw new RuntimeException("Unable to create BallInPlay due to aPlay");
+    }
+    play = aPlay;
+  }
+
+  public BallInPlay(int aMinBallSpeedX, int aMinBallSpeedY, double aBallSpeedIncreaseFactor, Game aGame, int aXCurSpeed, int aYCurSpeed, int aXCurPos, int aYCurPos, boolean aIsTestForPlay, PaddleInPlay aPaddleForPlay, GameInPlay aGameForPlay)
+  {
+    super(aMinBallSpeedX, aMinBallSpeedY, aBallSpeedIncreaseFactor, aGame);
+    xCurSpeed = aXCurSpeed;
+    yCurSpeed = aYCurSpeed;
+    xCurPos = aXCurPos;
+    yCurPos = aYCurPos;
+    play = new Play(aIsTestForPlay, this, aPaddleForPlay, aGameForPlay);
   }
 
   //------------------------
@@ -85,9 +103,20 @@ public class BallInPlay extends Ball
   {
     return yCurPos;
   }
+  /* Code from template association_GetOne */
+  public Play getPlay()
+  {
+    return play;
+  }
 
   public void delete()
   {
+    Play existingPlay = play;
+    play = null;
+    if (existingPlay != null)
+    {
+      existingPlay.delete();
+    }
     super.delete();
   }
 
@@ -98,6 +127,7 @@ public class BallInPlay extends Ball
             "xCurSpeed" + ":" + getXCurSpeed()+ "," +
             "yCurSpeed" + ":" + getYCurSpeed()+ "," +
             "xCurPos" + ":" + getXCurPos()+ "," +
-            "yCurPos" + ":" + getYCurPos()+ "]";
+            "yCurPos" + ":" + getYCurPos()+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "play = "+(getPlay()!=null?Integer.toHexString(System.identityHashCode(getPlay())):"null");
   }
 }

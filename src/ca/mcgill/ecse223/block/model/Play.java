@@ -23,14 +23,42 @@ public class Play
   Thread doActivityStatusPausedThread = null;
   Thread doActivityStatusEndThread = null;
 
+  //Play Associations
+  private BallInPlay ball;
+  private PaddleInPlay paddle;
+  private GameInPlay game;
+
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Play(boolean aIsTest)
+  public Play(boolean aIsTest, BallInPlay aBall, PaddleInPlay aPaddle, GameInPlay aGame)
   {
     isTest = aIsTest;
+    if (aBall == null || aBall.getPlay() != null)
+    {
+      throw new RuntimeException("Unable to create Play due to aBall");
+    }
+    ball = aBall;
+    if (aPaddle == null || aPaddle.getPlay() != null)
+    {
+      throw new RuntimeException("Unable to create Play due to aPaddle");
+    }
+    paddle = aPaddle;
+    if (aGame == null || aGame.getPlay() != null)
+    {
+      throw new RuntimeException("Unable to create Play due to aGame");
+    }
+    game = aGame;
     setStatus(Status.Idle);
+  }
+
+  public Play(boolean aIsTest, int aMinBallSpeedXForBall, int aMinBallSpeedYForBall, double aBallSpeedIncreaseFactorForBall, Game aGameForBall, int aXCurSpeedForBall, int aYCurSpeedForBall, int aXCurPosForBall, int aYCurPosForBall, int aMaxPaddleLengthForPaddle, int aMinPaddleLengthForPaddle, Game aGameForPaddle, int aXCurPosForPaddle, int aCurLengthForPaddle)
+  {
+    isTest = aIsTest;
+    ball = new BallInPlay(aMinBallSpeedXForBall, aMinBallSpeedYForBall, aBallSpeedIncreaseFactorForBall, aGameForBall, aXCurSpeedForBall, aYCurSpeedForBall, aXCurPosForBall, aYCurPosForBall, this);
+    paddle = new PaddleInPlay(aMaxPaddleLengthForPaddle, aMinPaddleLengthForPaddle, aGameForPaddle, aXCurPosForPaddle, aCurLengthForPaddle, this);
+    game = new GameInPlay(this);
   }
 
   //------------------------
@@ -74,7 +102,7 @@ public class Play
     switch (aStatus)
     {
       case Idle:
-        // line 7 "../../../../../Block223StateMachine.ump"
+        // line 11 "../../../../../Block223StateMachine.ump"
         isTest = false; 
 				initalizePaddlePosition(); //Place the paddle in the middle, 30 units above.
 				dropBallFromStartingPoint();	//Drop the ball from the starting point.
@@ -96,7 +124,7 @@ public class Play
     switch (aStatus)
     {
       case Idle:
-        // line 15 "../../../../../Block223StateMachine.ump"
+        // line 19 "../../../../../Block223StateMachine.ump"
         isTest = true;
 				initalizePaddlePosition(); //Place the paddle in the middle, 30 units above.
 				dropBallFromStartingPoint();	//Drop the ball from the starting point.
@@ -121,7 +149,7 @@ public class Play
         if (spaceIsPressed())
         {
           exitStatus();
-        // line 34 "../../../../../Block223StateMachine.ump"
+        // line 38 "../../../../../Block223StateMachine.ump"
           //set speeds to 0 as entry
           setStatus(Status.Paused);
           wasEventProcessed = true;
@@ -146,7 +174,7 @@ public class Play
         if (getIsTest()&&(GameInPlay.getBlocksOnTheField().size()==0||PlayerInPlay.getLivesLeft()==0))
         {
           exitStatus();
-        // line 41 "../../../../../Block223StateMachine.ump"
+        // line 45 "../../../../../Block223StateMachine.ump"
           
           setStatus(Status.Idle);
           wasEventProcessed = true;
@@ -155,7 +183,7 @@ public class Play
         if (!getIsTest()&&(GameInPlay.getBlocksOnTheField().size()==0||PlayerInPlay.getLivesLeft()==0))
         {
           exitStatus();
-        // line 46 "../../../../../Block223StateMachine.ump"
+        // line 50 "../../../../../Block223StateMachine.ump"
           
           setStatus(Status.End);
           wasEventProcessed = true;
@@ -180,7 +208,7 @@ public class Play
         if (isBlockOutOfBounds(BallInPlay.getXCurPos(),allInPlay.getYCurPos())&&PlayerInPlay.getLivesLeft()>1)
         {
           exitStatus();
-        // line 52 "../../../../../Block223StateMachine.ump"
+        // line 56 "../../../../../Block223StateMachine.ump"
           deductLives();
           setStatus(Status.Paused);
           wasEventProcessed = true;
@@ -189,7 +217,7 @@ public class Play
         if (isBlockOutOfBounds(BallInPlay.getXCurPos(),allInPlay.getYCurPos())&&PlayerInPlay.getLivesLeft()==1)
         {
           exitStatus();
-        // line 61 "../../../../../Block223StateMachine.ump"
+        // line 65 "../../../../../Block223StateMachine.ump"
           deductLives();
           setStatus(Status.End);
           wasEventProcessed = true;
@@ -214,7 +242,7 @@ public class Play
         if (isBallInSpace(BallInPlay.getXCurPos(),allInPlay.getYCurPos()))
         {
           exitStatus();
-        // line 67 "../../../../../Block223StateMachine.ump"
+        // line 71 "../../../../../Block223StateMachine.ump"
           
           setStatus(Status.Playing);
           wasEventProcessed = true;
@@ -239,7 +267,7 @@ public class Play
         if (isABlockHit(BallInPlay.getXCurPos(),allInPlay.getYCurPos()))
         {
           exitStatus();
-        // line 71 "../../../../../Block223StateMachine.ump"
+        // line 75 "../../../../../Block223StateMachine.ump"
           //isBlockHit is a private method that we create
 			
 				numBlocks=numBlocks-1;
@@ -268,7 +296,7 @@ public class Play
         if (isaWallOrPaddleHit(BallInPlay.getXCurPos(),allInPlay.getYCurPos()))
         {
           exitStatus();
-        // line 81 "../../../../../Block223StateMachine.ump"
+        // line 85 "../../../../../Block223StateMachine.ump"
           //Within the guard is a private method we created to determine if the ball hit a wall/paddle
 			
 			redirectBall();
@@ -295,7 +323,7 @@ public class Play
         if (spaceIsPressed())
         {
           exitStatus();
-        // line 94 "../../../../../Block223StateMachine.ump"
+        // line 98 "../../../../../Block223StateMachine.ump"
           unpauseGame();
           setStatus(Status.Playing);
           wasEventProcessed = true;
@@ -343,12 +371,27 @@ public class Play
         break;
     }
   }
+  /* Code from template association_GetOne */
+  public BallInPlay getBall()
+  {
+    return ball;
+  }
+  /* Code from template association_GetOne */
+  public PaddleInPlay getPaddle()
+  {
+    return paddle;
+  }
+  /* Code from template association_GetOne */
+  public GameInPlay getGame()
+  {
+    return game;
+  }
 
   private void doActivityStatusPlaying()
   {
     try
     {
-      // line 27 "../../../../../Block223StateMachine.ump"
+      // line 31 "../../../../../Block223StateMachine.ump"
       ballMoving(); 
 			paddleMoving();
       Thread.sleep(1);
@@ -363,7 +406,7 @@ public class Play
   {
     try
     {
-      // line 89 "../../../../../Block223StateMachine.ump"
+      // line 93 "../../../../../Block223StateMachine.ump"
       pauseGame();
 				saveGameState();
       Thread.sleep(1);
@@ -378,7 +421,7 @@ public class Play
   {
     try
     {
-      // line 100 "../../../../../Block223StateMachine.ump"
+      // line 104 "../../../../../Block223StateMachine.ump"
       updateHallOfFame(); //Update the hall of fame with stats.
       Thread.sleep(1);
     }
@@ -418,12 +461,34 @@ public class Play
   }
 
   public void delete()
-  {}
+  {
+    BallInPlay existingBall = ball;
+    ball = null;
+    if (existingBall != null)
+    {
+      existingBall.delete();
+    }
+    PaddleInPlay existingPaddle = paddle;
+    paddle = null;
+    if (existingPaddle != null)
+    {
+      existingPaddle.delete();
+    }
+    GameInPlay existingGame = game;
+    game = null;
+    if (existingGame != null)
+    {
+      existingGame.delete();
+    }
+  }
 
 
   public String toString()
   {
     return super.toString() + "["+
-            "isTest" + ":" + getIsTest()+ "]";
+            "isTest" + ":" + getIsTest()+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "ball = "+(getBall()!=null?Integer.toHexString(System.identityHashCode(getBall())):"null") + System.getProperties().getProperty("line.separator") +
+            "  " + "paddle = "+(getPaddle()!=null?Integer.toHexString(System.identityHashCode(getPaddle())):"null") + System.getProperties().getProperty("line.separator") +
+            "  " + "game = "+(getGame()!=null?Integer.toHexString(System.identityHashCode(getGame())):"null");
   }
 }

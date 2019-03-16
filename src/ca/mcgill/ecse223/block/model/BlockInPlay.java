@@ -3,7 +3,7 @@
 
 package ca.mcgill.ecse223.block.model;
 
-// line 22 "../../../../../Block223Play.ump"
+// line 25 "../../../../../Block223Play.ump"
 public class BlockInPlay extends BlockAssignment
 {
 
