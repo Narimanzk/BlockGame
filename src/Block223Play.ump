@@ -27,6 +27,13 @@ class BlockInPlay{
 }
 
 class GameInPlay{
+	isA Game;
+	Integer levelIndex;
+	1--* BlockInPlay blocksOnTheField;
+}
+
+class LevelInPlay{
+	isA Level;
 	1--* BlockInPlay blocksOnTheField;
 }
 
