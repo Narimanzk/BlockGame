@@ -2,6 +2,7 @@
 /*This code was generated using the UMPLE 1.29.0.4181.a593105a9 modeling language!*/
 
 package ca.mcgill.ecse223.block.model;
+import java.util.*;
 
 // line 1 "../../../../../Block223StateMachine.ump"
 public class Play
@@ -53,12 +54,12 @@ public class Play
     setStatus(Status.Idle);
   }
 
-  public Play(boolean aIsTest, int aMinBallSpeedXForBall, int aMinBallSpeedYForBall, double aBallSpeedIncreaseFactorForBall, Game aGameForBall, int aXCurSpeedForBall, int aYCurSpeedForBall, int aXCurPosForBall, int aYCurPosForBall, int aMaxPaddleLengthForPaddle, int aMinPaddleLengthForPaddle, Game aGameForPaddle, int aXCurPosForPaddle, int aCurLengthForPaddle)
+  public Play(boolean aIsTest, int aMinBallSpeedXForBall, int aMinBallSpeedYForBall, double aBallSpeedIncreaseFactorForBall, Game aGameForBall, int aXCurSpeedForBall, int aYCurSpeedForBall, int aXCurPosForBall, int aYCurPosForBall, int aMaxPaddleLengthForPaddle, int aMinPaddleLengthForPaddle, Game aGameForPaddle, int aXCurPosForPaddle, int aCurLengthForPaddle, String aNameForGame, int aNrBlocksPerLevelForGame, Admin aAdminForGame, Ball aBallForGame, Paddle aPaddleForGame, Block223 aBlock223ForGame, HallOfFame aHallOfFameForGame, int aLevelIndexForGame)
   {
     isTest = aIsTest;
     ball = new BallInPlay(aMinBallSpeedXForBall, aMinBallSpeedYForBall, aBallSpeedIncreaseFactorForBall, aGameForBall, aXCurSpeedForBall, aYCurSpeedForBall, aXCurPosForBall, aYCurPosForBall, this);
     paddle = new PaddleInPlay(aMaxPaddleLengthForPaddle, aMinPaddleLengthForPaddle, aGameForPaddle, aXCurPosForPaddle, aCurLengthForPaddle, this);
-    game = new GameInPlay(this);
+    game = new GameInPlay(aNameForGame, aNrBlocksPerLevelForGame, aAdminForGame, aBallForGame, aPaddleForGame, aBlock223ForGame, aHallOfFameForGame, aLevelIndexForGame, this);
   }
 
   //------------------------
