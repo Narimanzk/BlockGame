@@ -368,6 +368,17 @@ public class Block implements Serializable
     }
   }
 
+  // line 62 "../../../../../Block223Persistence.ump"
+   public static  void reinitializeAutouniqueID(List<Block> blocks){
+    nextId = 0; 
+    for (Block block : blocks) {
+      if (block.getId() > nextId) {
+        nextId = block.getId();
+      }
+    }
+    nextId++;
+  }
+
 
   public String toString()
   {
