@@ -6,6 +6,7 @@ import java.util.List;
 import ca.mcgill.ecse223.block.application.Block223Application;
 import ca.mcgill.ecse223.block.controller.TOUserMode.Mode;
 import ca.mcgill.ecse223.block.model.*;
+import ca.mcgill.ecse223.block.model.PlayedGame.PlayStatus;
 /*
 import ca.mcgill.ecse223.block.model.Admin;
 import ca.mcgill.ecse223.block.model.Ball;
@@ -506,7 +507,7 @@ public class Block223Controller {
 			}
 		}
 		if (Block223Application.getCurrentUserRole() == null)
-			throw new InvalidInputException("The username and password do not match\n");
+			throw new InvalidInputException("The username and password do not match.");
 	}
 
 	public static void logout() {
@@ -518,9 +519,43 @@ public class Block223Controller {
 	public static void selectPlayableGame(String name, int id) throws InvalidInputException  {
 
 	}
-
+	//TUDZ
 	public static void startGame(Block223PlayModeInterface ui) throws InvalidInputException {
+		PlayedGame aGame = Block223Application.getCurrentPlayableGame();
+		
+		UserRole userRole = Block223Application.getCurrentUserRole();
+		if(userRole == null)
+			throw new InvalidInputException("Player privileges are required to play a game.");
+		if(aGame == null)
+			throw new InvalidInputException("A game must be selected to play it.");
+		if((userRole instanceof Admin) && aGame.getPlayer() != null)
+			throw new InvalidInputException("Player privileges are required to play a game.");
+		if((userRole instanceof Admin) && aGame.getGame().getAdmin() != userRole)
+			throw new InvalidInputException("Only the admin of a game can test the game.");
+		if(userRole instanceof Player && aGame.getPlayer() == null) 
+			throw new InvalidInputException("Admin privileges are required to test a game");
 
+		aGame.play();
+		String userInputs = ui.takeInputs();
+		
+		while(aGame.getPlayStatus() == PlayStatus.Moving) {
+			ui.takeInputs();
+			updatePaddlePosition(userInputs);
+			aGame.move();
+			
+			if(userInputs.contains(" ")) {
+				aGame.pause();
+			}
+//			wait(); doesnt work
+			ui.refresh();
+		}
+		if(aGame.getPlayStatus() == PlayStatus.GameOver) {
+			Block223Application.setCurrentPlayableGame(null);
+		}
+		else {
+			Block223 block223 = Block223Application.getBlock223();
+			Block223Persistence.save(block223);
+		}
 	}
 
 	public static void testGame(Block223PlayModeInterface ui) throws InvalidInputException {
@@ -682,6 +717,8 @@ public class Block223Controller {
 	// play mode TODO
 
 	public static List<TOPlayableGame> getPlayableGames() throws InvalidInputException {
+		Block223 block223 = Block223Application.getBlock223();
+		
 		return null;
 	}
 
@@ -722,6 +759,21 @@ public class Block223Controller {
 			}
 		}
 		return null;
+	}
+	//TUDZ
+	private static void updatePaddlePosition(String userInputs) {
+		PlayedGame aGame = Block223Application.getCurrentPlayableGame();
+		int r = 0, l = 0;
+		for(int i = 0; i < userInputs.length(); i++) {
+			char c = userInputs.charAt(i);
+			if(c == ' ')
+				break;
+			if(c == 'l')
+				l++;
+			if(c == 'r')
+				r++;
+		}
+		aGame.setCurrentPaddleX(aGame.getCurrentBallX()+(aGame.PADDLE_MOVE_LEFT * l) + (aGame.PADDLE_MOVE_RIGHT * r));
 	}
 
 }
