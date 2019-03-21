@@ -1,40 +1,23 @@
 namespace ca.mcgill.ecse223.block.model;
 
-
+use Block223PlayMode.ump;
 use Block223Persistence.ump;
-use Block223Play.ump;
-use Block223StateMachine.ump;
+use Block223States.ump;
 
-class Block223{
+class Block223 {
    1 <@>- * User users;
    1 <@>- * UserRole roles;
    1 <@>- * Game games;
-
 }
 
 class User {
    unique username;
    1 -> 1..2 UserRole roles;
-   /*
-   before constructor, setUsername{
-   		if(getWithUsername(aUsername) != null){
-   			throw new RuntimeException("The username has already been taken");
-   		}
-   	}
-   	before constructor, setUsername {
-    	if (aUsername == null || aUsername.length() == 0) {
-	  		throw new RuntimeException("The username must be specified.");
-		}
-	}
-   	*/
-   		
 }
 
 class UserRole {
    abstract;
    password;
-
-   		
 }
 
 class Admin {
@@ -43,13 +26,6 @@ class Admin {
 
 class Player {
    isA UserRole;
-   /*
-      before constructor, setPassword{
-   		if (aPassword == null || aPassword.length() == 0){
-   			throw new RuntimeException("The player password needs to be specified.");
-   		}
-   	}
-   	*/
 }
 
 class Game {
@@ -60,24 +36,6 @@ class Game {
    const Integer COLUMNS_PADDING = 5;
    const Integer ROW_PADDING = 2;
    unique name;
-   /*
-   before constructor, setName {
-    	if (aName == null || aName.length() == 0) {
-	  		throw new RuntimeException("The name of a game must be specified.");
-		}
-	}
-	before constructor, setNrBlocksPerLevel{
-		if (aNrBlocksPerLevel <= 0){
-  			throw new RuntimeException("The number of blocks per level must be greater than zero.");
-  		}
-  	}
-  	before getLevel {
-    	if ( index < 0 || index > (levels.size()-1)) {
-			throw new IndexOutOfBoundsException("Level " + index+1 + " does not exist for the game");
-		}
-	}
-	*/		
-		
    Integer nrBlocksPerLevel;
    * -- 1 Admin admin;
    1 <@>- * Block blocks;
@@ -108,28 +66,6 @@ class Level {
 class BlockAssignment {
    Integer gridHorizontalPosition;
    Integer gridVerticalPosition;
-   /*
-   before setGridHorizontalPosition {
-	   	//One column padding between each block=>(Max# - 1) column paddings
-	   	//1 wall padding on each side=> 2 wall paddings
-	    int maxNumberHorizontalBlocks = (Game.PLAY_AREA_SIDE + Game.COLUMNS_PADDING - 2 * Game.WALL_PADDING) / (Block.SIZE+Game.COLUMNS_PADDING);
-	    if ( aGridHorizontalPosition <= 0 || aGridHorizontalPosition > maxNumberHorizontalBlocks ) {
-			throw new RuntimeException("The horizontal position must be between 1 and " + maxNumberHorizontalBlocks + ".");
-		}
-	}	
-	before setGridVerticalPosition {
-		//1 Row between each block = > ( Max# - 1) row paddings
-		//1 wall padding at the top
-		//1 paddle at the bottom
-		//1 ball at the bottom
-		//Vertical distance necessary below the paddle
-		
-	    int maxNumberVerticalBlocks = (Game.PLAY_AREA_SIDE + Game.ROW_PADDING - Paddle.PADDLE_WIDTH - Paddle.VERTICAL_DISTANCE - Ball.BALL_DIAMETER - Game.WALL_PADDING) / (Block.SIZE+Game.ROW_PADDING);
-	    if ( aGridVerticalPosition <= 0 || aGridVerticalPosition > maxNumberVerticalBlocks ) {
-	 		throw new RuntimeException("The vertical position must be between 1 and " + maxNumberVerticalBlocks + ".");
-		}
-	}
-	*/
    * -- 1 Level level;
    * -- 1 Block block;
 }
@@ -139,23 +75,6 @@ class Ball {
    Integer minBallSpeedX;
    Integer minBallSpeedY;
    Double ballSpeedIncreaseFactor;
-   /*
-   	before constructor, setMinBallSpeedX{
-		if (aMinBallSpeedX <= 0){
-  			throw new RuntimeException("The minimum speed of the ball mut be greater than zero.");
-  		}
-  	}
-	before constructor, setMinBallSpeedY{
-		if (aMinBallSpeedY <= 0){
-  			throw new RuntimeException("The minimum speed of the ball mut be greater than zero.");
-  		}
-  	}
-	before constructor, setBallSpeedIncreaseFactor{
-		if (aBallSpeedIncreaseFactor <= 0){
-  			throw new RuntimeException("The speed increase factor of the ball mut be greater than zero.");
-  		}
-  	}
-   */
 }
 
 class Paddle {
@@ -163,22 +82,4 @@ class Paddle {
    const Integer VERTICAL_DISTANCE = 30;
    Integer maxPaddleLength;
    Integer minPaddleLength;
-   /*
-   	before constructor, setMaxPaddleLength{
-		if (aMaxPaddleLength <= 0 || aMaxPaddleLength > 390){
-  			throw new RuntimeException("The maximum length of the paddle be greater than zero and less than or equal to 390.");
-  		}
-  	}
-	before constructor, setMinPaddleLength{
-		if (aMinPaddleLength <= 0){
-  			throw new RuntimeException("The minimum length of the paddle be greater than zero.");
-  		}
-  	}
-   */
-}
-
-class HallOfFame{
- 1 -- 1 Game game;
- 1 -- * PlayerInPlay entries;
- 
 }

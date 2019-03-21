@@ -5,8 +5,8 @@ package ca.mcgill.ecse223.block.model;
 import java.io.Serializable;
 import java.util.*;
 
-// line 9 "../../../../../Block223Persistence.ump"
-// line 137 "../../../../../Block223.ump"
+// line 85 "../../../../../Block223Persistence.ump"
+// line 73 "../../../../../Block223.ump"
 public class Ball implements Serializable
 {
 
@@ -44,12 +44,12 @@ public class Ball implements Serializable
     game = aGame;
   }
 
-  public Ball(int aMinBallSpeedX, int aMinBallSpeedY, double aBallSpeedIncreaseFactor, String aNameForGame, int aNrBlocksPerLevelForGame, Admin aAdminForGame, Paddle aPaddleForGame, Block223 aBlock223ForGame, HallOfFame aHallOfFameForGame)
+  public Ball(int aMinBallSpeedX, int aMinBallSpeedY, double aBallSpeedIncreaseFactor, String aNameForGame, int aNrBlocksPerLevelForGame, Admin aAdminForGame, Paddle aPaddleForGame, Block223 aBlock223ForGame)
   {
     minBallSpeedX = aMinBallSpeedX;
     minBallSpeedY = aMinBallSpeedY;
     ballSpeedIncreaseFactor = aBallSpeedIncreaseFactor;
-    game = new Game(aNameForGame, aNrBlocksPerLevelForGame, aAdminForGame, this, aPaddleForGame, aBlock223ForGame, aHallOfFameForGame);
+    game = new Game(aNameForGame, aNrBlocksPerLevelForGame, aAdminForGame, this, aPaddleForGame, aBlock223ForGame);
   }
 
   //------------------------
@@ -123,8 +123,8 @@ public class Ball implements Serializable
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 12 "../../../../../Block223Persistence.ump"
-  private static final long serialVersionUID = 6076580571713169673L ;
+  // line 88 "../../../../../Block223Persistence.ump"
+  private static final long serialVersionUID = 7342002601644000501L ;
 
   
 }

@@ -5,8 +5,8 @@ package ca.mcgill.ecse223.block.model;
 import java.io.Serializable;
 import java.util.*;
 
-// line 68 "../../../../../Block223Persistence.ump"
-// line 161 "../../../../../Block223.ump"
+// line 91 "../../../../../Block223Persistence.ump"
+// line 80 "../../../../../Block223.ump"
 public class Paddle implements Serializable
 {
 
@@ -43,11 +43,11 @@ public class Paddle implements Serializable
     game = aGame;
   }
 
-  public Paddle(int aMaxPaddleLength, int aMinPaddleLength, String aNameForGame, int aNrBlocksPerLevelForGame, Admin aAdminForGame, Ball aBallForGame, Block223 aBlock223ForGame, HallOfFame aHallOfFameForGame)
+  public Paddle(int aMaxPaddleLength, int aMinPaddleLength, String aNameForGame, int aNrBlocksPerLevelForGame, Admin aAdminForGame, Ball aBallForGame, Block223 aBlock223ForGame)
   {
     maxPaddleLength = aMaxPaddleLength;
     minPaddleLength = aMinPaddleLength;
-    game = new Game(aNameForGame, aNrBlocksPerLevelForGame, aAdminForGame, aBallForGame, this, aBlock223ForGame, aHallOfFameForGame);
+    game = new Game(aNameForGame, aNrBlocksPerLevelForGame, aAdminForGame, aBallForGame, this, aBlock223ForGame);
   }
 
   //------------------------
@@ -107,8 +107,8 @@ public class Paddle implements Serializable
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 71 "../../../../../Block223Persistence.ump"
-  private static final long serialVersionUID = 4417469660219235016L ;
+  // line 94 "../../../../../Block223Persistence.ump"
+  private static final long serialVersionUID = 8062668971918939261L ;
 
   
 }

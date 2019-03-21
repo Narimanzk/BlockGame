@@ -1,59 +1,59 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.29.0.4181.a593105a9 modeling language!*/
 
-package ca.mcgill.ecse223.block.model;
+package ca.mcgill.ecse223.block.controller;
 import java.util.*;
 
-// line 180 "../../../../../Block223.ump"
-public class HallOfFame
+// line 32 "../../../../../Block223TransferObjectsPlayMode.ump"
+public class TOHallOfFame
 {
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
-  //HallOfFame Associations
-  private Game game;
-  private List<PlayerInPlay> entries;
+  //TOHallOfFame Attributes
+  private String gamename;
+
+  //TOHallOfFame Associations
+  private List<TOHallOfFameEntry> entries;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public HallOfFame(Game aGame)
+  public TOHallOfFame(String aGamename)
   {
-    if (aGame == null || aGame.getHallOfFame() != null)
-    {
-      throw new RuntimeException("Unable to create HallOfFame due to aGame");
-    }
-    game = aGame;
-    entries = new ArrayList<PlayerInPlay>();
-  }
-
-  public HallOfFame(String aNameForGame, int aNrBlocksPerLevelForGame, Admin aAdminForGame, Ball aBallForGame, Paddle aPaddleForGame, Block223 aBlock223ForGame)
-  {
-    game = new Game(aNameForGame, aNrBlocksPerLevelForGame, aAdminForGame, aBallForGame, aPaddleForGame, aBlock223ForGame, this);
-    entries = new ArrayList<PlayerInPlay>();
+    gamename = aGamename;
+    entries = new ArrayList<TOHallOfFameEntry>();
   }
 
   //------------------------
   // INTERFACE
   //------------------------
-  /* Code from template association_GetOne */
-  public Game getGame()
+
+  public boolean setGamename(String aGamename)
   {
-    return game;
+    boolean wasSet = false;
+    gamename = aGamename;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public String getGamename()
+  {
+    return gamename;
   }
   /* Code from template association_GetMany */
-  public PlayerInPlay getEntry(int index)
+  public TOHallOfFameEntry getEntry(int index)
   {
-    PlayerInPlay aEntry = entries.get(index);
+    TOHallOfFameEntry aEntry = entries.get(index);
     return aEntry;
   }
 
-  public List<PlayerInPlay> getEntries()
+  public List<TOHallOfFameEntry> getEntries()
   {
-    List<PlayerInPlay> newEntries = Collections.unmodifiableList(entries);
+    List<TOHallOfFameEntry> newEntries = Collections.unmodifiableList(entries);
     return newEntries;
   }
 
@@ -69,7 +69,7 @@ public class HallOfFame
     return has;
   }
 
-  public int indexOfEntry(PlayerInPlay aEntry)
+  public int indexOfEntry(TOHallOfFameEntry aEntry)
   {
     int index = entries.indexOf(aEntry);
     return index;
@@ -80,20 +80,20 @@ public class HallOfFame
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public PlayerInPlay addEntry(String aPassword, Block223 aBlock223, int aPoints, int aLivesLeft, String aName)
+  public TOHallOfFameEntry addEntry(int aPosition, String aPlayername, int aScore)
   {
-    return new PlayerInPlay(aPassword, aBlock223, aPoints, aLivesLeft, aName, this);
+    return new TOHallOfFameEntry(aPosition, aPlayername, aScore, this);
   }
 
-  public boolean addEntry(PlayerInPlay aEntry)
+  public boolean addEntry(TOHallOfFameEntry aEntry)
   {
     boolean wasAdded = false;
     if (entries.contains(aEntry)) { return false; }
-    HallOfFame existingHallOfFame = aEntry.getHallOfFame();
-    boolean isNewHallOfFame = existingHallOfFame != null && !this.equals(existingHallOfFame);
-    if (isNewHallOfFame)
+    TOHallOfFame existingTOHallOfFame = aEntry.getTOHallOfFame();
+    boolean isNewTOHallOfFame = existingTOHallOfFame != null && !this.equals(existingTOHallOfFame);
+    if (isNewTOHallOfFame)
     {
-      aEntry.setHallOfFame(this);
+      aEntry.setTOHallOfFame(this);
     }
     else
     {
@@ -103,11 +103,11 @@ public class HallOfFame
     return wasAdded;
   }
 
-  public boolean removeEntry(PlayerInPlay aEntry)
+  public boolean removeEntry(TOHallOfFameEntry aEntry)
   {
     boolean wasRemoved = false;
-    //Unable to remove aEntry, as it must always have a hallOfFame
-    if (!this.equals(aEntry.getHallOfFame()))
+    //Unable to remove aEntry, as it must always have a tOHallOfFame
+    if (!this.equals(aEntry.getTOHallOfFame()))
     {
       entries.remove(aEntry);
       wasRemoved = true;
@@ -115,7 +115,7 @@ public class HallOfFame
     return wasRemoved;
   }
   /* Code from template association_AddIndexControlFunctions */
-  public boolean addEntryAt(PlayerInPlay aEntry, int index)
+  public boolean addEntryAt(TOHallOfFameEntry aEntry, int index)
   {  
     boolean wasAdded = false;
     if(addEntry(aEntry))
@@ -129,7 +129,7 @@ public class HallOfFame
     return wasAdded;
   }
 
-  public boolean addOrMoveEntryAt(PlayerInPlay aEntry, int index)
+  public boolean addOrMoveEntryAt(TOHallOfFameEntry aEntry, int index)
   {
     boolean wasAdded = false;
     if(entries.contains(aEntry))
@@ -149,17 +149,17 @@ public class HallOfFame
 
   public void delete()
   {
-    Game existingGame = game;
-    game = null;
-    if (existingGame != null)
-    {
-      existingGame.delete();
-    }
     for(int i=entries.size(); i > 0; i--)
     {
-      PlayerInPlay aEntry = entries.get(i - 1);
+      TOHallOfFameEntry aEntry = entries.get(i - 1);
       aEntry.delete();
     }
   }
 
+
+  public String toString()
+  {
+    return super.toString() + "["+
+            "gamename" + ":" + getGamename()+ "]";
+  }
 }

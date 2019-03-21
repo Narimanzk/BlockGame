@@ -4,8 +4,8 @@
 package ca.mcgill.ecse223.block.model;
 import java.io.Serializable;
 
-// line 42 "../../../../../Block223Persistence.ump"
-// line 108 "../../../../../Block223.ump"
+// line 79 "../../../../../Block223Persistence.ump"
+// line 66 "../../../../../Block223.ump"
 public class BlockAssignment implements Serializable
 {
 
@@ -185,8 +185,8 @@ public class BlockAssignment implements Serializable
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 45 "../../../../../Block223Persistence.ump"
-  private static final long serialVersionUID = 1767133221150421445L ;
+  // line 82 "../../../../../Block223Persistence.ump"
+  private static final long serialVersionUID = -6011556325373584641L ;
 
   
 }

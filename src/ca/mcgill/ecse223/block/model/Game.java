@@ -5,8 +5,9 @@ package ca.mcgill.ecse223.block.model;
 import java.io.Serializable;
 import java.util.*;
 
-// line 48 "../../../../../Block223Persistence.ump"
-// line 55 "../../../../../Block223.ump"
+// line 6 "../../../../../Block223PlayMode.ump"
+// line 42 "../../../../../Block223Persistence.ump"
+// line 31 "../../../../../Block223.ump"
 public class Game implements Serializable
 {
 
@@ -35,26 +36,40 @@ public class Game implements Serializable
   //------------------------
 
   //Game Attributes
+  private boolean published;
   private String name;
   private int nrBlocksPerLevel;
+  private Comparator<HallOfFameEntry> hallOfFameEntriesPriority;
 
   //Game Associations
+  private HallOfFameEntry mostRecentEntry;
   private Admin admin;
   private List<Block> blocks;
   private List<Level> levels;
   private List<BlockAssignment> blockAssignments;
   private Ball ball;
   private Paddle paddle;
+  private List<PlayedGame> playedGames;
+  private List<HallOfFameEntry> hallOfFameEntries;
   private Block223 block223;
-  private HallOfFame hallOfFame;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Game(String aName, int aNrBlocksPerLevel, Admin aAdmin, Ball aBall, Paddle aPaddle, Block223 aBlock223, HallOfFame aHallOfFame)
+  public Game(String aName, int aNrBlocksPerLevel, Admin aAdmin, Ball aBall, Paddle aPaddle, Block223 aBlock223)
   {
+    published = false;
     nrBlocksPerLevel = aNrBlocksPerLevel;
+    hallOfFameEntriesPriority = 
+      new Comparator<HallOfFameEntry>(){
+        @Override
+        public int compare(HallOfFameEntry arg0, HallOfFameEntry arg1)
+        {
+          return ((Integer)arg0.getScore()).compareTo(
+                 ((Integer)arg1.getScore()));
+        }
+      };
     if (!setName(aName))
     {
       throw new RuntimeException("Cannot create due to duplicate name");
@@ -77,22 +92,29 @@ public class Game implements Serializable
       throw new RuntimeException("Unable to create Game due to aPaddle");
     }
     paddle = aPaddle;
+    playedGames = new ArrayList<PlayedGame>();
+    hallOfFameEntries = new ArrayList<HallOfFameEntry>();
     boolean didAddBlock223 = setBlock223(aBlock223);
     if (!didAddBlock223)
     {
       throw new RuntimeException("Unable to create game due to block223");
     }
-    if (aHallOfFame == null || aHallOfFame.getGame() != null)
-    {
-      throw new RuntimeException("Unable to create Game due to aHallOfFame");
-    }
-    hallOfFame = aHallOfFame;
   }
 
   public Game(String aName, int aNrBlocksPerLevel, Admin aAdmin, int aMinBallSpeedXForBall, int aMinBallSpeedYForBall, double aBallSpeedIncreaseFactorForBall, int aMaxPaddleLengthForPaddle, int aMinPaddleLengthForPaddle, Block223 aBlock223)
   {
+    published = false;
     name = aName;
     nrBlocksPerLevel = aNrBlocksPerLevel;
+    hallOfFameEntriesPriority = 
+      new Comparator<HallOfFameEntry>(){
+        @Override
+        public int compare(HallOfFameEntry arg0, HallOfFameEntry arg1)
+        {
+          return ((Integer)arg0.getScore()).compareTo(
+                 ((Integer)arg1.getScore()));
+        }
+      };
     boolean didAddAdmin = setAdmin(aAdmin);
     if (!didAddAdmin)
     {
@@ -103,17 +125,26 @@ public class Game implements Serializable
     blockAssignments = new ArrayList<BlockAssignment>();
     ball = new Ball(aMinBallSpeedXForBall, aMinBallSpeedYForBall, aBallSpeedIncreaseFactorForBall, this);
     paddle = new Paddle(aMaxPaddleLengthForPaddle, aMinPaddleLengthForPaddle, this);
+    playedGames = new ArrayList<PlayedGame>();
+    hallOfFameEntries = new ArrayList<HallOfFameEntry>();
     boolean didAddBlock223 = setBlock223(aBlock223);
     if (!didAddBlock223)
     {
       throw new RuntimeException("Unable to create game due to block223");
     }
-    hallOfFame = new HallOfFame(this);
   }
 
   //------------------------
   // INTERFACE
   //------------------------
+
+  public boolean setPublished(boolean aPublished)
+  {
+    boolean wasSet = false;
+    published = aPublished;
+    wasSet = true;
+    return wasSet;
+  }
 
   public boolean setName(String aName)
   {
@@ -139,6 +170,19 @@ public class Game implements Serializable
     return wasSet;
   }
 
+  public boolean setHallOfFameEntriesPriority(Comparator<HallOfFameEntry> aHallOfFameEntriesPriority)
+  {
+    boolean wasSet = false;
+    hallOfFameEntriesPriority = aHallOfFameEntriesPriority;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public boolean getPublished()
+  {
+    return published;
+  }
+
   public String getName()
   {
     return name;
@@ -154,26 +198,30 @@ public class Game implements Serializable
     return getWithName(aName) != null;
   }
 
-  /**
-   * before constructor, setName {
-   * if (aName == null || aName.length() == 0) {
-   * throw new RuntimeException("The name of a game must be specified.");
-   * }
-   * 
-   * before constructor, setNrBlocksPerLevel{
-   * if (aNrBlocksPerLevel <= 0){
-   * throw new RuntimeException("The number of blocks per level must be greater than zero.");
-   * }
-   * }
-   * before getLevel {
-   * if ( index < 0 || index > (levels.size()-1)) {
-   * throw new IndexOutOfBoundsException("Level " + index+1 + " does not exist for the game");
-   * }
-   * 
-   */
   public int getNrBlocksPerLevel()
   {
     return nrBlocksPerLevel;
+  }
+
+  public Comparator<HallOfFameEntry> getHallOfFameEntriesPriority()
+  {
+    return hallOfFameEntriesPriority;
+  }
+  /* Code from template attribute_IsBoolean */
+  public boolean isPublished()
+  {
+    return published;
+  }
+  /* Code from template association_GetOne */
+  public HallOfFameEntry getMostRecentEntry()
+  {
+    return mostRecentEntry;
+  }
+
+  public boolean hasMostRecentEntry()
+  {
+    boolean has = mostRecentEntry != null;
+    return has;
   }
   /* Code from template association_GetOne */
   public Admin getAdmin()
@@ -280,15 +328,78 @@ public class Game implements Serializable
   {
     return paddle;
   }
+  /* Code from template association_GetMany */
+  public PlayedGame getPlayedGame(int index)
+  {
+    PlayedGame aPlayedGame = playedGames.get(index);
+    return aPlayedGame;
+  }
+
+  public List<PlayedGame> getPlayedGames()
+  {
+    List<PlayedGame> newPlayedGames = Collections.unmodifiableList(playedGames);
+    return newPlayedGames;
+  }
+
+  public int numberOfPlayedGames()
+  {
+    int number = playedGames.size();
+    return number;
+  }
+
+  public boolean hasPlayedGames()
+  {
+    boolean has = playedGames.size() > 0;
+    return has;
+  }
+
+  public int indexOfPlayedGame(PlayedGame aPlayedGame)
+  {
+    int index = playedGames.indexOf(aPlayedGame);
+    return index;
+  }
+  /* Code from template association_GetMany */
+  public HallOfFameEntry getHallOfFameEntry(int index)
+  {
+    HallOfFameEntry aHallOfFameEntry = hallOfFameEntries.get(index);
+    return aHallOfFameEntry;
+  }
+
+  public List<HallOfFameEntry> getHallOfFameEntries()
+  {
+    List<HallOfFameEntry> newHallOfFameEntries = Collections.unmodifiableList(hallOfFameEntries);
+    return newHallOfFameEntries;
+  }
+
+  public int numberOfHallOfFameEntries()
+  {
+    int number = hallOfFameEntries.size();
+    return number;
+  }
+
+  public boolean hasHallOfFameEntries()
+  {
+    boolean has = hallOfFameEntries.size() > 0;
+    return has;
+  }
+
+  public int indexOfHallOfFameEntry(HallOfFameEntry aHallOfFameEntry)
+  {
+    int index = hallOfFameEntries.indexOf(aHallOfFameEntry);
+    return index;
+  }
   /* Code from template association_GetOne */
   public Block223 getBlock223()
   {
     return block223;
   }
-  /* Code from template association_GetOne */
-  public HallOfFame getHallOfFame()
+  /* Code from template association_SetUnidirectionalOptionalOne */
+  public boolean setMostRecentEntry(HallOfFameEntry aNewMostRecentEntry)
   {
-    return hallOfFame;
+    boolean wasSet = false;
+    mostRecentEntry = aNewMostRecentEntry;
+    wasSet = true;
+    return wasSet;
   }
   /* Code from template association_SetOneToMany */
   public boolean setAdmin(Admin aAdmin)
@@ -561,6 +672,122 @@ public class Game implements Serializable
     }
     return wasAdded;
   }
+  /* Code from template association_MinimumNumberOfMethod */
+  public static int minimumNumberOfPlayedGames()
+  {
+    return 0;
+  }
+  /* Code from template association_AddManyToOne */
+  public PlayedGame addPlayedGame(String aPlayername, Block223 aBlock223)
+  {
+    return new PlayedGame(aPlayername, this, aBlock223);
+  }
+
+  public boolean addPlayedGame(PlayedGame aPlayedGame)
+  {
+    boolean wasAdded = false;
+    if (playedGames.contains(aPlayedGame)) { return false; }
+    Game existingGame = aPlayedGame.getGame();
+    boolean isNewGame = existingGame != null && !this.equals(existingGame);
+    if (isNewGame)
+    {
+      aPlayedGame.setGame(this);
+    }
+    else
+    {
+      playedGames.add(aPlayedGame);
+    }
+    wasAdded = true;
+    return wasAdded;
+  }
+
+  public boolean removePlayedGame(PlayedGame aPlayedGame)
+  {
+    boolean wasRemoved = false;
+    //Unable to remove aPlayedGame, as it must always have a game
+    if (!this.equals(aPlayedGame.getGame()))
+    {
+      playedGames.remove(aPlayedGame);
+      wasRemoved = true;
+    }
+    return wasRemoved;
+  }
+  /* Code from template association_AddIndexControlFunctions */
+  public boolean addPlayedGameAt(PlayedGame aPlayedGame, int index)
+  {  
+    boolean wasAdded = false;
+    if(addPlayedGame(aPlayedGame))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfPlayedGames()) { index = numberOfPlayedGames() - 1; }
+      playedGames.remove(aPlayedGame);
+      playedGames.add(index, aPlayedGame);
+      wasAdded = true;
+    }
+    return wasAdded;
+  }
+
+  public boolean addOrMovePlayedGameAt(PlayedGame aPlayedGame, int index)
+  {
+    boolean wasAdded = false;
+    if(playedGames.contains(aPlayedGame))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfPlayedGames()) { index = numberOfPlayedGames() - 1; }
+      playedGames.remove(aPlayedGame);
+      playedGames.add(index, aPlayedGame);
+      wasAdded = true;
+    } 
+    else 
+    {
+      wasAdded = addPlayedGameAt(aPlayedGame, index);
+    }
+    return wasAdded;
+  }
+  /* Code from template association_MinimumNumberOfMethod */
+  public static int minimumNumberOfHallOfFameEntries()
+  {
+    return 0;
+  }
+  /* Code from template association_AddManyToOne */
+  public HallOfFameEntry addHallOfFameEntry(int aScore, String aPlayername, Player aPlayer, Block223 aBlock223)
+  {
+    return new HallOfFameEntry(aScore, aPlayername, aPlayer, this, aBlock223);
+  }
+
+  public boolean addHallOfFameEntry(HallOfFameEntry aHallOfFameEntry)
+  {
+    boolean wasAdded = false;
+    if (hallOfFameEntries.contains(aHallOfFameEntry)) { return false; }
+    Game existingGame = aHallOfFameEntry.getGame();
+    boolean isNewGame = existingGame != null && !this.equals(existingGame);
+    if (isNewGame)
+    {
+      aHallOfFameEntry.setGame(this);
+    }
+    else
+    {
+      hallOfFameEntries.add(aHallOfFameEntry);
+    }
+    wasAdded = true;
+    if(wasAdded)
+        Collections.sort(hallOfFameEntries, hallOfFameEntriesPriority);
+    
+    return wasAdded;
+  }
+
+  public boolean removeHallOfFameEntry(HallOfFameEntry aHallOfFameEntry)
+  {
+    boolean wasRemoved = false;
+    //Unable to remove aHallOfFameEntry, as it must always have a game
+    if (!this.equals(aHallOfFameEntry.getGame()))
+    {
+      hallOfFameEntries.remove(aHallOfFameEntry);
+      wasRemoved = true;
+    }
+    return wasRemoved;
+  }
+
   /* Code from template association_SetOneToMany */
   public boolean setBlock223(Block223 aBlock223)
   {
@@ -584,6 +811,7 @@ public class Game implements Serializable
   public void delete()
   {
     gamesByName.remove(getName());
+    mostRecentEntry = null;
     Admin placeholderAdmin = admin;
     this.admin = null;
     if(placeholderAdmin != null)
@@ -623,21 +851,25 @@ public class Game implements Serializable
     {
       existingPaddle.delete();
     }
+    for(int i=playedGames.size(); i > 0; i--)
+    {
+      PlayedGame aPlayedGame = playedGames.get(i - 1);
+      aPlayedGame.delete();
+    }
+    for(int i=hallOfFameEntries.size(); i > 0; i--)
+    {
+      HallOfFameEntry aHallOfFameEntry = hallOfFameEntries.get(i - 1);
+      aHallOfFameEntry.delete();
+    }
     Block223 placeholderBlock223 = block223;
     this.block223 = null;
     if(placeholderBlock223 != null)
     {
       placeholderBlock223.removeGame(this);
     }
-    HallOfFame existingHallOfFame = hallOfFame;
-    hallOfFame = null;
-    if (existingHallOfFame != null)
-    {
-      existingHallOfFame.delete();
-    }
   }
 
-  // line 54 "../../../../../Block223Persistence.ump"
+  // line 48 "../../../../../Block223Persistence.ump"
    public static  void reinitializeGamesByName(List<Game> games){
     gamesByName = new HashMap<String, Game>();
     for (Game game : games) {
@@ -650,20 +882,22 @@ public class Game implements Serializable
   public String toString()
   {
     return super.toString() + "["+
+            "published" + ":" + getPublished()+ "," +
             "name" + ":" + getName()+ "," +
             "nrBlocksPerLevel" + ":" + getNrBlocksPerLevel()+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "hallOfFameEntriesPriority" + "=" + (getHallOfFameEntriesPriority() != null ? !getHallOfFameEntriesPriority().equals(this)  ? getHallOfFameEntriesPriority().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "mostRecentEntry = "+(getMostRecentEntry()!=null?Integer.toHexString(System.identityHashCode(getMostRecentEntry())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "admin = "+(getAdmin()!=null?Integer.toHexString(System.identityHashCode(getAdmin())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "ball = "+(getBall()!=null?Integer.toHexString(System.identityHashCode(getBall())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "paddle = "+(getPaddle()!=null?Integer.toHexString(System.identityHashCode(getPaddle())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "block223 = "+(getBlock223()!=null?Integer.toHexString(System.identityHashCode(getBlock223())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "hallOfFame = "+(getHallOfFame()!=null?Integer.toHexString(System.identityHashCode(getHallOfFame())):"null");
+            "  " + "block223 = "+(getBlock223()!=null?Integer.toHexString(System.identityHashCode(getBlock223())):"null");
   }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 51 "../../../../../Block223Persistence.ump"
-  private static final long serialVersionUID = 6884475053231046252L ;
+  // line 45 "../../../../../Block223Persistence.ump"
+  private static final long serialVersionUID = -210105651472293481L ;
 
   
 }

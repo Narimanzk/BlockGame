@@ -20,14 +20,12 @@ import ca.mcgill.ecse223.block.model.User;
 import ca.mcgill.ecse223.block.model.UserRole;
 */
 import ca.mcgill.ecse223.block.persistence.Block223Persistence;
-
 public class Block223Controller {
 
 	// ****************************
 	// Modifier methods
 	// ****************************
-	// TUDOR
-	public static void createGame(String name) throws InvalidInputException, RuntimeException {
+	public static void createGame(String name) throws InvalidInputException {
 		Block223 block223 = Block223Application.getBlock223();
 		UserRole userRole = Block223Application.getCurrentUserRole();
 		Game aGame = findGame(name);
@@ -45,7 +43,6 @@ public class Block223Controller {
 		block223.addGame(game);
 	}
 
-	// TUDOR
 	public static void setGameDetails(int nrLevels, int nrBlocksPerLevel, int minBallSpeedX, int minBallSpeedY,
 			Double ballSpeedIncreaseFactor, int maxPaddleLength, int minPaddleLength) throws InvalidInputException {
 		Block223 block223 = Block223Application.getBlock223();
@@ -116,9 +113,8 @@ public class Block223Controller {
 		}
 	}
 
-	// Narry
 	public static void deleteGame(String name) throws InvalidInputException {
-		String error = "";
+				String error = "";
 		if (!(Block223Application.getCurrentUserRole() instanceof Admin)) {
 			error += "Admin privileges are required to delete a game.";
 		}
@@ -139,9 +135,8 @@ public class Block223Controller {
 		}
 	}
 
-	// Narry
 	public static void selectGame(String name) throws InvalidInputException {
-		String error = "";
+				String error = "";
 		
 		if (!(Block223Application.getCurrentUserRole() instanceof Admin)) {
 			error += "Admin privileges are required to select a game.";
@@ -164,12 +159,12 @@ public class Block223Controller {
 			throw new InvalidInputException(error.trim());
 		}
 		Block223Application.setCurrentGame(game);
+
 	}
 
-	// Narry
 	public static void updateGame(String name, int nrLevels, int nrBlocksPerLevel, int minBallSpeedX, int minBallSpeedY,
 			Double ballSpeedIncreaseFactor, int maxPaddleLength, int minPaddleLength) throws InvalidInputException {
-		String error = "";
+				String error = "";
 		if (!(Block223Application.getCurrentUserRole() instanceof Admin))
 			error += "Admin priviliges are required to define game settings.";
 		if (Block223Application.getCurrentGame() == null)
@@ -193,12 +188,10 @@ public class Block223Controller {
 		}
 		setGameDetails(nrLevels, nrBlocksPerLevel, minBallSpeedX, minBallSpeedY, ballSpeedIncreaseFactor,
 				maxPaddleLength, minPaddleLength);
-
 	}
 
-	// Charles McC
 	public static void addBlock(int red, int green, int blue, int points) throws InvalidInputException {
-		String error = "";
+				String error = "";
 		if (red > 255 || red < 0) {
 			error = error + "Red must be between 0 and 255. ";
 		}
@@ -224,9 +217,8 @@ public class Block223Controller {
 		}
 	}
 
-	// Charles McC
 	public static void deleteBlock(int id) throws InvalidInputException {
-		Block223 block223 = Block223Application.getBlock223();
+				Block223 block223 = Block223Application.getBlock223();
 		Game gameToChange = Block223Application.getCurrentGame();
 		List<Block> blocks = gameToChange.getBlocks();
 		Block toDelete = null;
@@ -243,9 +235,9 @@ public class Block223Controller {
 		//BlockApplication.getCurrentGame().removeBlock(toDelete);// calling custom getBlock method
 	}
 
-	// Charles L
 	public static void updateBlock(int id, int red, int green, int blue, int points) throws InvalidInputException {
-		String error = "";
+
+			String error = "";
 		if (!(Block223Application.getCurrentUserRole() instanceof Admin))
 			throw new InvalidInputException("Admin privileges are required to access game information. ");
 
@@ -291,10 +283,9 @@ public class Block223Controller {
 
 	}
 
-	// Charles L
 	public static void positionBlock(int id, int level, int gridHorizontalPosition, int gridVerticalPosition)
 			throws InvalidInputException {
-		if (!(Block223Application.getCurrentUserRole() instanceof Admin))
+	if (!(Block223Application.getCurrentUserRole() instanceof Admin))
 			throw new InvalidInputException("Admin privileges are required to access game information. ");
 
 		Block223 block223 = Block223Application.getBlock223();
@@ -344,10 +335,10 @@ public class Block223Controller {
 		}
 	}
 
-	// MATT:
+
 	public static void moveBlock(int level, int oldGridHorizontalPosition, int oldGridVerticalPosition,
 			int newGridHorizontalPosition, int newGridVerticalPosition) throws InvalidInputException {
-		// Error checking:
+				// Error checking:
 		String error = "";
 
 		Block223 block223 = Block223Application.getBlock223();
@@ -396,11 +387,9 @@ public class Block223Controller {
 		}
 	}
 
-	// MATT:
 	public static void removeBlock(int level, int gridHorizontalPosition, int gridVerticalPosition)
 			throws InvalidInputException {
-
-		Block223 block223 = Block223Application.getBlock223();
+					Block223 block223 = Block223Application.getBlock223();
 		// Error checking:
 		String error = "";
 		// Needs to be an admin.
@@ -430,7 +419,6 @@ public class Block223Controller {
 		}
 	}
 
-	// Aly
 	public static void saveGame() throws InvalidInputException {
 		String error = "";
 		Block223 block223 = Block223Application.getBlock223();
@@ -449,12 +437,12 @@ public class Block223Controller {
 		} catch (RuntimeException e) {
 			throw new InvalidInputException(e.getMessage());
 		}
+
 	}
 
-	// TUDOR
 	public static void register(String username, String playerPassword, String adminPassword)
 			throws InvalidInputException {
-		String error = "";
+						String error = "";
 		UserRole userRole = Block223Application.getCurrentUserRole();
 
 		if (userRole != null)
@@ -485,10 +473,8 @@ public class Block223Controller {
 
 	}
 
-
-	// TUDOR
 	public static void login(String username, String password) throws InvalidInputException {
-		String error = "";
+				String error = "";
 
 		Block223 block223 = Block223Application.getBlock223();
 		UserRole userRole = Block223Application.getCurrentUserRole();
@@ -514,17 +500,29 @@ public class Block223Controller {
 			throw new InvalidInputException("The username and password do not match\n");
 	}
 
-	// TUDOR
-	public static void logout() { // Tudor did this God function
-		Block223Application.setCurrentUserRole(null);
+	public static void logout() {
+				Block223Application.setCurrentUserRole(null);
+	}
+
+	// play mode
+
+	public static void selectPlayableGame(String name, int id) throws InvalidInputException  {
+	}
+
+	public static void startGame(Block223PlayModeInterface ui) throws InvalidInputException {
+	}
+
+	public static void testGame(Block223PlayModeInterface ui) throws InvalidInputException {
+	}
+
+	public static void publishGame () throws InvalidInputException {
 	}
 
 	// ****************************
 	// Query methods
 	// ****************************
-	// Narry
 	public static List<TOGame> getDesignableGames() throws InvalidInputException {
-		String error = "";
+				String error = "";
 		Block223 block223 = Block223Application.getBlock223();
 		Admin admin = (Admin) Block223Application.getCurrentUserRole();
 		if (admin == null) {
@@ -548,9 +546,8 @@ public class Block223Controller {
 		return result;
 	}
 
-	// Narry
 	public static TOGame getCurrentDesignableGame() throws InvalidInputException {
-		String error = "";
+				String error = "";
 		if (!(Block223Application.getCurrentUserRole() instanceof Admin))
 			error += "Admin priviliges are required to access game information.";
 		if (Block223Application.getCurrentGame() == null)
@@ -567,9 +564,8 @@ public class Block223Controller {
 		return to;
 	}
 
-	// Charles L
 	public static List<TOBlock> getBlocksOfCurrentDesignableGame() throws InvalidInputException {
-		if (!(Block223Application.getCurrentUserRole() instanceof Admin))
+				if (!(Block223Application.getCurrentUserRole() instanceof Admin))
 			throw new InvalidInputException("Admin privileges are required to access game information. ");
 
 		Game game = Block223Application.getCurrentGame();
@@ -590,9 +586,8 @@ public class Block223Controller {
 		return result;
 	}
 
-	// Charles L
 	public static TOBlock getBlockOfCurrentDesignableGame(int id) throws InvalidInputException {
-		if (!(Block223Application.getCurrentUserRole() instanceof Admin))
+				if (!(Block223Application.getCurrentUserRole() instanceof Admin))
 			throw new InvalidInputException("Admin privileges are required to access game information. ");
 
 		Game game = Block223Application.getCurrentGame();
@@ -620,9 +615,8 @@ public class Block223Controller {
 		return to;
 	}
 
-	// Charles L
-	public List<TOGridCell> getBlocksAtLevelOfCurrentDesignableGame(int level) throws InvalidInputException {
-		if (!(Block223Application.getCurrentUserRole() instanceof Admin))
+	public static List<TOGridCell> getBlocksAtLevelOfCurrentDesignableGame(int level) throws InvalidInputException {
+				if (!(Block223Application.getCurrentUserRole() instanceof Admin))
 			throw new InvalidInputException("Admin privileges are required to access game information. ");
 
 		Game game = Block223Application.getCurrentGame();
@@ -646,9 +640,8 @@ public class Block223Controller {
 		return result;
 	}
 
-	// Charles L
 	public static TOUserMode getUserMode() {
-		UserRole userRole = Block223Application.getCurrentUserRole();
+				UserRole userRole = Block223Application.getCurrentUserRole();
 		TOUserMode to = null;
 		if (userRole == null) {
 			to = new TOUserMode(Mode.None);
@@ -663,7 +656,22 @@ public class Block223Controller {
 		return to;
 	}
 
-	// Narry
+	// play mode
+
+	public static List<TOPlayableGame> getPlayableGames() throws InvalidInputException {
+	}
+
+	public static TOCurrentlyPlayedGame getCurrentPlayableGame() throws InvalidInputException {
+	}
+
+	public static TOHallOfFame getHallOfFame(int start, int end) throws InvalidInputException {
+	}
+
+	public static TOHallOfFame getHallOfFameWithMostRecentEntry(int numberOfEntries) throws InvalidInputException {
+	}
+
+	/////////// PRIVATE METHODS ///////////
+		// Narry
 	private static Game findGame(String name) {
 		Game foundGame = null;
 		for (Game game : Block223Application.getBlock223().getGames()) {
@@ -685,4 +693,5 @@ public class Block223Controller {
 		}
 		return null;
 	}
+
 }
