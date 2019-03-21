@@ -724,35 +724,37 @@ public class PlayedGame implements Serializable
 
   // line 37 "../../../../../Block223States.ump"
    private boolean isOutOfBoundsAndLastLife(){
-    // TODO implement
-    return false;
+    boolean outOfBounds = false;
+		if (getLives() == 1) {
+			outOfBounds = isOutOfBounds();
+		}
+		return outOfBounds;
   }
 
-  // line 42 "../../../../../Block223States.ump"
+  // line 45 "../../../../../Block223States.ump"
    private boolean isOutOfBounds(){
-    // TODO implement
-    return false;
+    return (this.getCurrentBallY() + Ball.BALL_DIAMETER > 390);
   }
 
-  // line 47 "../../../../../Block223States.ump"
+  // line 49 "../../../../../Block223States.ump"
    private boolean hitLastBlockAndLastLevel(){
     // TODO implement
     return false;
   }
 
-  // line 52 "../../../../../Block223States.ump"
+  // line 54 "../../../../../Block223States.ump"
    private boolean hitLastBlock(){
     // TODO implement
     return false;
   }
 
-  // line 57 "../../../../../Block223States.ump"
+  // line 59 "../../../../../Block223States.ump"
    private boolean hitBlock(){
     // TODO implement
     return false;
   }
 
-  // line 62 "../../../../../Block223States.ump"
+  // line 64 "../../../../../Block223States.ump"
    private boolean hitWall(){
     // TODO implement
     return false;
@@ -762,39 +764,50 @@ public class PlayedGame implements Serializable
   /**
    * Actions
    */
-  // line 69 "../../../../../Block223States.ump"
+  // line 71 "../../../../../Block223States.ump"
    private void doSetup(){
     // TODO implement
   }
 
-  // line 73 "../../../../../Block223States.ump"
+  // line 75 "../../../../../Block223States.ump"
    private void doHitPaddleOrWall(){
     // TODO implement
   }
 
-  // line 77 "../../../../../Block223States.ump"
+  // line 79 "../../../../../Block223States.ump"
    private void doOutOfBounds(){
-    // TODO implement
+    setLives(getLives()-1);
+		resetCurrentBallX();
+		resetCurrentBallY();
+		resetBallDirectionX();
+		resetBallDirectionY();
+		resetCurrentPaddleX();
   }
 
-  // line 81 "../../../../../Block223States.ump"
+  // line 88 "../../../../../Block223States.ump"
    private void doHitBlock(){
     // TODO implement
   }
 
-  // line 85 "../../../../../Block223States.ump"
+  // line 92 "../../../../../Block223States.ump"
    private void doHitBlockNextLevel(){
     // TODO implement
   }
 
-  // line 89 "../../../../../Block223States.ump"
+  // line 96 "../../../../../Block223States.ump"
    private void doHitNothingAndNotOutOfBounds(){
     // TODO implement
   }
 
-  // line 93 "../../../../../Block223States.ump"
+  // line 100 "../../../../../Block223States.ump"
    private void doGameOver(){
-    // TODO implement
+    Player p = getPlayer();
+		if (p != null) {
+			Game curGame = getGame();
+			HallOfFameEntry hof = new HallOfFameEntry(score,playername,p,game,block223);
+			curGame.setMostRecentEntry(hof);
+		}
+		delete();
   }
 
 
