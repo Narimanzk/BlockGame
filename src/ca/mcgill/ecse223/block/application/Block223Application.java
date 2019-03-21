@@ -12,6 +12,7 @@ public class Block223Application {
 	private static Block223 block223;
 	private static UserRole currentRole = null;
 	private static Game currentGame = null;
+	private static PlayedGame currentPlayableGame = null;
 	
 	public static void main(String[] args) {
 		// start UI
@@ -45,6 +46,12 @@ public class Block223Application {
 	}
 	public static Game getCurrentGame() {
 		return currentGame;
+	}
+	public static void setCurrentPlayableGame(PlayedGame aGame) {
+		currentPlayableGame = aGame;
+	}
+	public static PlayedGame getCurrentPlayableGame() {
+		return currentPlayableGame;
 	}
 	
 }
