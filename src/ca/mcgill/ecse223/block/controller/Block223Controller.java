@@ -594,7 +594,13 @@ public class Block223Controller {
 			if (userInputs.contains(" ")) {
 				aGame.pause();
 			}
-//			wait(); doesnt work
+			
+			try {
+				userInputs.wait((long) aGame.getWaitTime());
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			ui.refresh();
 		}
 		if (aGame.getPlayStatus() == PlayStatus.GameOver) {

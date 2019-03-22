@@ -712,6 +712,29 @@ public class PlayedGame implements Serializable
     }
   }
 
+  // line 46 "../../../../../Block223PlayMode.ump"
+   private void doSetup(){
+    resetCurrentBallX();
+	resetCurrentBallY();
+	resetBallDirectionX();
+	resetBallDirectionY();
+	resetCurrentPaddleX();
+	getGame();
+	Level level = game.getLevel(currentLevel-1);
+	List<BlockAssignment> assignments = level.getBlockAssignments();
+	
+	for(BlockAssignment a : assignments) {
+		PlayedBlockAssignment pblock = new PlayedBlockAssignment(
+				(Game.WALL_PADDING+Block.SIZE+Game.COLUMNS_PADDING) *(a.getGridHorizontalPosition()-1),
+				(Game.WALL_PADDING+Block.SIZE+Game.ROW_PADDING) *(a.getGridVerticalPosition()-1), a.getBlock(), this);
+	}
+	
+	while(numberOfBlocks() < game.getNrBlocksPerLevel()) {
+		//lets not be random no idea how to chekc if grid is taken TODO
+		PlayedBlockAssignment pblock = new PlayedBlockAssignment(0, 0, game.getRandomBlock(), this);
+	}
+  }
+
 
   /**
    * Guards
@@ -758,15 +781,6 @@ public class PlayedGame implements Serializable
    private boolean hitWall(){
     // TODO implement
     return false;
-  }
-
-
-  /**
-   * Actions
-   */
-  // line 71 "../../../../../Block223States.ump"
-   private void doSetup(){
-    // TODO implement
   }
 
   // line 75 "../../../../../Block223States.ump"

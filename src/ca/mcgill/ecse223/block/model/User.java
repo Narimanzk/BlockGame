@@ -4,9 +4,10 @@
 package ca.mcgill.ecse223.block.model;
 import java.io.Serializable;
 import java.util.*;
+import java.util.Map.Entry;
 
 // line 17 "../../../../../Block223Persistence.ump"
-// line 13 "../../../../../Block223.ump"
+// line 22 "../../../../../Block223.ump"
 public class User implements Serializable
 {
 
@@ -253,6 +254,18 @@ public class User implements Serializable
     for (User user : users) {
       usersByUsername.put(user.getUsername(), user);
     }
+  }
+
+  // line 26 "../../../../../Block223.ump"
+   public static  String findUsername(UserRole player){
+    String username = "";
+	   Map<User, String> newMap = new HashMap<>();
+	   for(Entry<String, User> entry : usersByUsername.entrySet()) {
+		   newMap.put(entry.getValue(), entry.getKey());
+	   }
+	   username =  newMap.get(player);
+	   
+	   return username;
   }
 
 
