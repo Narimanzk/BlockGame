@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.*;
 
 // line 57 "../../../../../Block223Persistence.ump"
-// line 48 "../../../../../Block223.ump"
+// line 76 "../../../../../Block223.ump"
 public class Block implements Serializable
 {
 
@@ -366,6 +366,17 @@ public class Block implements Serializable
       BlockAssignment aBlockAssignment = blockAssignments.get(i - 1);
       aBlockAssignment.delete();
     }
+  }
+
+  // line 62 "../../../../../Block223Persistence.ump"
+   public static  void reinitializeAutouniqueID(List<Block> blocks){
+    nextId = 0; 
+    for (Block block : blocks) {
+      if (block.getId() > nextId) {
+        nextId = block.getId();
+      }
+    }
+    nextId++;
   }
 
 

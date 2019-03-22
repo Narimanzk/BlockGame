@@ -58,6 +58,15 @@ class Block {
   depend java.io.Serializable;
   isA Serializable;
   private static final long serialVersionUID = 5332292624658907512L;
+  public static void reinitializeAutouniqueID(List<Block> blocks) {
+    nextId = 0; 
+    for (Block block : blocks) {
+      if (block.getId() > nextId) {
+        nextId = block.getId();
+      }
+    }
+    nextId++;
+  }
 }
 
 class Level {
@@ -66,7 +75,7 @@ class Level {
   private static final long serialVersionUID = -7956760334392179806L;
   
     public static void reinitializeAutouniqueID(List<Block> blocks) {
-    nextId = 0; 
+    Integer nextId = 0; 
     for (Block block : blocks) {
       if (block.getId() > nextId) {
         nextId = block.getId();

@@ -5,9 +5,11 @@ package ca.mcgill.ecse223.block.model;
 import java.io.Serializable;
 import java.util.*;
 
+import ca.mcgill.ecse223.block.application.Block223Application;
+
 // line 6 "../../../../../Block223PlayMode.ump"
 // line 42 "../../../../../Block223Persistence.ump"
-// line 31 "../../../../../Block223.ump"
+// line 50 "../../../../../Block223.ump"
 public class Game implements Serializable
 {
 
@@ -876,6 +878,17 @@ public class Game implements Serializable
       Block.reinitializeAutouniqueID(game.getBlocks());
       gamesByName.put(game.getName(), game);
     }
+  }
+
+  // line 66 "../../../../../Block223.ump"
+   public static  Block getRandomBlock(){
+    Game game = Block223Application.getCurrentGame();
+	   int max = game.getBlocks().size();
+	   Random rand = new Random();
+	   int n = rand.nextInt(max);
+	   Block block = game.getBlock(n);
+	   
+	   return block;
   }
 
 
