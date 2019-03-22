@@ -45,19 +45,47 @@ class PlayedGame {
 		return (this.getCurrentBallY() + Ball.BALL_DIAMETER > 390);
   }
   
-  private boolean hitLastBlockAndLastLevel() {
-    // TODO implement
+   private boolean hitLastBlockAndLastLevel(){
+	   Game game = getGame();
+	   int nrLevels = game.numberOfLevels();
+	   setBounce(null);
+	   if(nrLevels == currentLevel) {
+		   int nrBlocks = numberOfBlocks();
+		   if(nrBlocks == 1) {
+			   PlayedBlockAssignment block = getBlock(0);
+			   BouncePoint bp = calculateBouncePointBlock(block);
+			   setBounce(bp);
+			   return (bp != null);
+		   }
+	   }
     return false;
   }
   
-  private boolean hitLastBlock(){
-    // TODO implement
+   private boolean hitLastBlock(){
+	   int nrBlocks = numberOfBlocks();
+	   setBounce(null);
+	   if(nrBlocks==1) {
+		   PlayedBlockAssignment block = getBlock(0);
+		   BouncePoint bp = calculateBouncePointBlock(block);
+		   setBounce(bp);
+		   return (bp != null);
+	   }
     return false;
   }
   
-  private boolean hitBlock() {
-    // TODO implement
-    return false;
+  private boolean hitBlock(){
+	   int nrBlocks = numberOfBlocks();
+	   setBounce(null);
+	   for(int i=0;i<nrBlocks;i++) {
+		   PlayedBlockAssignment aBlock = getBlock(i);
+		   BouncePoint bp = calculateBouncePointBlock(aBlock);
+		   bounce = getBounce();
+		   boolean closer = isCloser(bp, bounce);
+		   if(closer) {
+			   setBounce(bp);
+		   }
+	   }
+    return (getBounce() != null);
   }
   
   private boolean hitWall() {
@@ -84,12 +112,26 @@ class PlayedGame {
 		resetCurrentPaddleX();
   }
 
-  private void doHitBlock() {
-    // TODO implement
+   private void doHitBlock(){
+	   int score = getScore();
+	   BouncePoint bounce = getBounce();
+	   PlayedBlockAssignment pBlock = bounce.getHitBlock();
+	   Block block = pBlock.getBlock();
+	   int points = block.getPoints();
+	   setScore(score+points);
+	   pBlock.delete();
+	   bounceBall();
   }
 
-  private void doHitBlockNextLevel() {
-    // TODO implement
+   private void doHitBlockNextLevel(){
+	   doHitBlock();
+	   int level = getCurrentLevel();
+	   setCurrentLevel(level+1);
+	   setCurrentPaddleLength(getGame().getPaddle().getMaxPaddleLength()-
+			   (getGame().getPaddle().getMaxPaddleLength()-
+					   getGame().getPaddle().getMinPaddleLength())/
+			   (getGame().numberOfLevels()-1)*(getCurrentLevel()-1));
+	   setWaitTime(INITIAL_WAIT_TIME * Math.pow(getGame().getBall().getBallSpeedIncreaseFactor(), (getCurrentLevel())-1));
   }
 
   private void doHitNothingAndNotOutOfBounds() {
