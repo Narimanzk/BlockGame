@@ -543,25 +543,26 @@ public class Block223Controller {
 	// play mode TODO
 
 	// TUDZ
-	public static void selectPlayableGame(String name, int id) throws InvalidInputException {
+	public static void selectPlayableGame(String name, int id) throws InvalidInputException  {
 
 		Game game = findGame(name);
 		Block223 block223 = Block223Application.getBlock223();
 		UserRole player = Block223Application.getCurrentUserRole();
 		PlayedGame pgame = null;
-
-		if (!(player instanceof Player))
+		
+		if(!(player instanceof Player))
 			throw new InvalidInputException("Player privileges are required to play a game.");
-		if (game == null)
+		if(game == null)
 			throw new InvalidInputException("The game does not exist.");
 
-		if (game != null) {
-			String username = findUsername(player);// TODO this function
-
+		if(game != null) {
+			String username = User.findUsername(player);
+			
 			pgame = new PlayedGame(username, game, block223);
 			pgame.setPlayer((Player) player);
-		} else {
-			pgame = findPlayableGame(id);// TODO this function
+		}
+		else {
+			pgame = block223.findPlayableGame(id);
 		}
 		Block223Application.setCurrentPlayableGame(pgame);
 	}
@@ -823,7 +824,7 @@ public class Block223Controller {
 	// Charles L
 	public static TOHallOfFame getHallOfFame(int start, int end) throws InvalidInputException {
 		if (!(Block223Application.getCurrentUserRole() instanceof Player))
-			throw new InvalidInputException("Player privileges are required to access a game’s hall of fame.".trim());
+			throw new InvalidInputException("Player privileges are required to access a gameï¿½s hall of fame.".trim());
 		if (Block223Application.getCurrentPlayableGame() == null)
 			throw new InvalidInputException("A game must be selected to view its hall of fame.".trim());
 
@@ -850,7 +851,7 @@ public class Block223Controller {
 	// Charles L
 	public static TOHallOfFame getHallOfFameWithMostRecentEntry(int numberOfEntries) throws InvalidInputException {
 		if (!(Block223Application.getCurrentUserRole() instanceof Player))
-			throw new InvalidInputException("Player privileges are required to access a game’s hall of fame.".trim());
+			throw new InvalidInputException("Player privileges are required to access a gameï¿½s hall of fame.".trim());
 		if (Block223Application.getCurrentPlayableGame() == null)
 			throw new InvalidInputException("A game must be selected to view its hall of fame.".trim());
 
