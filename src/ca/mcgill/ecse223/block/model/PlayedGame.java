@@ -4,6 +4,10 @@
 package ca.mcgill.ecse223.block.model;
 import java.io.Serializable;
 import java.util.*;
+import java.awt.geom.*;
+import java.awt.Polygon;
+
+import ca.mcgill.ecse223.block.model.BouncePoint.BounceDirection;
 
 // line 11 "../../../../../Block223PlayMode.ump"
 // line 97 "../../../../../Block223Persistence.ump"
@@ -735,20 +739,37 @@ public class PlayedGame implements Serializable
   }
 
   // line 47 "../../../../../Block223States.ump"
+   
+   //CHARLES, THIS ONE IS FOR YOU
    private boolean hitLastBlockAndLastLevel(){
     // TODO implement
     return false;
   }
 
   // line 52 "../../../../../Block223States.ump"
+   
+   //CHARLES, THIS ONE IS FOR YOU
    private boolean hitLastBlock(){
     // TODO implement
     return false;
   }
 
   // line 57 "../../../../../Block223States.ump"
+
+   //CHARLES, THIS ONE IS FOR YOU
    private boolean hitBlock(){
     // TODO implement
+	   int nrBlocks = numberOfBlocks();
+	   setBounce(null);
+	   for(int i=0;i<nrBlocks;i++) {
+		   PlayedBlockAssignment aBlock = getBlock(i);
+		   BouncePoint bp = calculateBouncePointBlock(aBlock);
+		   bounce = getBounce();
+		   boolean closer = isCloser(bp, bounce);
+		   if(closer) {
+			   setBounce(bp);
+		   }
+	   }
     return false;
   }
 
@@ -778,11 +799,15 @@ public class PlayedGame implements Serializable
   }
 
   // line 81 "../../../../../Block223States.ump"
+   
+   //CHARLES, THIS ONE IS FOR YOU
    private void doHitBlock(){
     // TODO implement
   }
 
   // line 85 "../../../../../Block223States.ump"
+   
+   //CHARLES, THIS ONE IS FOR YOU
    private void doHitBlockNextLevel(){
     // TODO implement
   }
@@ -797,7 +822,103 @@ public class PlayedGame implements Serializable
     // TODO implement
   }
 
+   private BouncePoint calculateBouncePointBlock(PlayedBlockAssignment aBlock) {
+	   //BouncePoint(double aX, double aY, BounceDirection aDirection)
+	   int size = aBlock.getBlock().SIZE;
+	   int borderSize = size+20;
+	   double leftX = aBlock.getX()-(size+10);
+	   double bottomY = aBlock.getY()-10;
+	   Rectangle2D blockBoundary = new Rectangle2D.Double(leftX,bottomY,borderSize,borderSize);
+	   Point2D ballCoords = new Point2D.Double(currentBallX, currentBallY);
+	   Point2D ballNewCoords = new Point2D.Double(currentBallX+ballDirectionX, currentBallY+ballDirectionY);
+	   Line2D.Double ballPath = new Line2D.Double(ballCoords, ballNewCoords);
+	   
+	   if(!blockBoundary.intersectsLine(ballPath)) {
+		   return null;
+	   }
+	   double rightX = leftX + borderSize;
+	   double topY = bottomY + borderSize;
+	   
+	   Line2D.Double top = new Line2D.Double(leftX,topY,rightX,topY);
+	   Line2D.Double bottom = new Line2D.Double(leftX, bottomY, rightX, bottomY);
+	   Line2D.Double right = new Line2D.Double(rightX, topY, rightX, bottomY);
+	   Line2D.Double left = new Line2D.Double(leftX, topY, leftX, bottomY);
+	   
+	   ArrayList<Point2D> intersects = new ArrayList<Point2D>();
+	   
+	   if(ballPath.intersectsLine(top)) {
+		   intersects.add(getIntersection(ballPath,top));
+	   }
+	   if(ballPath.intersectsLine(bottom)) {
+		   intersects.add(getIntersection(ballPath,bottom));
+	   }
+	   if(ballPath.intersectsLine(left)) {
+		   intersects.add(getIntersection(ballPath,left));
+	   }
+	   if(ballPath.intersectsLine(right)) {
+		   intersects.add(getIntersection(ballPath,right));
+	   }
+	   double minDistance = ballCoords.distance(intersects.get(0));
+	   Point2D closestPoint=intersects.get(0);
+	   for(int i=1;i<intersects.size();i++) {
+		   double distance = ballCoords.distance(intersects.get(i));
+		   if(distance<minDistance) {
+			   closestPoint = intersects.get(i);
+			   minDistance = distance;
+		   }
+	   }//we now have the closest intersect point! So how do we flip?
+	   
+	   if(closestPoint.getX()<rightX-10 && closestPoint.getX()>leftX+10) {
+		   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_Y);
+		   return finalBP;
+	   }else if(closestPoint.getY()<topY-10 && closestPoint.getY()>bottomY+10) {
+		   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_X);
+		   return finalBP;
+	   }else {
+		   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_BOTH);
+		   return finalBP;
+	   }
+   }
+   
+   //Thank you stack overflow!
+   private static Point2D getIntersection(final Line2D.Double line1, final Line2D.Double line2) {
 
+       final double x1,y1, x2,y2, x3,y3, x4,y4;
+       x1 = line1.x1; y1 = line1.y1; x2 = line1.x2; y2 = line1.y2;
+       x3 = line2.x1; y3 = line2.y1; x4 = line2.x2; y4 = line2.y2;
+       final double x = (
+               (x2 - x1)*(x3*y4 - x4*y3) - (x4 - x3)*(x1*y2 - x2*y1)
+               ) /
+               (
+               (x1 - x2)*(y3 - y4) - (y1 - y2)*(x3 - x4)
+               );
+       final double y = (
+               (y3 - y4)*(x1*y2 - x2*y1) - (y1 - y2)*(x3*y4 - x4*y3)
+               ) /
+               (
+               (x1 - x2)*(y3 - y4) - (y1 - y2)*(x3 - x4)
+               );
+
+       return new Point2D.Double(x, y);
+
+   }
+   
+   private boolean isCloser(BouncePoint bp, BouncePoint bounce) {
+	   if(bp == null) {
+		   return false;
+	   }
+	   if(bounce == null) {
+		   return true;
+	   }
+	   double bpDist =Math.sqrt(Math.pow(Math.abs(currentBallX-bp.getX()),2)+Math.pow(Math.abs(currentBallY-bp.getY()),2));
+	   double bounceDist = Math.sqrt(Math.pow(Math.abs(currentBallX-bounce.getX()),2)+Math.pow(Math.abs(currentBallY-bounce.getY()),2));;
+	   if(bpDist<=bounceDist) {
+		   return true;
+	   }else {
+		   return false;
+	   }
+	}
+   
   public String toString()
   {
     return super.toString() + "["+
