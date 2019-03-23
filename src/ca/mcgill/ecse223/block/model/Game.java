@@ -8,7 +8,7 @@ import java.util.*;
 import ca.mcgill.ecse223.block.application.Block223Application;
 
 // line 6 "../../../../../Block223PlayMode.ump"
-// line 42 "../../../../../Block223Persistence.ump"
+// line 48 "../../../../../Block223Persistence.ump"
 // line 50 "../../../../../Block223.ump"
 public class Game implements Serializable
 {
@@ -871,7 +871,7 @@ public class Game implements Serializable
     }
   }
 
-  // line 48 "../../../../../Block223Persistence.ump"
+  // line 54 "../../../../../Block223Persistence.ump"
    public static  void reinitializeGamesByName(List<Game> games){
     gamesByName = new HashMap<String, Game>();
     for (Game game : games) {
@@ -909,7 +909,7 @@ public class Game implements Serializable
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 45 "../../../../../Block223Persistence.ump"
+  // line 51 "../../../../../Block223Persistence.ump"
   private static final long serialVersionUID = -210105651472293481L ;
 
   

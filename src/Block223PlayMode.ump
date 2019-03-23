@@ -43,6 +43,14 @@ class PlayedGame {
    1 <@>- * PlayedBlockAssignment blocks;
    0..1 -> 0..1 BouncePoint bounce;
    
+   before constructor {
+      boolean didAddGameResult = setGame(aGame);
+      if (!didAddGameResult)
+      {
+         throw new RuntimeException("Unable to create playedGame due to game");
+      }
+   }
+   
    private void bounceBall() {
 	   BouncePoint bp = getBounce();
 	   double incomingY = bp.getY()- currentBallY;

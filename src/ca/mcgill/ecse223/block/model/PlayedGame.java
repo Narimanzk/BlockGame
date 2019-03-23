@@ -4,13 +4,9 @@
 package ca.mcgill.ecse223.block.model;
 import java.io.Serializable;
 import java.util.*;
-import java.awt.geom.*;
-import java.awt.Polygon;
-
-import ca.mcgill.ecse223.block.model.BouncePoint.BounceDirection;
 
 // line 11 "../../../../../Block223PlayMode.ump"
-// line 106 "../../../../../Block223Persistence.ump"
+// line 112 "../../../../../Block223Persistence.ump"
 // line 1 "../../../../../Block223States.ump"
 public class PlayedGame implements Serializable
 {
@@ -83,6 +79,13 @@ public class PlayedGame implements Serializable
 
   public PlayedGame(String aPlayername, Game aGame, Block223 aBlock223)
   {
+    // line 47 "../../../../../Block223PlayMode.ump"
+    boolean didAddGameResult = setGame(aGame);
+          if (!didAddGameResult)
+          {
+             throw new RuntimeException("Unable to create playedGame due to game");
+          }
+    // END OF UMPLE BEFORE INJECTION
     score = 0;
     lives = NR_LIVES;
     currentLevel = 1;
@@ -716,165 +719,9 @@ public class PlayedGame implements Serializable
     }
   }
 
-  // line 46 "../../../../../Block223PlayMode.ump"
-   private void doSetup(){
-    resetCurrentBallX();
-	resetCurrentBallY();
-	resetBallDirectionX();
-	resetBallDirectionY();
-	resetCurrentPaddleX();
-	getGame();
-	Level level = game.getLevel(currentLevel-1);
-	List<BlockAssignment> assignments = level.getBlockAssignments();
-	
-	for(BlockAssignment a : assignments) {
-		PlayedBlockAssignment pblock = new PlayedBlockAssignment(
-				(Game.WALL_PADDING+Block.SIZE+Game.COLUMNS_PADDING) *(a.getGridHorizontalPosition()-1),
-				(Game.WALL_PADDING+Block.SIZE+Game.ROW_PADDING) *(a.getGridVerticalPosition()-1), a.getBlock(), this);
-	}
-	
-	while(numberOfBlocks() < game.getNrBlocksPerLevel()) {
-		//lets not be random no idea how to chekc if grid is taken TODO
-		PlayedBlockAssignment pblock = new PlayedBlockAssignment(0, 0, game.getRandomBlock(), this);
-	}
-  }
-
-
-  /**
-   * Guards
-   */
-  // line 32 "../../../../../Block223States.ump"
-   private boolean hitPaddle(){
-	   BouncePoint bp = calculateBouncePointPaddle();
-	   setBounce(bp);
-	   return (bp!=null);
-  }
-
-  // line 37 "../../../../../Block223States.ump"
-   private boolean isOutOfBoundsAndLastLife(){
-    boolean outOfBounds = false;
-		if (getLives() == 1) {
-			outOfBounds = isOutOfBounds();
-		}
-		return outOfBounds;
-  }
-
-  // line 45 "../../../../../Block223States.ump"
-   private boolean isOutOfBounds(){
-    return (this.getCurrentBallY() + Ball.BALL_DIAMETER > 390);
-  }
-
-  // line 49 "../../../../../Block223States.ump"
-   private boolean hitLastBlockAndLastLevel(){
-	   Game game = getGame();
-	   int nrLevels = game.numberOfLevels();
-	   setBounce(null);
-	   if(nrLevels == currentLevel) {
-		   int nrBlocks = numberOfBlocks();
-		   if(nrBlocks == 1) {
-			   PlayedBlockAssignment block = getBlock(0);
-			   BouncePoint bp = calculateBouncePointBlock(block);
-			   setBounce(bp);
-			   return (bp != null);
-		   }
-	   }
-    return false;
-  }
-
-  // line 54 "../../../../../Block223States.ump"
-   private boolean hitLastBlock(){
-	   int nrBlocks = numberOfBlocks();
-	   setBounce(null);
-	   if(nrBlocks==1) {
-		   PlayedBlockAssignment block = getBlock(0);
-		   BouncePoint bp = calculateBouncePointBlock(block);
-		   setBounce(bp);
-		   return (bp != null);
-	   }
-    return false;
-  }
-
-  // line 59 "../../../../../Block223States.ump"
-   private boolean hitBlock(){
-    // TODO implement
-	   int nrBlocks = numberOfBlocks();
-	   setBounce(null);
-	   for(int i=0;i<nrBlocks;i++) {
-		   PlayedBlockAssignment aBlock = getBlock(i);
-		   BouncePoint bp = calculateBouncePointBlock(aBlock);
-		   bounce = getBounce();
-		   boolean closer = isCloser(bp, bounce);
-		   if(closer) {
-			   setBounce(bp);
-		   }
-	   }
-    return (getBounce() != null);
-  }
-
-  // line 64 "../../../../../Block223States.ump"
-   private boolean hitWall(){
-	   BouncePoint bp = calculateBouncePointWall();
-	   setBounce(bp);
-	   return (bp != null);
-  }
-
-  // line 75 "../../../../../Block223States.ump"
-   private void doHitPaddleOrWall(){
-	   bounceBall();
-  }
-
-  // line 79 "../../../../../Block223States.ump"
-   private void doOutOfBounds(){
-    setLives(getLives()-1);
-		resetCurrentBallX();
-		resetCurrentBallY();
-		resetBallDirectionX();
-		resetBallDirectionY();
-		resetCurrentPaddleX();
-  }
-
-  // line 88 "../../../../../Block223States.ump"
-   private void doHitBlock(){
-	   int score = getScore();
-	   BouncePoint bounce = getBounce();
-	   PlayedBlockAssignment pBlock = bounce.getHitBlock();
-	   Block block = pBlock.getBlock();
-	   int points = block.getPoints();
-	   setScore(score+points);
-	   pBlock.delete();
-	   bounceBall();
-  }
-
-  // line 92 "../../../../../Block223States.ump"
-   private void doHitBlockNextLevel(){
-	   doHitBlock();
-	   int level = getCurrentLevel();
-	   setCurrentLevel(level+1);
-	   setCurrentPaddleLength(getGame().getPaddle().getMaxPaddleLength()-
-			   (getGame().getPaddle().getMaxPaddleLength()-
-					   getGame().getPaddle().getMinPaddleLength())/
-			   (getGame().numberOfLevels()-1)*(getCurrentLevel()-1));
-	   setWaitTime(INITIAL_WAIT_TIME * Math.pow(getGame().getBall().getBallSpeedIncreaseFactor(), (getCurrentLevel())-1));
-  }
-
-  // line 96 "../../../../../Block223States.ump"
-   private void doHitNothingAndNotOutOfBounds(){
-    // TODO implement
-  }
-
-  // line 100 "../../../../../Block223States.ump"
-   private void doGameOver(){
-    Player p = getPlayer();
-		if (p != null) {
-			Game curGame = getGame();
-			HallOfFameEntry hof = new HallOfFameEntry(score,playername,p,game,block223);
-			curGame.setMostRecentEntry(hof);
-		}
-		delete();
-  }
-   
-   private void bounceBall() {
-	   BouncePoint bp = getBounce();
+  // line 55 "../../../../../Block223PlayMode.ump"
+   private void bounceBall(){
+    BouncePoint bp = getBounce();
 	   double incomingY = bp.getY()- currentBallY;
 	   double remainingY = ballDirectionY - incomingY;
 	   double incomingX = bp.getX()- currentBallX;
@@ -904,11 +751,11 @@ public class PlayedGame implements Serializable
 	   if(bp.hasHitBlock()) {
 		   bounce.setHitBlock(null);
 	   }
-   }
+  }
 
-   private BouncePoint calculateBouncePointBlock(PlayedBlockAssignment aBlock) {
-	   //BouncePoint(double aX, double aY, BounceDirection aDirection)
-	   int size = aBlock.getBlock().SIZE;
+  // line 88 "../../../../../Block223PlayMode.ump"
+   private BouncePoint calculateBouncePointBlock(PlayedBlockAssignment aBlock){
+    int size = aBlock.getBlock().SIZE;
 	   int borderSize = size+20;
 	   double leftX = aBlock.getX()-(size+10);
 	   double bottomY = aBlock.getY()-10;
@@ -961,93 +808,19 @@ public class PlayedGame implements Serializable
 	   
 	   if(closestPoint.getX()<rightX-10 && closestPoint.getX()>leftX+10) {
 		   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_Y);
-		   finalBP.setHitBlock(aBlock);
 		   return finalBP;
 	   }else if(closestPoint.getY()<topY-10 && closestPoint.getY()>bottomY+10) {
 		   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_X);
-		   finalBP.setHitBlock(aBlock);
-		   return finalBP;
-	   }else {
-		   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_BOTH);
-		   finalBP.setHitBlock(aBlock);
-		   return finalBP;
-	   }
-   }
- //TODO implement
-   private BouncePoint calculateBouncePointPaddle() {
- 	  double boxXpos = getCurrentPaddleX()-getCurrentPaddleLength()-(Ball.BALL_DIAMETER/2);
- 	  double boxYpos = getCurrentPaddleY()-(Ball.BALL_DIAMETER/2);
- 	  double boxWidth = getCurrentPaddleLength()+Ball.BALL_DIAMETER;
- 	  double boxLength = Ball.BALL_DIAMETER;
- 	 Rectangle2D fullBox = new Rectangle2D.Double(boxXpos,boxYpos,boxWidth,boxLength);
- 	  Point2D ballCoords = new Point2D.Double(currentBallX, currentBallY);
-	  Point2D ballNewCoords = new Point2D.Double(currentBallX+ballDirectionX, currentBallY+ballDirectionY);
-	  Line2D.Double ballPath = new Line2D.Double(ballCoords, ballNewCoords);
- 	  //Line2D ballPath = new Line2D.Double(getCurrentBallX(), getCurrentBallY(),(getCurrentBallX()+getBallDirectionX()), (getCurrentBallY()+getBallDirectionY()));
- 	  if(!fullBox.intersectsLine(ballPath)) return null;
- 	  Line2D.Double top = new Line2D.Double(boxXpos,boxYpos,boxXpos+getCurrentPaddleLength()+Ball.BALL_DIAMETER,boxYpos);
- 	  Line2D.Double left = new Line2D.Double(boxXpos,boxYpos,boxXpos,boxYpos+Ball.BALL_DIAMETER);
- 	  Line2D.Double right = new Line2D.Double(getCurrentPaddleX()+(Ball.BALL_DIAMETER/2),boxYpos,getCurrentPaddleX()+(Ball.BALL_DIAMETER/2),boxYpos+Ball.BALL_DIAMETER);
- 	  
-	   
- 	 ArrayList<Point2D> intersects = new ArrayList<Point2D>();
-	   
-	   if(ballPath.intersectsLine(top)) {
-		   intersects.add(getIntersection(ballPath,top));
-	   }
-	   if(ballPath.intersectsLine(left)) {
-		   intersects.add(getIntersection(ballPath,left));
-	   }
-	   if(ballPath.intersectsLine(right)) {
-		   intersects.add(getIntersection(ballPath,right));
-	   }
-	   double minDistance = ballCoords.distance(intersects.get(0));
-	   Point2D closestPoint=intersects.get(0);
-	   for(int i=1;i<intersects.size();i++) {
-		   double distance = ballCoords.distance(intersects.get(i));
-		   if(distance<minDistance) {
-			   closestPoint = intersects.get(i);
-			   minDistance = distance;
-		   }
-	   }
-	   if(closestPoint.getX()<getCurrentPaddleX() && closestPoint.getX()>getCurrentPaddleX()-getCurrentPaddleLength()) {
-		   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_Y);
-		   return finalBP;
-	   }else if(closestPoint.getY()<boxYpos-(Ball.BALL_DIAMETER/2) && closestPoint.getY()>boxYpos+(3*Ball.BALL_DIAMETER)) {
-		   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_X);
 		   return finalBP;
 	   }else {
 		   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_BOTH);
 		   return finalBP;
 	   }
- 	  
-   }
-   
-   //Thank you stack overflow!
-   private static Point2D getIntersection(final Line2D.Double line1, final Line2D.Double line2) {
+  }
 
-       final double x1,y1, x2,y2, x3,y3, x4,y4;
-       x1 = line1.x1; y1 = line1.y1; x2 = line1.x2; y2 = line1.y2;
-       x3 = line2.x1; y3 = line2.y1; x4 = line2.x2; y4 = line2.y2;
-       final double x = (
-               (x2 - x1)*(x3*y4 - x4*y3) - (x4 - x3)*(x1*y2 - x2*y1)
-               ) /
-               (
-               (x1 - x2)*(y3 - y4) - (y1 - y2)*(x3 - x4)
-               );
-       final double y = (
-               (y3 - y4)*(x1*y2 - x2*y1) - (y1 - y2)*(x3*y4 - x4*y3)
-               ) /
-               (
-               (x1 - x2)*(y3 - y4) - (y1 - y2)*(x3 - x4)
-               );
-
-       return new Point2D.Double(x, y);
-
-   }
-   
-   private boolean isCloser(BouncePoint bp, BouncePoint bounce) {
-	   if(bp == null) {
+  // line 171 "../../../../../Block223PlayMode.ump"
+   private boolean isCloser(BouncePoint bp, BouncePoint bounce){
+    if(bp == null) {
 		   return false;
 	   }
 	   if(bounce == null) {
@@ -1060,8 +833,165 @@ public class PlayedGame implements Serializable
 	   }else {
 		   return false;
 	   }
+  }
+
+  // line 187 "../../../../../Block223PlayMode.ump"
+   private void doSetup(){
+    resetCurrentBallX();
+	resetCurrentBallY();
+	resetBallDirectionX();
+	resetBallDirectionY();
+	resetCurrentPaddleX();
+	getGame();
+	Level level = game.getLevel(currentLevel-1);
+	List<BlockAssignment> assignments = level.getBlockAssignments();
+	
+	for(BlockAssignment a : assignments) {
+		PlayedBlockAssignment pblock = new PlayedBlockAssignment(
+				(Game.WALL_PADDING+Block.SIZE+Game.COLUMNS_PADDING) *(a.getGridHorizontalPosition()-1),
+				(Game.WALL_PADDING+Block.SIZE+Game.ROW_PADDING) *(a.getGridVerticalPosition()-1), a.getBlock(), this);
 	}
-   
+	
+	while(numberOfBlocks() < game.getNrBlocksPerLevel()) {
+		//lets not be random no idea how to chekc if grid is taken TODO
+		PlayedBlockAssignment pblock = new PlayedBlockAssignment(0, 0, game.getRandomBlock(), this);
+	}
+  }
+
+
+  /**
+   * Guards
+   */
+  // line 32 "../../../../../Block223States.ump"
+   private boolean hitPaddle(){
+    BouncePoint bp = calculateBouncePointPaddle();
+	   setBounce(bp);
+	   return (bp!=null);
+  }
+
+  // line 38 "../../../../../Block223States.ump"
+   private boolean isOutOfBoundsAndLastLife(){
+    boolean outOfBounds = false;
+		if (getLives() == 1) {
+			outOfBounds = isOutOfBounds();
+		}
+		return outOfBounds;
+  }
+
+  // line 46 "../../../../../Block223States.ump"
+   private boolean isOutOfBounds(){
+    return (this.getCurrentBallY() + Ball.BALL_DIAMETER > 390);
+  }
+
+  // line 50 "../../../../../Block223States.ump"
+   private boolean hitLastBlockAndLastLevel(){
+    Game game = getGame();
+	   int nrLevels = game.numberOfLevels();
+	   setBounce(null);
+	   if(nrLevels == currentLevel) {
+		   int nrBlocks = numberOfBlocks();
+		   if(nrBlocks == 1) {
+			   PlayedBlockAssignment block = getBlock(0);
+			   BouncePoint bp = calculateBouncePointBlock(block);
+			   setBounce(bp);
+			   return (bp != null);
+		   }
+	   }
+    return false;
+  }
+
+  // line 66 "../../../../../Block223States.ump"
+   private boolean hitLastBlock(){
+    int nrBlocks = numberOfBlocks();
+	   setBounce(null);
+	   if(nrBlocks==1) {
+		   PlayedBlockAssignment block = getBlock(0);
+		   BouncePoint bp = calculateBouncePointBlock(block);
+		   setBounce(bp);
+		   return (bp != null);
+	   }
+    return false;
+  }
+
+  // line 78 "../../../../../Block223States.ump"
+   private boolean hitBlock(){
+    int nrBlocks = numberOfBlocks();
+	   setBounce(null);
+	   for(int i=0;i<nrBlocks;i++) {
+		   PlayedBlockAssignment aBlock = getBlock(i);
+		   BouncePoint bp = calculateBouncePointBlock(aBlock);
+		   bounce = getBounce();
+		   boolean closer = isCloser(bp, bounce);
+		   if(closer) {
+			   setBounce(bp);
+		   }
+	   }
+    return (getBounce() != null);
+  }
+
+  // line 93 "../../../../../Block223States.ump"
+   private boolean hitWall(){
+    BouncePoint bp = calculateBouncePointWall();
+	   setBounce(bp);
+	   return (bp != null);
+  }
+
+  // line 105 "../../../../../Block223States.ump"
+   private void doHitPaddleOrWall(){
+    bounceBall();
+  }
+
+  // line 109 "../../../../../Block223States.ump"
+   private void doOutOfBounds(){
+    setLives(getLives()-1);
+		resetCurrentBallX();
+		resetCurrentBallY();
+		resetBallDirectionX();
+		resetBallDirectionY();
+		resetCurrentPaddleX();
+  }
+
+  // line 118 "../../../../../Block223States.ump"
+   private void doHitBlock(){
+    int score = getScore();
+	   BouncePoint bounce = getBounce();
+	   PlayedBlockAssignment pBlock = bounce.getHitBlock();
+	   Block block = pBlock.getBlock();
+	   int points = block.getPoints();
+	   setScore(score+points);
+	   pBlock.delete();
+	   bounceBall();
+  }
+
+  // line 129 "../../../../../Block223States.ump"
+   private void doHitBlockNextLevel(){
+    doHitBlock();
+	   int level = getCurrentLevel();
+	   setCurrentLevel(level+1);
+	   setCurrentPaddleLength(getGame().getPaddle().getMaxPaddleLength()-
+			   (getGame().getPaddle().getMaxPaddleLength()-
+					   getGame().getPaddle().getMinPaddleLength())/
+			   (getGame().numberOfLevels()-1)*(getCurrentLevel()-1));
+	   setWaitTime(INITIAL_WAIT_TIME * Math.pow(getGame().getBall().getBallSpeedIncreaseFactor(), (getCurrentLevel())-1));
+  }
+
+  // line 140 "../../../../../Block223States.ump"
+   private void doHitNothingAndNotOutOfBounds(){
+    // TODO implement
+  }
+
+  // line 144 "../../../../../Block223States.ump"
+   private void doGameOver(){
+    Player p = getPlayer();
+		if (p != null) {
+			Game curGame = getGame();
+			HallOfFameEntry hof = new HallOfFameEntry(score,playername,p,game,block223);
+			curGame.setMostRecentEntry(hof);
+		}
+		delete();
+  }
+
+
   public String toString()
   {
     return super.toString() + "["+
@@ -1087,7 +1017,27 @@ public class PlayedGame implements Serializable
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 109 "../../../../../Block223Persistence.ump"
+  // line 151 "../../../../../Block223PlayMode.ump"
+  private static Point2D getIntersection (final Line2D.Double line1, final Line2D.Double line2) 
+  {
+    final double x1,y1, x2,y2, x3,y3, x4,y4;
+       x1 = line1.x1; y1 = line1.y1; x2 = line1.x2; y2 = line1.y2;
+       x3 = line2.x1; y3 = line2.y1; x4 = line2.x2; y4 = line2.y2;
+       final double x = (
+               (x2 - x1)*(x3*y4 - x4*y3) - (x4 - x3)*(x1*y2 - x2*y1)
+               ) /
+               (
+               (x1 - x2)*(y3 - y4) - (y1 - y2)*(x3 - x4)
+               );
+       final double y = (
+               (y3 - y4)*(x1*y2 - x2*y1) - (y1 - y2)*(x3*y4 - x4*y3)
+               ) /
+               (
+               (x1 - x2)*(y3 - y4) - (y1 - y2)*(x3 - x4)
+               );
+       return new Point2D.Double(x, y);
+  }
+// line 115 "../../../../../Block223Persistence.ump"
   private static final long serialVersionUID = 8597675110221231714L ;
 
   
