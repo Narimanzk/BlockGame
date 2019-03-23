@@ -745,8 +745,9 @@ public class PlayedGame implements Serializable
    */
   // line 32 "../../../../../Block223States.ump"
    private boolean hitPaddle(){
-    // TODO implement
-    return false;
+	   BouncePoint bp = calculateBouncePointPaddle();
+	   setBounce(bp);
+	   return (bp!=null);
   }
 
   // line 37 "../../../../../Block223States.ump"
@@ -812,13 +813,14 @@ public class PlayedGame implements Serializable
 
   // line 64 "../../../../../Block223States.ump"
    private boolean hitWall(){
-    // TODO implement
-    return false;
+	   BouncePoint bp = calculateBouncePointWall();
+	   setBounce(bp);
+	   return (bp != null);
   }
 
   // line 75 "../../../../../Block223States.ump"
    private void doHitPaddleOrWall(){
-    // TODO implement
+	   bounceBall();
   }
 
   // line 79 "../../../../../Block223States.ump"
@@ -970,6 +972,55 @@ public class PlayedGame implements Serializable
 		   finalBP.setHitBlock(aBlock);
 		   return finalBP;
 	   }
+   }
+ //TODO implement
+   private BouncePoint calculateBouncePointPaddle() {
+ 	  double boxXpos = getCurrentPaddleX()-getCurrentPaddleLength()-(Ball.BALL_DIAMETER/2);
+ 	  double boxYpos = getCurrentPaddleY()-(Ball.BALL_DIAMETER/2);
+ 	  double boxWidth = getCurrentPaddleLength()+Ball.BALL_DIAMETER;
+ 	  double boxLength = Ball.BALL_DIAMETER;
+ 	 Rectangle2D fullBox = new Rectangle2D.Double(boxXpos,boxYpos,boxWidth,boxLength);
+ 	  Point2D ballCoords = new Point2D.Double(currentBallX, currentBallY);
+	  Point2D ballNewCoords = new Point2D.Double(currentBallX+ballDirectionX, currentBallY+ballDirectionY);
+	  Line2D.Double ballPath = new Line2D.Double(ballCoords, ballNewCoords);
+ 	  //Line2D ballPath = new Line2D.Double(getCurrentBallX(), getCurrentBallY(),(getCurrentBallX()+getBallDirectionX()), (getCurrentBallY()+getBallDirectionY()));
+ 	  if(!fullBox.intersectsLine(ballPath)) return null;
+ 	  Line2D.Double top = new Line2D.Double(boxXpos,boxYpos,boxXpos+getCurrentPaddleLength()+Ball.BALL_DIAMETER,boxYpos);
+ 	  Line2D.Double left = new Line2D.Double(boxXpos,boxYpos,boxXpos,boxYpos+Ball.BALL_DIAMETER);
+ 	  Line2D.Double right = new Line2D.Double(getCurrentPaddleX()+(Ball.BALL_DIAMETER/2),boxYpos,getCurrentPaddleX()+(Ball.BALL_DIAMETER/2),boxYpos+Ball.BALL_DIAMETER);
+ 	  
+	   
+ 	 ArrayList<Point2D> intersects = new ArrayList<Point2D>();
+	   
+	   if(ballPath.intersectsLine(top)) {
+		   intersects.add(getIntersection(ballPath,top));
+	   }
+	   if(ballPath.intersectsLine(left)) {
+		   intersects.add(getIntersection(ballPath,left));
+	   }
+	   if(ballPath.intersectsLine(right)) {
+		   intersects.add(getIntersection(ballPath,right));
+	   }
+	   double minDistance = ballCoords.distance(intersects.get(0));
+	   Point2D closestPoint=intersects.get(0);
+	   for(int i=1;i<intersects.size();i++) {
+		   double distance = ballCoords.distance(intersects.get(i));
+		   if(distance<minDistance) {
+			   closestPoint = intersects.get(i);
+			   minDistance = distance;
+		   }
+	   }
+	   if(closestPoint.getX()<getCurrentPaddleX() && closestPoint.getX()>getCurrentPaddleX()-getCurrentPaddleLength()) {
+		   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_Y);
+		   return finalBP;
+	   }else if(closestPoint.getY()<boxYpos-(Ball.BALL_DIAMETER/2) && closestPoint.getY()>boxYpos+(3*Ball.BALL_DIAMETER)) {
+		   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_X);
+		   return finalBP;
+	   }else {
+		   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_BOTH);
+		   return finalBP;
+	   }
+ 	  
    }
    
    //Thank you stack overflow!

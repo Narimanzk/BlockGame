@@ -29,8 +29,9 @@ class PlayedGame {
   // Guards
   
   private boolean hitPaddle() {
-    // TODO implement
-    return false;
+     BouncePoint bp = calculateBouncePointPaddle();
+	   setBounce(bp);
+	   return (bp!=null);
   }
 
   private boolean isOutOfBoundsAndLastLife() {
@@ -89,8 +90,9 @@ class PlayedGame {
   }
   
   private boolean hitWall() {
-    // TODO implement
-    return false;
+    BouncePoint bp = calculateBouncePointWall();
+	   setBounce(bp);
+	   return (bp != null);
   }
   
   // Actions
@@ -100,7 +102,7 @@ class PlayedGame {
   }
   
   private void doHitPaddleOrWall() {
-    // TODO implement
+    bounceBall();
   }
 
   private void doOutOfBounds() {
