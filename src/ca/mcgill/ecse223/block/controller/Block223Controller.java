@@ -65,7 +65,7 @@ public class Block223Controller {
 		Game aGame = Block223Application.getCurrentGame();
 
 		if (!(userRole instanceof Admin))
-			throw new InvalidInputException("Admin privileges are required to create a game.".trim());
+			throw new InvalidInputException("Admin privileges are required to define game settings.".trim());
 		if (aGame == null)
 			throw new InvalidInputException("A game must be selected to define game settings.".trim());
 
@@ -142,10 +142,16 @@ public class Block223Controller {
 			throw new InvalidInputException("Only the admin who created the game can delete the game.".trim());
 		}
 		Game game = findGame(name);
-
-		if (game.getPublished()) {
-			throw new InvalidInputException("A published game cannot be deleted.");
+		
+		if(game != null) {
+			if (game.getPublished()) {
+				throw new InvalidInputException("A published game cannot be deleted.");
+			}
 		}
+		else {
+			
+		}
+
 
 		if (game != null) {
 			Block223 block223 = game.getBlock223();
