@@ -4,7 +4,6 @@
 package ca.mcgill.ecse223.block.model;
 import java.io.Serializable;
 import java.util.*;
-import java.util.Map.Entry;
 
 // line 17 "../../../../../Block223Persistence.ump"
 // line 22 "../../../../../Block223.ump"

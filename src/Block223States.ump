@@ -137,10 +137,10 @@ class PlayedGame {
   }
 
   private void doHitNothingAndNotOutOfBounds() {
-  int x = getCurrentBallX();
-  int y = getCurrentBallY()
-  dx = getBallDirectionX();
-  dy = getBallDirectionY();
+	double x = currentBallX;
+  double y = currentBallY;
+  double dx = getBallDirectionX();
+  double dy = getBallDirectionY();
   setCurrentBallX(x+dx);
   setCurrentBallY(y+dy);
     

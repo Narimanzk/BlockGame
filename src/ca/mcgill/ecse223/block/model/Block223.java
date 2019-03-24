@@ -8,7 +8,7 @@ import java.util.*;
 /**
  * the reinitialize methods need to be added
  */
-// line 1 "../../../../../Block223PlayMode.ump"
+// line 2 "../../../../../Block223PlayMode.ump"
 // line 5 "../../../../../Block223Persistence.ump"
 // line 7 "../../../../../Block223.ump"
 public class Block223 implements Serializable

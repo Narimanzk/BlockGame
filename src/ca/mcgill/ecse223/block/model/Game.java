@@ -5,9 +5,7 @@ package ca.mcgill.ecse223.block.model;
 import java.io.Serializable;
 import java.util.*;
 
-import ca.mcgill.ecse223.block.application.Block223Application;
-
-// line 6 "../../../../../Block223PlayMode.ump"
+// line 7 "../../../../../Block223PlayMode.ump"
 // line 48 "../../../../../Block223Persistence.ump"
 // line 50 "../../../../../Block223.ump"
 public class Game implements Serializable
