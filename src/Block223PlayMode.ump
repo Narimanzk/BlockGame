@@ -72,8 +72,36 @@ class PlayedGame {
 		   setBallDirectionX(newBallDirectionX);
 		   setBallDirectionY(newBallDirectionY);
 	   }else if(bp.getDirection() == BouncePoint.BounceDirection.FLIP_BOTH) {
-		   double newBallDirectionX = ballDirectionX *-1;
-		   double newBallDirectionY = ballDirectionY *-1;
+		   		   double newBallDirectionX=1;
+		   double newBallDirectionY=1;
+		   if(bp.hasHitBlock()) {
+			   bounce.setHitBlock(null);
+			   PlayedBlockAssignment block = bp.getHitBlock();
+			   if(bp.getX()>block.getX()) {//we are on right side
+				   //if(bp.getY()>block.getY()) {//we are in corner F
+					   if(ballDirectionX<0) {
+						   newBallDirectionX=ballDirectionX*-1;
+					   }else {
+						   newBallDirectionY=ballDirectionY*-1;
+					   }
+				   /*}else {//we are in corner H
+					   if(ballDirectionX<0) {
+						   newBallDirectionX=ballDirectionX*-1;
+					   }else {
+						   newBallDirectionY=ballDirectionY*-1;
+					   }
+				   }*/
+			   }else {//we are on left side
+				   if(ballDirectionX<0) {
+					   newBallDirectionY=ballDirectionY*-1;
+				   }else {
+					   newBallDirectionX=ballDirectionX*-1;
+				   }
+			   }
+		   }else {
+			   newBallDirectionX = ballDirectionX *-1;
+			   newBallDirectionY = ballDirectionY *-1;
+		   }
 		   setCurrentBallY(bp.getY()+remainingY/ballDirectionY * newBallDirectionY);
 		   setCurrentBallX(bp.getX()+remainingX/ballDirectionX * newBallDirectionX);
 		   setBallDirectionX(newBallDirectionX);
