@@ -231,17 +231,19 @@ class PlayedGame {
 	 	  Line2D.Double b = new Line2D.Double(Ball.BALL_DIAMETER/2,Ball.BALL_DIAMETER/2,Game.PLAY_AREA_SIDE-(Ball.BALL_DIAMETER/2),Ball.BALL_DIAMETER/2);
 	 	  Line2D.Double c = new Line2D.Double(Game.PLAY_AREA_SIDE-(Ball.BALL_DIAMETER/2),Ball.BALL_DIAMETER/2,Game.PLAY_AREA_SIDE-(Ball.BALL_DIAMETER/2),Game.PLAY_AREA_SIDE-(Ball.BALL_DIAMETER/2));
 	 	  
-	 	 ArrayList<Point2D> intersects = new ArrayList<Point2D>();
-		   
-		   if(ballPath.intersectsLine(a)) {
-			   intersects.add(getIntersection(ballPath,a));
-		   }
-		   if(ballPath.intersectsLine(b)) {
-			   intersects.add(getIntersection(ballPath,b));
-		   }
-		   if(ballPath.intersectsLine(c)) {
-			   intersects.add(getIntersection(ballPath,c));
-		   }
+	 	  ArrayList<Point2D> intersects = new ArrayList<Point2D>();
+		  if(!ballPath.intersectsLine(a) && !ballPath.intersectsLine(b) && !ballPath.intersectsLine(c)){
+		  	return null;
+		  }
+		  if(ballPath.intersectsLine(a)) {
+			  intersects.add(getIntersection(ballPath,a));
+		  }
+		  if(ballPath.intersectsLine(b)) {
+			  intersects.add(getIntersection(ballPath,b));
+		  }
+		  if(ballPath.intersectsLine(c)) {
+			  intersects.add(getIntersection(ballPath,c));
+		  }
 		   double minDistance = ballCoords.distance(intersects.get(0));
 		   Point2D closestPoint=intersects.get(0);
 		   for(int i=1;i<intersects.size();i++) {
