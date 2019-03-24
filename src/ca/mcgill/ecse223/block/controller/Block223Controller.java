@@ -601,12 +601,12 @@ public class Block223Controller {
 				aGame.pause();
 			}
 			
-			try {
-				userInputs.wait((long) aGame.getWaitTime());
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+//			try {
+//				userInputs.wait((long) aGame.getWaitTime());
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 			ui.refresh();
 		}
 		if (aGame.getPlayStatus() == PlayStatus.GameOver) {
