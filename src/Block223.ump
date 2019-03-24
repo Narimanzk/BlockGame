@@ -20,6 +20,7 @@ class Block223 {
 }
 
 class User {
+depend java.util.Map.Entry;
    unique username;
    1 -> 1..2 UserRole roles;
     public static  String findUsername(UserRole player){
@@ -62,14 +63,12 @@ class Game {
    1 <@>- * BlockAssignment blockAssignments;
    1 <@>- 1 Ball ball;
    1 <@>- 1 Paddle paddle;
-   public static Block getRandomBlock() {
-	   Game game = Block223Application.getCurrentGame();
-	   int max = game.getBlocks().size();
-	   Random rand = new Random();
-	   int n = rand.nextInt(max);
-	   Block block = game.getBlock(n);
-	   
-	   return block;
+   public Block getRandomBlock(){
+   	int max = this.getBlocks().size();
+   	Random rand = new Random();
+   	int n = rand.nextInt(max);
+   	Block block = this.getBlock(n);
+   	return block;
    }
 }
 

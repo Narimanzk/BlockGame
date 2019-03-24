@@ -99,7 +99,25 @@ depend java.awt.geom.*;
   // Actions
   
   private void doSetup() {
-    // TODO implement
+    resetCurrentBallX();
+	resetCurrentBallY();
+	resetBallDirectionX();
+	resetBallDirectionY();
+	resetCurrentPaddleX();
+	getGame();
+	Level level = game.getLevel(currentLevel-1);
+	List<BlockAssignment> assignments = level.getBlockAssignments();
+	
+	for(BlockAssignment a : assignments) {
+		PlayedBlockAssignment pblock = new PlayedBlockAssignment(
+				(Game.WALL_PADDING+Block.SIZE+Game.COLUMNS_PADDING) *(a.getGridHorizontalPosition()-1),
+				(Game.WALL_PADDING+Block.SIZE+Game.ROW_PADDING) *(a.getGridVerticalPosition()-1), a.getBlock(), this);
+	}
+	
+	while(numberOfBlocks() < game.getNrBlocksPerLevel()) {
+		//lets not be random no idea how to chekc if grid is taken TODO
+		PlayedBlockAssignment pblock = new PlayedBlockAssignment(0, 0, game.getRandomBlock(), this);
+	}
   }
   
   private void doHitPaddleOrWall() {
@@ -138,10 +156,10 @@ depend java.awt.geom.*;
   }
 
   private void doHitNothingAndNotOutOfBounds() {
-  int x = getCurrentBallX();
-  int y = getCurrentBallY()
-  dx = getBallDirectionX();
-  dy = getBallDirectionY();
+	double x = currentBallX;
+  double y = currentBallY;
+  double dx = getBallDirectionX();
+  double dy = getBallDirectionY();
   setCurrentBallX(x+dx);
   setCurrentBallY(y+dy);
     

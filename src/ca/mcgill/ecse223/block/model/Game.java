@@ -5,11 +5,9 @@ package ca.mcgill.ecse223.block.model;
 import java.io.Serializable;
 import java.util.*;
 
-import ca.mcgill.ecse223.block.application.Block223Application;
-
 // line 6 "../../../../../Block223PlayMode.ump"
 // line 48 "../../../../../Block223Persistence.ump"
-// line 50 "../../../../../Block223.ump"
+// line 51 "../../../../../Block223.ump"
 public class Game implements Serializable
 {
 
@@ -880,15 +878,13 @@ public class Game implements Serializable
     }
   }
 
-  // line 66 "../../../../../Block223.ump"
-   public static  Block getRandomBlock(){
-    Game game = Block223Application.getCurrentGame();
-	   int max = game.getBlocks().size();
-	   Random rand = new Random();
-	   int n = rand.nextInt(max);
-	   Block block = game.getBlock(n);
-	   
-	   return block;
+  // line 67 "../../../../../Block223.ump"
+   public Block getRandomBlock(){
+    int max = this.getBlocks().size();
+   	Random rand = new Random();
+   	int n = rand.nextInt(max);
+   	Block block = this.getBlock(n);
+   	return block;
   }
 
 
