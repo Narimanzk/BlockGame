@@ -520,7 +520,7 @@ public class Block223Controller {
 				check = true;
 			}
 		}
-		if (check) {
+		if (User.getWithUsername(username)!=null) {
 			throw new InvalidInputException("The username has already been taken.");
 		}
 		
