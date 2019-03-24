@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.*;
 
 // line 42 "../../../../../Block223Persistence.ump"
-// line 46 "../../../../../Block223.ump"
+// line 47 "../../../../../Block223.ump"
 public class Player extends UserRole implements Serializable
 {
 

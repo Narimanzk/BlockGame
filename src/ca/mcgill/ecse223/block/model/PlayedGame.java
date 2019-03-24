@@ -4,8 +4,9 @@
 package ca.mcgill.ecse223.block.model;
 import java.io.Serializable;
 import java.util.*;
+import java.awt.geom.*;
 
-// line 12 "../../../../../Block223PlayMode.ump"
+// line 11 "../../../../../Block223PlayMode.ump"
 // line 112 "../../../../../Block223Persistence.ump"
 // line 1 "../../../../../Block223States.ump"
 public class PlayedGame implements Serializable
@@ -79,7 +80,7 @@ public class PlayedGame implements Serializable
 
   public PlayedGame(String aPlayername, Game aGame, Block223 aBlock223)
   {
-    // line 48 "../../../../../Block223PlayMode.ump"
+    // line 47 "../../../../../Block223PlayMode.ump"
     boolean didAddGameResult = setGame(aGame);
           if (!didAddGameResult)
           {
@@ -408,7 +409,7 @@ public class PlayedGame implements Serializable
       case Moving:
         if (hitPaddle())
         {
-        // line 12 "../../../../../Block223States.ump"
+        // line 13 "../../../../../Block223States.ump"
           doHitPaddleOrWall();
           setPlayStatus(PlayStatus.Moving);
           wasEventProcessed = true;
@@ -416,7 +417,7 @@ public class PlayedGame implements Serializable
         }
         if (isOutOfBoundsAndLastLife())
         {
-        // line 13 "../../../../../Block223States.ump"
+        // line 14 "../../../../../Block223States.ump"
           doOutOfBounds();
           setPlayStatus(PlayStatus.GameOver);
           wasEventProcessed = true;
@@ -424,7 +425,7 @@ public class PlayedGame implements Serializable
         }
         if (isOutOfBounds())
         {
-        // line 14 "../../../../../Block223States.ump"
+        // line 15 "../../../../../Block223States.ump"
           doOutOfBounds();
           setPlayStatus(PlayStatus.Paused);
           wasEventProcessed = true;
@@ -432,7 +433,7 @@ public class PlayedGame implements Serializable
         }
         if (hitLastBlockAndLastLevel())
         {
-        // line 15 "../../../../../Block223States.ump"
+        // line 16 "../../../../../Block223States.ump"
           doHitBlock();
           setPlayStatus(PlayStatus.GameOver);
           wasEventProcessed = true;
@@ -440,7 +441,7 @@ public class PlayedGame implements Serializable
         }
         if (hitLastBlock())
         {
-        // line 16 "../../../../../Block223States.ump"
+        // line 17 "../../../../../Block223States.ump"
           doHitBlockNextLevel();
           setPlayStatus(PlayStatus.Ready);
           wasEventProcessed = true;
@@ -448,7 +449,7 @@ public class PlayedGame implements Serializable
         }
         if (hitBlock())
         {
-        // line 17 "../../../../../Block223States.ump"
+        // line 18 "../../../../../Block223States.ump"
           doHitBlock();
           setPlayStatus(PlayStatus.Moving);
           wasEventProcessed = true;
@@ -456,13 +457,13 @@ public class PlayedGame implements Serializable
         }
         if (hitWall())
         {
-        // line 18 "../../../../../Block223States.ump"
+        // line 19 "../../../../../Block223States.ump"
           doHitPaddleOrWall();
           setPlayStatus(PlayStatus.Moving);
           wasEventProcessed = true;
           break;
         }
-        // line 19 "../../../../../Block223States.ump"
+        // line 20 "../../../../../Block223States.ump"
         doHitNothingAndNotOutOfBounds();
         setPlayStatus(PlayStatus.Moving);
         wasEventProcessed = true;
@@ -482,11 +483,11 @@ public class PlayedGame implements Serializable
     switch(playStatus)
     {
       case Ready:
-        // line 7 "../../../../../Block223States.ump"
+        // line 8 "../../../../../Block223States.ump"
         doSetup();
         break;
       case GameOver:
-        // line 25 "../../../../../Block223States.ump"
+        // line 26 "../../../../../Block223States.ump"
         doGameOver();
         break;
     }
@@ -719,7 +720,7 @@ public class PlayedGame implements Serializable
     }
   }
 
-  // line 56 "../../../../../Block223PlayMode.ump"
+  // line 55 "../../../../../Block223PlayMode.ump"
    private void bounceBall(){
     BouncePoint bp = getBounce();
 	   double incomingY = bp.getY()- currentBallY;
@@ -753,7 +754,7 @@ public class PlayedGame implements Serializable
 	   }
   }
 
-  // line 89 "../../../../../Block223PlayMode.ump"
+  // line 88 "../../../../../Block223PlayMode.ump"
    private BouncePoint calculateBouncePointBlock(PlayedBlockAssignment aBlock){
     int size = aBlock.getBlock().SIZE;
 	   int borderSize = size+20;
@@ -927,7 +928,89 @@ public class PlayedGame implements Serializable
 	   }
   }
 
-  // line 278 "../../../../../Block223PlayMode.ump"
+
+  /**
+   * Guards
+   */
+  // line 33 "../../../../../Block223States.ump"
+   private boolean hitPaddle(){
+    BouncePoint bp = calculateBouncePointPaddle();
+	   setBounce(bp);
+	   return (bp!=null);
+  }
+
+  // line 39 "../../../../../Block223States.ump"
+   private boolean isOutOfBoundsAndLastLife(){
+    boolean outOfBounds = false;
+		if (getLives() == 1) {
+			outOfBounds = isOutOfBounds();
+		}
+		return outOfBounds;
+  }
+
+  // line 47 "../../../../../Block223States.ump"
+   private boolean isOutOfBounds(){
+    return (this.getCurrentBallY() + Ball.BALL_DIAMETER > 390);
+  }
+
+  // line 51 "../../../../../Block223States.ump"
+   private boolean hitLastBlockAndLastLevel(){
+    Game game = getGame();
+	   int nrLevels = game.numberOfLevels();
+	   setBounce(null);
+	   if(nrLevels == currentLevel) {
+		   int nrBlocks = numberOfBlocks();
+		   if(nrBlocks == 1) {
+			   PlayedBlockAssignment block = getBlock(0);
+			   BouncePoint bp = calculateBouncePointBlock(block);
+			   setBounce(bp);
+			   return (bp != null);
+		   }
+	   }
+    return false;
+  }
+
+  // line 67 "../../../../../Block223States.ump"
+   private boolean hitLastBlock(){
+    int nrBlocks = numberOfBlocks();
+	   setBounce(null);
+	   if(nrBlocks==1) {
+		   PlayedBlockAssignment block = getBlock(0);
+		   BouncePoint bp = calculateBouncePointBlock(block);
+		   setBounce(bp);
+		   return (bp != null);
+	   }
+    return false;
+  }
+
+  // line 79 "../../../../../Block223States.ump"
+   private boolean hitBlock(){
+    int nrBlocks = numberOfBlocks();
+	   setBounce(null);
+	   for(int i=0;i<nrBlocks;i++) {
+		   PlayedBlockAssignment aBlock = getBlock(i);
+		   BouncePoint bp = calculateBouncePointBlock(aBlock);
+		   bounce = getBounce();
+		   boolean closer = isCloser(bp, bounce);
+		   if(closer) {
+			   setBounce(bp);
+		   }
+	   }
+    return (getBounce() != null);
+  }
+
+  // line 94 "../../../../../Block223States.ump"
+   private boolean hitWall(){
+    BouncePoint bp = calculateBouncePointWall();
+	   setBounce(bp);
+	   return (bp != null);
+  }
+
+
+  /**
+   * Actions
+   */
+  // line 102 "../../../../../Block223States.ump"
    private void doSetup(){
     resetCurrentBallX();
 	resetCurrentBallY();
@@ -950,90 +1033,12 @@ public class PlayedGame implements Serializable
 	}
   }
 
-
-  /**
-   * Guards
-   */
-  // line 32 "../../../../../Block223States.ump"
-   private boolean hitPaddle(){
-    BouncePoint bp = calculateBouncePointPaddle();
-	   setBounce(bp);
-	   return (bp!=null);
-  }
-
-  // line 38 "../../../../../Block223States.ump"
-   private boolean isOutOfBoundsAndLastLife(){
-    boolean outOfBounds = false;
-		if (getLives() == 1) {
-			outOfBounds = isOutOfBounds();
-		}
-		return outOfBounds;
-  }
-
-  // line 46 "../../../../../Block223States.ump"
-   private boolean isOutOfBounds(){
-    return (this.getCurrentBallY() + Ball.BALL_DIAMETER > 390);
-  }
-
-  // line 50 "../../../../../Block223States.ump"
-   private boolean hitLastBlockAndLastLevel(){
-    Game game = getGame();
-	   int nrLevels = game.numberOfLevels();
-	   setBounce(null);
-	   if(nrLevels == currentLevel) {
-		   int nrBlocks = numberOfBlocks();
-		   if(nrBlocks == 1) {
-			   PlayedBlockAssignment block = getBlock(0);
-			   BouncePoint bp = calculateBouncePointBlock(block);
-			   setBounce(bp);
-			   return (bp != null);
-		   }
-	   }
-    return false;
-  }
-
-  // line 66 "../../../../../Block223States.ump"
-   private boolean hitLastBlock(){
-    int nrBlocks = numberOfBlocks();
-	   setBounce(null);
-	   if(nrBlocks==1) {
-		   PlayedBlockAssignment block = getBlock(0);
-		   BouncePoint bp = calculateBouncePointBlock(block);
-		   setBounce(bp);
-		   return (bp != null);
-	   }
-    return false;
-  }
-
-  // line 78 "../../../../../Block223States.ump"
-   private boolean hitBlock(){
-    int nrBlocks = numberOfBlocks();
-	   setBounce(null);
-	   for(int i=0;i<nrBlocks;i++) {
-		   PlayedBlockAssignment aBlock = getBlock(i);
-		   BouncePoint bp = calculateBouncePointBlock(aBlock);
-		   bounce = getBounce();
-		   boolean closer = isCloser(bp, bounce);
-		   if(closer) {
-			   setBounce(bp);
-		   }
-	   }
-    return (getBounce() != null);
-  }
-
-  // line 93 "../../../../../Block223States.ump"
-   private boolean hitWall(){
-    BouncePoint bp = calculateBouncePointWall();
-	   setBounce(bp);
-	   return (bp != null);
-  }
-
-  // line 105 "../../../../../Block223States.ump"
+  // line 124 "../../../../../Block223States.ump"
    private void doHitPaddleOrWall(){
     bounceBall();
   }
 
-  // line 109 "../../../../../Block223States.ump"
+  // line 128 "../../../../../Block223States.ump"
    private void doOutOfBounds(){
     setLives(getLives()-1);
 		resetCurrentBallX();
@@ -1043,7 +1048,7 @@ public class PlayedGame implements Serializable
 		resetCurrentPaddleX();
   }
 
-  // line 118 "../../../../../Block223States.ump"
+  // line 137 "../../../../../Block223States.ump"
    private void doHitBlock(){
     int score = getScore();
 	   BouncePoint bounce = getBounce();
@@ -1055,7 +1060,7 @@ public class PlayedGame implements Serializable
 	   bounceBall();
   }
 
-  // line 129 "../../../../../Block223States.ump"
+  // line 148 "../../../../../Block223States.ump"
    private void doHitBlockNextLevel(){
     doHitBlock();
 	   int level = getCurrentLevel();
@@ -1067,7 +1072,7 @@ public class PlayedGame implements Serializable
 	   setWaitTime(INITIAL_WAIT_TIME * Math.pow(getGame().getBall().getBallSpeedIncreaseFactor(), (getCurrentLevel())-1));
   }
 
-  // line 140 "../../../../../Block223States.ump"
+  // line 159 "../../../../../Block223States.ump"
    private void doHitNothingAndNotOutOfBounds(){
     double x = currentBallX;
   double y = currentBallY;
@@ -1077,7 +1082,7 @@ public class PlayedGame implements Serializable
   setCurrentBallY(y+dy);
   }
 
-  // line 150 "../../../../../Block223States.ump"
+  // line 169 "../../../../../Block223States.ump"
    private void doGameOver(){
     Player p = getPlayer();
 		if (p != null) {

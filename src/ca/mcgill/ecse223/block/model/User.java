@@ -3,6 +3,7 @@
 
 package ca.mcgill.ecse223.block.model;
 import java.io.Serializable;
+import java.util.Map.Entry;
 import java.util.*;
 
 // line 17 "../../../../../Block223Persistence.ump"
@@ -255,7 +256,7 @@ public class User implements Serializable
     }
   }
 
-  // line 26 "../../../../../Block223.ump"
+  // line 27 "../../../../../Block223.ump"
    public static  String findUsername(UserRole player){
     String username = "";
 	   Map<User, String> newMap = new HashMap<>();
