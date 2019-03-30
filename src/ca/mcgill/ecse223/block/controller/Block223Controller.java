@@ -202,24 +202,18 @@ public class Block223Controller {
 			throw new InvalidInputException("Only the admin who created the game can define its game settings.".trim());
 		if (name == null || name.length() == 0)
 			throw new InvalidInputException("The name of a game must be specified.".trim());
-
+		if(game.isPublished())
+			throw new InvalidInputException("A published game cannot be updated.".trim());
 		String currentName = game.getName();
 		Game aGame = findGame(name);
-		if (aGame != null)
+		if (aGame != null && !aGame.equals(game) && !name.contentEquals(currentName))
 			throw new InvalidInputException("The name of a game must be unique.".trim());
-
-		if (!currentName.equals(name)) {
-			try {
+		if (!currentName.equals(name))
 				game.setName(name);
-			} catch (RuntimeException e) {
-				if (e.getMessage().equals("Name is not unique")) {
-					throw new InvalidInputException("The name of a game must be unique.".trim());
-
-				}
-			}
-		}
 		setGameDetails(nrLevels, nrBlocksPerLevel, minBallSpeedX, minBallSpeedY, ballSpeedIncreaseFactor,
-				maxPaddleLength, minPaddleLength);
+						maxPaddleLength, minPaddleLength);
+			
+		
 	}
 
 	public static void addBlock(int red, int green, int blue, int points) throws InvalidInputException {
