@@ -574,21 +574,25 @@ public class Block223Controller {
 		Block223 block223 = Block223Application.getBlock223();
 		UserRole player = Block223Application.getCurrentUserRole();
 		PlayedGame pgame = null;
-		
+		String username = User.findUsername(player);
+
 		if(!(player instanceof Player))
 			throw new InvalidInputException("Player privileges are required to play a game.");
-		if(game == null)
-			throw new InvalidInputException("The game does not exist.");
 
 		if(game != null) {
-			String username = User.findUsername(player);
-			
 			pgame = new PlayedGame(username, game, block223);
 			pgame.setPlayer((Player) player);
 		}
 		else {
 			pgame = block223.findPlayableGame(id);
+
 		}
+		if(pgame == null && game == null)
+			throw new InvalidInputException("The game does not exist.");
+		if(game == null && player != pgame.getPlayer()) 
+			throw new InvalidInputException("Only the player that started a game can continue the game.");
+
+
 		Block223Application.setCurrentPlayableGame(pgame);
 	}
 
@@ -606,7 +610,7 @@ public class Block223Controller {
 		if ((userRole instanceof Admin) && aGame.getGame().getAdmin() != userRole)
 			throw new InvalidInputException("Only the admin of a game can test the game.");
 		if (userRole instanceof Player && aGame.getPlayer() == null)
-			throw new InvalidInputException("Admin privileges are required to test a game");
+			throw new InvalidInputException("Admin privileges are required to test a game.");
 
 		aGame.play();
 		String userInputs = ui.takeInputs();
@@ -988,7 +992,7 @@ public class Block223Controller {
 			if (c == 'r')
 				r++;
 		}
-		aGame.setCurrentPaddleX(aGame.getCurrentBallX() + (aGame.PADDLE_MOVE_LEFT * l) + (aGame.PADDLE_MOVE_RIGHT * r));
+		aGame.setCurrentPaddleX(aGame.getCurrentBallX() + (PlayedGame.PADDLE_MOVE_LEFT * l) + (PlayedGame.PADDLE_MOVE_RIGHT * r));
 	}
 
 }

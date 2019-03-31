@@ -98,7 +98,7 @@ depend java.awt.geom.*;
   
   // Actions
   
-    private void doSetup() {
+   private void doSetup(){
 	    resetCurrentBallX();
 		resetCurrentBallY();
 		resetBallDirectionX();
@@ -112,9 +112,8 @@ depend java.awt.geom.*;
 					(Game.WALL_PADDING+Block.SIZE+Game.COLUMNS_PADDING) *(a.getGridHorizontalPosition()-1),
 					(Game.WALL_PADDING+Block.SIZE+Game.ROW_PADDING) *(a.getGridVerticalPosition()-1), a.getBlock(), this);
 		}
-		
 		while(numberOfBlocks() < game.getNrBlocksPerLevel()) {
-			//lets not be random no idea how to chekc if grid is taken TODO
+
 			Random rand = new Random();
 			int x = rand.nextInt((390%20));
 			int y = rand.nextInt((390%20));
@@ -129,11 +128,13 @@ depend java.awt.geom.*;
 					}
 					if(canPlace) {
 						PlayedBlockAssignment pblock = new PlayedBlockAssignment(j, i, game.getRandomBlock(), this);
+						canPlace = false;
+
 					}	
 				}
 			}
 		}
-	  }
+  }
   
   private void doHitPaddleOrWall() {
     bounceBall();
