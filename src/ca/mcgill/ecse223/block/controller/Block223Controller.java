@@ -494,7 +494,7 @@ public class Block223Controller {
 		if (userRole != null)
 			throw new InvalidInputException("Cannot register a new user while a user is logged in.".trim());
 
-		if (playerPassword == null || "" == playerPassword.trim()) {
+		if (playerPassword == null || "".equals(playerPassword.trim())) {
 			throw new InvalidInputException("The player password needs to be specified.");
 		}
 		
@@ -503,7 +503,7 @@ public class Block223Controller {
 
 		Block223 block223 = Block223Application.getBlock223();
 		
-		if (username == null || "" == username.trim()) {
+		if (username == null || "".equals(username.trim())) {
 			throw new InvalidInputException("The username must be specified.");
 		}
 
@@ -541,10 +541,17 @@ public class Block223Controller {
 		UserRole userRole = Block223Application.getCurrentUserRole();
 		if (userRole != null)
 			throw new InvalidInputException("Cannot login a user while a user is already logged in.".trim());
+
+		if (username.trim().equals("")) {
+			throw new InvalidInputException("The username must be specified.".trim());
+		}
+		
+		if (password.trim().equals("")) {
+			throw new InvalidInputException("The password must be specified.".trim());
+		}
 		if (User.getWithUsername(username) == null)
 			throw new InvalidInputException("The username and password do not match.".trim());
-		
-		
+
 		
 		User user = User.getWithUsername(username);
 		List<UserRole> roles = user.getRoles();
