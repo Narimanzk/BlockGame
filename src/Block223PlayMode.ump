@@ -309,6 +309,81 @@ private BouncePoint calculateBouncePointPaddle(){
                );
        return new Point2D.Double(x, y);
 	}
+	 private Point2D getIntersectionPoint(Line2D a, Line2D b) {
+		if (a.intersectsLine(b) && slope(a) != slope(b)) {
+			double x1 = a.getX1();
+			double x2 = b.getX1();
+			double y1 = a.getY1();
+			double y2 = b.getY1();
+			Double m1 = slope(a);
+			Double m2 = slope(b);
+			double x,y;
+			if (m1 == null) {
+				x = a.getX1();
+				y = m2*(x-x2) + y2;
+			} else if (m2 == null) {
+				x = b.getX1(); 
+				y = m1*(x-x1) + y1;
+			} else {
+				x  = (m1*x1 - y1 + y2-m2*x2)/(m1-m2);
+				y =  m1*(x-x1) + y1;
+			}
+		    return new Point2D.Double(x,y);
+		} else {
+			return null;
+		}
+	}
+  /**
+	 * Returns the intersections between an arc and a line segment
+	 * @param l The line
+	 * @param xc The x of the circle's center
+	 * @param yc the y of the circle's center
+	 * @param r the radius of the circle
+	 * @return a list of points of intersection
+	 */
+	private List<Point2D> getIntersectionPoints(Line2D l, double xc, double yc, double r) {
+		List<Point2D> list = new ArrayList<Point2D>();
+		Double m = slope(l);
+		double xl = l.getX1();
+		double yl = l.getY1();
+		if (m == null) {
+			List<Double> yvals = new ArrayList<Double>();
+			double x = xl;
+			double radicand = r*r - (x-xc)*(x-xc);
+			if (radicand >= 0) {
+				yvals.add(yc - Math.sqrt(radicand));
+				yvals.add(yc + Math.sqrt(radicand));
+			}
+			for (Double yval : yvals) {
+				if (yval <= Math.min(yl, l.getY2()) && yval >= Math.max(yl, l.getY2())) {
+					list.add(new Point2D.Double(x, yval));
+				}
+			}
+		} else {
+
+			List<Double> xvals = new ArrayList<Double>();
+			double a = (m*m + 1);
+			double b = 2*m*(-m*xl+yl-yc)-2*xc;
+			double c = Math.pow(-m*xl+yl-yc,2) - r*r + xc*xc;
+			if (b*b - 4*a*c >= 0) {
+				xvals.add((-b + Math.sqrt(b*b - 4*a*c) ) / (2*a));
+				xvals.add((-b - Math.sqrt(b*b - 4*a*c) ) / (2*a));
+			}
+			for (Double xval : xvals) {
+				if (xval <= Math.max(xl, l.getX2()) && xval >= Math.min(xl, l.getX2())) {
+					list.add(new Point2D.Double(xval, m*xval - m*xl + yl));
+				}
+			}
+		}
+		return list;
+	}
+  private Double slope(Line2D l) {
+		if (Math.abs(l.getX1() - l.getX2()) > 0.0001) {
+			return (l.getY1() - l.getY2())/(l.getX1() - l.getX2());
+		} else {
+			return null;
+		}
+	}
    
     private boolean isCloser(BouncePoint bp, BouncePoint bounce) {
 	   if(bp == null) {
