@@ -542,13 +542,6 @@ public class Block223Controller {
 		if (userRole != null)
 			throw new InvalidInputException("Cannot login a user while a user is already logged in.".trim());
 
-		if (username.trim().equals("")) {
-			throw new InvalidInputException("The username must be specified.".trim());
-		}
-		
-		if (password.trim().equals("")) {
-			throw new InvalidInputException("The password must be specified.".trim());
-		}
 		if (User.getWithUsername(username) == null)
 			throw new InvalidInputException("The username and password do not match.".trim());
 
@@ -566,6 +559,13 @@ public class Block223Controller {
 		if (Block223Application.getCurrentUserRole() == null)
 			throw new InvalidInputException("The username and password do not match.");
 		
+		if (username.trim().equals("")) {
+			throw new InvalidInputException("The username must be specified.".trim());
+		}
+		
+		if (password.trim().equals("")) {
+			throw new InvalidInputException("The password must be specified.".trim());
+		}
 	}
 
 	public static void logout() {
