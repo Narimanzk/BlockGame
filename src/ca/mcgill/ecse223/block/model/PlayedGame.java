@@ -722,15 +722,12 @@ public class PlayedGame implements Serializable
 
   // line 55 "../../../../../Block223PlayMode.ump"
    private void bounceBall(){
-	   BouncePoint bp = getBounce();
+    BouncePoint bp = getBounce();
 	   double incomingY = bp.getY()- currentBallY;
 	   double remainingY = ballDirectionY - incomingY;
 	   double incomingX = bp.getX()- currentBallX;
 	   double remainingX = ballDirectionX - incomingX;
-	   //System.out.println("Ball X,Y: "+currentBallX+","+currentBallY);
-	   //System.out.println("BouncePoint X,Y: "+bp.getX()+","+bp.getY());
 	   if(bp.getDirection() == BouncePoint.BounceDirection.FLIP_Y) {
-		   //System.out.println("Flipping Y");
 		   double newBallDirectionY = ballDirectionY *-1;
 		   double newBallDirectionX = ballDirectionX + Math.abs(ballDirectionY*0.1);
 		   setCurrentBallY(bp.getY()+remainingY/ballDirectionY * newBallDirectionY);
@@ -738,7 +735,6 @@ public class PlayedGame implements Serializable
 		   setBallDirectionX(newBallDirectionX);
 		   setBallDirectionY(newBallDirectionY);
 	   }else if(bp.getDirection() == BouncePoint.BounceDirection.FLIP_X) {
-		   //System.out.println("Flipping X");
 		   double newBallDirectionX = ballDirectionX *-1;
 		   double newBallDirectionY = ballDirectionY + Math.abs(ballDirectionX*0.1);
 		   setCurrentBallY(bp.getY()+remainingY/ballDirectionY * newBallDirectionY);
@@ -746,10 +742,10 @@ public class PlayedGame implements Serializable
 		   setBallDirectionX(newBallDirectionX);
 		   setBallDirectionY(newBallDirectionY);
 	   }else if(bp.getDirection() == BouncePoint.BounceDirection.FLIP_BOTH) {
-		   //System.out.println("Flipping Both");
-		   double newBallDirectionX=1;
+		   		   double newBallDirectionX=1;
 		   double newBallDirectionY=1;
 		   if(bp.hasHitBlock()) {
+			   bounce.setHitBlock(null);
 			   PlayedBlockAssignment block = bp.getHitBlock();
 			   if(bp.getX()>block.getX()) {//we are on right side
 				   //if(bp.getY()>block.getY()) {//we are in corner F
@@ -788,34 +784,15 @@ public class PlayedGame implements Serializable
 
   // line 116 "../../../../../Block223PlayMode.ump"
    private BouncePoint calculateBouncePointBlock(PlayedBlockAssignment aBlock){
-	   int size = aBlock.getBlock().SIZE;
+    int size = aBlock.getBlock().SIZE;
 	   int borderSize = size + Ball.BALL_DIAMETER;
 	   double leftX = aBlock.getX() - ((double)Ball.BALL_DIAMETER)/2;
 	   double bottomY = aBlock.getY() - ((double)Ball.BALL_DIAMETER)/2;
-	   //find the bottom left corner of the block's boundary and make a rectangle2D with that
-	   Rectangle2D blockBoundary = new Rectangle2D.Double(leftX,bottomY,borderSize,borderSize);
-	   Point2D ballCoords = new Point2D.Double(currentBallX, currentBallY);
-	   Point2D ballNewCoords = new Point2D.Double(currentBallX+ballDirectionX, currentBallY+ballDirectionY);
-	   //make a Line2D object that represents the ball's path in the next tick
-	   Line2D.Double ballPath = new Line2D.Double(ballCoords, ballNewCoords);
-
-	   //First, does the path of the ball intersect with the border of the block in any way?
-	   if(!blockBoundary.intersectsLine(ballPath)) {
-		   return null;//if it doesn't, screw it, just return null.
-	   }
-	   //if it does, we need to find the exact point where they intersect
 	   double rightX = leftX + borderSize;
 	   double topY = bottomY + borderSize;
-	   /*
-	   System.out.println("Ball's current coords: "+currentBallX+","+currentBallY);
-	   System.out.println("Ball's new coords: "+ballNewCoords.getX()+","+ballNewCoords.getY());
-	   System.out.println("");
-	   System.out.println("leftX= "+leftX);
-	   System.out.println("rightX= "+rightX);
-	   System.out.println("topY= "+topY);
-	   System.out.println("bottomY= "+bottomY);
-	   */
-	   //Define line segments that denote the edges of the block's border.
+
+	   Line2D.Double ballPath = new Line2D.Double(currentBallX, currentBallY, currentBallX+ballDirectionX, currentBallY+ballDirectionY);
+
 	   Line2D.Double top = new Line2D.Double(leftX,topY,rightX,topY);
 	   Line2D.Double bottom = new Line2D.Double(leftX, bottomY, rightX, bottomY);
 	   Line2D.Double right = new Line2D.Double(rightX, topY, rightX, bottomY);
@@ -823,26 +800,28 @@ public class PlayedGame implements Serializable
 	   
 	   ArrayList<Point2D> intersects = new ArrayList<Point2D>();
 	   //If the path of the ball intersects with ANY of those defined lines
+	   boolean found=false;
 	   if(ballPath.intersectsLine(top)) {
 		   //calculate the point of intersection and add that point to a list for processing.
 		   intersects.add(getIntersection(ballPath,top));
+		   found=true;
 	   }
-	   int test=0;
 	   if(ballPath.intersectsLine(bottom)) {
 		   intersects.add(getIntersection(ballPath,bottom));
-		   test++;
+		   found=true;
 	   }
 	   if(ballPath.intersectsLine(left)) {
 		   intersects.add(getIntersection(ballPath,left));
-		   test++;
+		   found=true;
 	   }
 	   if(ballPath.intersectsLine(right)) {
 		   intersects.add(getIntersection(ballPath,right));
-		   test++;
+		   found=true;
 	   }
-	   if(test==0) {
-		   System.out.println("Critical failure");
+	   if(!found) {
+		   return null;
 	   }
+	   Point2D ballCoords = new Point2D.Double(currentBallX, currentBallY);
 	   //With this list of points, find the one closest to the ball's current position
 	   double minDistance = ballCoords.distance(intersects.get(0));
 	   Point2D closestPoint=intersects.get(0);//set some initial values
@@ -854,11 +833,11 @@ public class PlayedGame implements Serializable
 		   }
 	   }//we now have the closest intersect point! So how do we flip?
 	   
-	   if(closestPoint.getX()<rightX-10 && closestPoint.getX()>leftX+10) {
+	   if(closestPoint.getX()<rightX-5 && closestPoint.getX()>leftX+5) {
 		   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_Y);
 		   finalBP.setHitBlock(aBlock);
 		   return finalBP;
-	   }else if(closestPoint.getY()<topY-10 && closestPoint.getY()>bottomY+10) {
+	   }else if(closestPoint.getY()<topY-5 && closestPoint.getY()>bottomY+5) {
 		   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_X);
 		   finalBP.setHitBlock(aBlock);
 		   return finalBP;
@@ -869,9 +848,9 @@ public class PlayedGame implements Serializable
 	   }
   }
 
-  // line 180 "../../../../../Block223PlayMode.ump"
+  // line 181 "../../../../../Block223PlayMode.ump"
    private BouncePoint calculateBouncePointPaddle(){
-	   double x1 = currentBallX;
+    double x1 = currentBallX;
 	   double y1 = currentBallY;
 	   double x2 = currentBallX + ballDirectionX;
 	   double y2 = currentBallY + ballDirectionY;
@@ -924,12 +903,11 @@ public class PlayedGame implements Serializable
 		   return new BouncePoint(closestPoint.getX(), closestPoint.getY(), bd);
 	   }
 	   return null;
+  }
 
-   }
-
-  // line 227 "../../../../../Block223PlayMode.ump"
+  // line 237 "../../../../../Block223PlayMode.ump"
    private BouncePoint calculateBouncePointWall(){
-	   double x1 = currentBallX;
+    double x1 = currentBallX;
 	   double y1 = currentBallY;
 	   double x2 = currentBallX + ballDirectionX;
 	   double y2 = currentBallY + ballDirectionY;
@@ -968,9 +946,92 @@ public class PlayedGame implements Serializable
 			return new BouncePoint(closestPoint.getX(), closestPoint.getY(), bd);
 	   }
 	   return null;
-   }
+  }
 
-  // line 292 "../../../../../Block223PlayMode.ump"
+  // line 297 "../../../../../Block223PlayMode.ump"
+   private Point2D getIntersectionPoint(Line2D a, Line2D b){
+    if (a.intersectsLine(b) && slope(a) != slope(b)) {
+			double x1 = a.getX1();
+			double x2 = b.getX1();
+			double y1 = a.getY1();
+			double y2 = b.getY1();
+			Double m1 = slope(a);
+			Double m2 = slope(b);
+			double x,y;
+			if (m1 == null) {
+				x = a.getX1();
+				y = m2*(x-x2) + y2;
+			} else if (m2 == null) {
+				x = b.getX1(); 
+				y = m1*(x-x1) + y1;
+			} else {
+				x  = (m1*x1 - y1 + y2-m2*x2)/(m1-m2);
+				y =  m1*(x-x1) + y1;
+			}
+		    return new Point2D.Double(x,y);
+		} else {
+			return null;
+		}
+  }
+
+
+  /**
+   * 
+   * Returns the intersections between an arc and a line segment
+   * @param l The line
+   * @param xc The x of the circle's center
+   * @param yc the y of the circle's center
+   * @param r the radius of the circle
+   * @return a list of points of intersection
+   */
+  // line 329 "../../../../../Block223PlayMode.ump"
+   private List<Point2D> getIntersectionPoints(Line2D l, double xc, double yc, double r){
+    List<Point2D> list = new ArrayList<Point2D>();
+		Double m = slope(l);
+		double xl = l.getX1();
+		double yl = l.getY1();
+		if (m == null) {
+			List<Double> yvals = new ArrayList<Double>();
+			double x = xl;
+			double radicand = r*r - (x-xc)*(x-xc);
+			if (radicand >= 0) {
+				yvals.add(yc - Math.sqrt(radicand));
+				yvals.add(yc + Math.sqrt(radicand));
+			}
+			for (Double yval : yvals) {
+				if (yval <= Math.min(yl, l.getY2()) && yval >= Math.max(yl, l.getY2())) {
+					list.add(new Point2D.Double(x, yval));
+				}
+			}
+		} else {
+
+			List<Double> xvals = new ArrayList<Double>();
+			double a = (m*m + 1);
+			double b = 2*m*(-m*xl+yl-yc)-2*xc;
+			double c = Math.pow(-m*xl+yl-yc,2) - r*r + xc*xc;
+			if (b*b - 4*a*c >= 0) {
+				xvals.add((-b + Math.sqrt(b*b - 4*a*c) ) / (2*a));
+				xvals.add((-b - Math.sqrt(b*b - 4*a*c) ) / (2*a));
+			}
+			for (Double xval : xvals) {
+				if (xval <= Math.max(xl, l.getX2()) && xval >= Math.min(xl, l.getX2())) {
+					list.add(new Point2D.Double(xval, m*xval - m*xl + yl));
+				}
+			}
+		}
+		return list;
+  }
+
+  // line 365 "../../../../../Block223PlayMode.ump"
+   private Double slope(Line2D l){
+    if (Math.abs(l.getX1() - l.getX2()) > 0.0001) {
+			return (l.getY1() - l.getY2())/(l.getX1() - l.getX2());
+		} else {
+			return null;
+		}
+  }
+
+  // line 373 "../../../../../Block223PlayMode.ump"
    private boolean isCloser(BouncePoint bp, BouncePoint bounce){
     if(bp == null) {
 		   return false;
@@ -1194,7 +1255,7 @@ public class PlayedGame implements Serializable
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 272 "../../../../../Block223PlayMode.ump"
+  // line 278 "../../../../../Block223PlayMode.ump"
   private static Point2D getIntersection (final Line2D.Double line1, final Line2D.Double line2) 
   {
     final double x1,y1, x2,y2, x3,y3, x4,y4;
@@ -1214,82 +1275,6 @@ public class PlayedGame implements Serializable
                );
        return new Point2D.Double(x, y);
   }
-  
-  private Point2D getIntersectionPoint(Line2D a, Line2D b) {
-		if (a.intersectsLine(b) && slope(a) != slope(b)) {
-			double x1 = a.getX1();
-			double x2 = b.getX1();
-			double y1 = a.getY1();
-			double y2 = b.getY1();
-			Double m1 = slope(a);
-			Double m2 = slope(b);
-			double x,y;
-			if (m1 == null) {
-				x = a.getX1();
-				y = m2*(x-x2) + y2;
-			} else if (m2 == null) {
-				x = b.getX1(); 
-				y = m1*(x-x1) + y1;
-			} else {
-				x  = (m1*x1 - y1 + y2-m2*x2)/(m1-m2);
-				y =  m1*(x-x1) + y1;
-			}
-		    return new Point2D.Double(x,y);
-		} else {
-			return null;
-		}
-	}
-/**
-	 * Returns the intersections between an arc and a line segment
-	 * @param l The line
-	 * @param xc The x of the circle's center
-	 * @param yc the y of the circle's center
-	 * @param r the radius of the circle
-	 * @return a list of points of intersection
-	 */
-	private List<Point2D> getIntersectionPoints(Line2D l, double xc, double yc, double r) {
-		List<Point2D> list = new ArrayList<Point2D>();
-		Double m = slope(l);
-		double xl = l.getX1();
-		double yl = l.getY1();
-		if (m == null) {
-			List<Double> yvals = new ArrayList<Double>();
-			double x = xl;
-			double radicand = r*r - (x-xc)*(x-xc);
-			if (radicand >= 0) {
-				yvals.add(yc - Math.sqrt(radicand));
-				yvals.add(yc + Math.sqrt(radicand));
-			}
-			for (Double yval : yvals) {
-				if (yval <= Math.min(yl, l.getY2()) && yval >= Math.max(yl, l.getY2())) {
-					list.add(new Point2D.Double(x, yval));
-				}
-			}
-		} else {
-
-			List<Double> xvals = new ArrayList<Double>();
-			double a = (m*m + 1);
-			double b = 2*m*(-m*xl+yl-yc)-2*xc;
-			double c = Math.pow(-m*xl+yl-yc,2) - r*r + xc*xc;
-			if (b*b - 4*a*c >= 0) {
-				xvals.add((-b + Math.sqrt(b*b - 4*a*c) ) / (2*a));
-				xvals.add((-b - Math.sqrt(b*b - 4*a*c) ) / (2*a));
-			}
-			for (Double xval : xvals) {
-				if (xval <= Math.max(xl, l.getX2()) && xval >= Math.min(xl, l.getX2())) {
-					list.add(new Point2D.Double(xval, m*xval - m*xl + yl));
-				}
-			}
-		}
-		return list;
-	}
-private Double slope(Line2D l) {
-		if (Math.abs(l.getX1() - l.getX2()) > 0.0001) {
-			return (l.getY1() - l.getY2())/(l.getX1() - l.getX2());
-		} else {
-			return null;
-		}
-	}
 // line 115 "../../../../../Block223Persistence.ump"
   private static final long serialVersionUID = 8597675110221231714L ;
 
