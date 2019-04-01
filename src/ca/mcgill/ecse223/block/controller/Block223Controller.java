@@ -514,7 +514,7 @@ public class Block223Controller {
 				check = true;
 			}
 		}
-		if (User.getWithUsername(username)!=null) {
+		if (Block223Application.getBlock223().getUsers().contains(User.getWithUsername(username))) {
 			throw new InvalidInputException("The username has already been taken.");
 		}
 		
@@ -537,7 +537,7 @@ public class Block223Controller {
 
 	public static void login(String username, String password) throws InvalidInputException {
 
-		Block223 block223 = Block223Application.getBlock223();
+		Block223 block223 = Block223Application.resetBlock223();
 		UserRole userRole = Block223Application.getCurrentUserRole();
 		if (userRole != null)
 			throw new InvalidInputException("Cannot login a user while a user is already logged in.".trim());
@@ -545,7 +545,7 @@ public class Block223Controller {
 			throw new InvalidInputException("The username and password do not match.".trim());
 		
 		
-		Block223Application.resetBlock223();
+		
 		User user = User.getWithUsername(username);
 		List<UserRole> roles = user.getRoles();
 		
