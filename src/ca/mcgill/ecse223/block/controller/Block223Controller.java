@@ -591,8 +591,6 @@ public class Block223Controller {
 			throw new InvalidInputException("The game does not exist.");
 		if(game == null && player != pgame.getPlayer()) 
 			throw new InvalidInputException("Only the player that started a game can continue the game.");
-
-
 		Block223Application.setCurrentPlayableGame(pgame);
 	}
 
@@ -650,8 +648,6 @@ public class Block223Controller {
 			throw new InvalidInputException("Only the admin who created the game can publish it\n");
 		if(Block223Application.getCurrentGame().getBlocks().size()<1)
 			throw new InvalidInputException("At least one block must be defined for a game to be published\n");
-
-		
 		
 
 		Game game = Block223Application.getCurrentGame();
