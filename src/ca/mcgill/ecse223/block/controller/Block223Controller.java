@@ -616,7 +616,7 @@ public class Block223Controller {
 		String userInputs = ui.takeInputs();
 
 		while (aGame.getPlayStatus() == PlayStatus.Moving) {
-			ui.takeInputs();
+			userInputs = ui.takeInputs();
 			updatePaddlePosition(userInputs);
 			aGame.move();
 
@@ -992,7 +992,15 @@ public class Block223Controller {
 			if (c == 'r')
 				r++;
 		}
-		aGame.setCurrentPaddleX(aGame.getCurrentBallX() + (PlayedGame.PADDLE_MOVE_LEFT * l) + (PlayedGame.PADDLE_MOVE_RIGHT * r));
+		double newPos = aGame.getCurrentPaddleX() + (PlayedGame.PADDLE_MOVE_LEFT * l) + (PlayedGame.PADDLE_MOVE_RIGHT * r);
+		if (newPos > 370) {
+			newPos = 370;
+		}
+		if (newPos < 0) {
+			newPos = 0;
+			
+		}
+		aGame.setCurrentPaddleX(newPos);
 	}
 
 }

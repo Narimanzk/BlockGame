@@ -1,0 +1,414 @@
+class Block223 {
+   1 <@>- * PlayedGame playedGames;
+   1 <@>- * HallOfFameEntry entries;
+}
+
+class Game {
+   Boolean published = false;
+   1 -> 0..1 HallOfFameEntry mostRecentEntry;
+}
+
+class PlayedGame {
+   const Integer INITIAL_WAIT_TIME = 1000; // at design time, the initial wait time may be adjusted as seen fit
+   autounique id;
+   const Integer NR_LIVES = 3;
+   Integer score = 0;
+   Integer lives = NR_LIVES;
+   Integer currentLevel = 1;
+   Double waitTime = INITIAL_WAIT_TIME;
+   * -- 0..1 Player player; // an admin may test the game; a game is played in test mode if player == null
+   playername; // added here so that it only needs to be determined once
+   
+   // the PlayedBall and PlayedPaddle are not in a separate class to avoid the bug in Umple that occurred for the second constructor of Game
+
+   // no direct link to Ball, because the ball can be found by navigating to PlayedGame, Game, and then Ball
+   const Integer BALL_INITIAL_X = Game.PLAY_AREA_SIDE / 2;
+   const Integer BALL_INITIAL_Y = Game.PLAY_AREA_SIDE / 2;
+   // 0/0 is the top left corner of the play area, i.e., a directionX/Y of 0/1 moves the ball down in a straight line
+   defaulted Double ballDirectionX = getGame().getBall().getMinBallSpeedX();
+   defaulted Double ballDirectionY = getGame().getBall().getMinBallSpeedY();
+   // the position of the ball is at the center of the ball
+   defaulted Double currentBallX = BALL_INITIAL_X;
+   defaulted Double currentBallY = BALL_INITIAL_Y;
+
+   // no direct link to Paddle, because the paddle can be found by navigating to PlayedGame, Game, and then Paddle
+   const Integer PADDLE_MOVE_RIGHT = 1; // pixels moved when right arrow key is pressed
+   const Integer PADDLE_MOVE_LEFT = -1; // pixels moved when left arrow key is pressed
+   Double currentPaddleLength = getGame().getPaddle().getMaxPaddleLength();
+   // the position of the paddle is at its top right corner
+   defaulted Double currentPaddleX = (Game.PLAY_AREA_SIDE - currentPaddleLength) / 2;
+   immutable Double currentPaddleY = Game.PLAY_AREA_SIDE - Paddle.VERTICAL_DISTANCE - Paddle.PADDLE_WIDTH;
+
+   * -- 1 Game game;
+   1 <@>- * PlayedBlockAssignment blocks;
+   0..1 -> 0..1 BouncePoint bounce;
+   
+   before constructor {
+      boolean didAddGameResult = setGame(aGame);
+      if (!didAddGameResult)
+      {
+         throw new RuntimeException("Unable to create playedGame due to game");
+      }
+   }
+   
+   private void bounceBall() {
+	   BouncePoint bp = getBounce();
+	   double incomingY = bp.getY()- currentBallY;
+	   double remainingY = ballDirectionY - incomingY;
+	   double incomingX = bp.getX()- currentBallX;
+	   double remainingX = ballDirectionX - incomingX;
+	   if(bp.getDirection() == BouncePoint.BounceDirection.FLIP_Y) {
+		   double newBallDirectionY = ballDirectionY *-1;
+		   double newBallDirectionX = ballDirectionX + Math.abs(ballDirectionY*0.1);
+		   setCurrentBallY(bp.getY()+remainingY/ballDirectionY * newBallDirectionY);
+		   setCurrentBallX(bp.getX()+remainingX/ballDirectionX * newBallDirectionX);
+		   setBallDirectionX(newBallDirectionX);
+		   setBallDirectionY(newBallDirectionY);
+	   }else if(bp.getDirection() == BouncePoint.BounceDirection.FLIP_X) {
+		   double newBallDirectionX = ballDirectionX *-1;
+		   double newBallDirectionY = ballDirectionY + Math.abs(ballDirectionX*0.1);
+		   setCurrentBallY(bp.getY()+remainingY/ballDirectionY * newBallDirectionY);
+		   setCurrentBallX(bp.getX()+remainingX/ballDirectionX * newBallDirectionX);
+		   setBallDirectionX(newBallDirectionX);
+		   setBallDirectionY(newBallDirectionY);
+	   }else if(bp.getDirection() == BouncePoint.BounceDirection.FLIP_BOTH) {
+		   		   double newBallDirectionX=1;
+		   double newBallDirectionY=1;
+		   if(bp.hasHitBlock()) {
+			   bounce.setHitBlock(null);
+			   PlayedBlockAssignment block = bp.getHitBlock();
+			   if(bp.getX()>block.getX()) {//we are on right side
+				   //if(bp.getY()>block.getY()) {//we are in corner F
+					   if(ballDirectionX<0) {
+						   newBallDirectionX=ballDirectionX*-1;
+					   }else {
+						   newBallDirectionY=ballDirectionY*-1;
+					   }
+				   /*}else {//we are in corner H
+					   if(ballDirectionX<0) {
+						   newBallDirectionX=ballDirectionX*-1;
+					   }else {
+						   newBallDirectionY=ballDirectionY*-1;
+					   }
+				   }*/
+			   }else {//we are on left side
+				   if(ballDirectionX<0) {
+					   newBallDirectionY=ballDirectionY*-1;
+				   }else {
+					   newBallDirectionX=ballDirectionX*-1;
+				   }
+			   }
+		   }else {
+			   newBallDirectionX = ballDirectionX *-1;
+			   newBallDirectionY = ballDirectionY *-1;
+		   }
+		   setCurrentBallY(bp.getY()+remainingY/ballDirectionY * newBallDirectionY);
+		   setCurrentBallX(bp.getX()+remainingX/ballDirectionX * newBallDirectionX);
+		   setBallDirectionX(newBallDirectionX);
+		   setBallDirectionY(newBallDirectionY);
+	   }
+	   if(bp.hasHitBlock()) {
+		   bounce.setHitBlock(null);
+	   }
+   }
+   
+   private BouncePoint calculateBouncePointBlock(PlayedBlockAssignment aBlock){
+	   int size = aBlock.getBlock().SIZE;
+	   int borderSize = size + Ball.BALL_DIAMETER;
+	   double leftX = aBlock.getX() - ((double)Ball.BALL_DIAMETER)/2;
+	   double bottomY = aBlock.getY() - ((double)Ball.BALL_DIAMETER)/2;
+	   double rightX = leftX + borderSize;
+	   double topY = bottomY + borderSize;
+
+	   Line2D.Double ballPath = new Line2D.Double(currentBallX, currentBallY, currentBallX+ballDirectionX, currentBallY+ballDirectionY);
+
+	   Line2D.Double top = new Line2D.Double(leftX,topY,rightX,topY);
+	   Line2D.Double bottom = new Line2D.Double(leftX, bottomY, rightX, bottomY);
+	   Line2D.Double right = new Line2D.Double(rightX, topY, rightX, bottomY);
+	   Line2D.Double left = new Line2D.Double(leftX, topY, leftX, bottomY);
+	   
+	   ArrayList<Point2D> intersects = new ArrayList<Point2D>();
+	   //If the path of the ball intersects with ANY of those defined lines
+	   boolean found=false;
+	   if(ballPath.intersectsLine(top)) {
+		   //calculate the point of intersection and add that point to a list for processing.
+		   intersects.add(getIntersection(ballPath,top));
+		   found=true;
+	   }
+	   if(ballPath.intersectsLine(bottom)) {
+		   intersects.add(getIntersection(ballPath,bottom));
+		   found=true;
+	   }
+	   if(ballPath.intersectsLine(left)) {
+		   intersects.add(getIntersection(ballPath,left));
+		   found=true;
+	   }
+	   if(ballPath.intersectsLine(right)) {
+		   intersects.add(getIntersection(ballPath,right));
+		   found=true;
+	   }
+	   if(!found) {
+		   return null;
+	   }
+	   Point2D ballCoords = new Point2D.Double(currentBallX, currentBallY);
+	   //With this list of points, find the one closest to the ball's current position
+	   double minDistance = ballCoords.distance(intersects.get(0));
+	   Point2D closestPoint=intersects.get(0);//set some initial values
+	   for(int i=1;i<intersects.size();i++) {//and iterate through the rest of the list
+		   double distance = ballCoords.distance(intersects.get(i));
+		   if(distance<minDistance) {
+			   closestPoint = intersects.get(i);
+			   minDistance = distance;
+		   }
+	   }//we now have the closest intersect point! So how do we flip?
+	   
+	   if(closestPoint.getX()<rightX-5 && closestPoint.getX()>leftX+5) {
+		   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_Y);
+		   finalBP.setHitBlock(aBlock);
+		   return finalBP;
+	   }else if(closestPoint.getY()<topY-5 && closestPoint.getY()>bottomY+5) {
+		   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_X);
+		   finalBP.setHitBlock(aBlock);
+		   return finalBP;
+	   }else {
+		   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_BOTH);
+		   finalBP.setHitBlock(aBlock);
+		   return finalBP;
+	   }
+  }
+  
+private BouncePoint calculateBouncePointPaddle(){
+	  double x1 = currentBallX;
+	   double y1 = currentBallY;
+	   double x2 = currentBallX + ballDirectionX;
+	   double y2 = currentBallY + ballDirectionY;
+	   Line2D ballPath = new Line2D.Double(x1,y1,x2,y2);
+	   double px = currentPaddleX;
+	   double py = currentPaddleY;
+	   double l = currentPaddleLength;
+	   double w = Paddle.PADDLE_WIDTH;
+	   double r = Ball.BALL_DIAMETER/2;
+	   Point2D closestPoint = null;
+	   BouncePoint.BounceDirection bd = null;
+	   double closestDist = Double.MAX_VALUE;
+	   Rectangle2D fullBox = new Rectangle2D.Double(px-r,py-r,l+(2*r),r+w);
+	   if(fullBox.intersectsLine(ballPath)){
+		   Line2D A = new Line2D.Double(px,py-r,px+l,py-r);
+		   Line2D B = new Line2D.Double(px-r,py,px-r,py+w);
+		   Line2D C = new Line2D.Double(px+l+r,py,px+l+r,py+w);
+
+		   for (Line2D line : new Line2D[] {A,B,C}) {
+			   Point2D intersectionPoint = getIntersectionPoint(line, ballPath);
+			   if (intersectionPoint != null && intersectionPoint.distance(x1, y1) < closestDist) {
+				   closestDist = getIntersectionPoint(line, ballPath).distance(x1, y1);
+				   closestPoint = getIntersectionPoint(line, ballPath);
+				   if (line.equals(A)) {
+					   bd = BouncePoint.BounceDirection.FLIP_Y;
+				   } else {
+					   bd = BouncePoint.BounceDirection.FLIP_X;
+				   }
+			   }
+		   }
+		   List<Point2D> EPts = getIntersectionPoints(ballPath, px,py,r);
+		   List<Point2D> FPts = getIntersectionPoints(ballPath, px+l, py, r);
+		   for (Point2D pt : EPts) {
+			   if (pt.getX() < px && pt.getY() < py && pt.distance(x1,x2) < closestDist) {
+				   closestPoint = pt;
+				   closestDist = pt.distance(x1,x2);
+				   bd = ballDirectionX < 0 ? BouncePoint.BounceDirection.FLIP_Y
+						   : BouncePoint.BounceDirection.FLIP_X;
+			   }
+		   }
+		   for (Point2D pt : FPts) {
+			   if (pt.getX() > px+l && pt.getY() < py && pt.distance(x1,x2) < closestDist) {
+				   closestPoint = pt;
+				   closestDist = pt.distance(x1,x2);
+				   bd = ballDirectionX < 0 ? BouncePoint.BounceDirection.FLIP_X
+						   : BouncePoint.BounceDirection.FLIP_Y;
+			   }
+		   }
+		   if (bd == null) return null;
+		   return new BouncePoint(closestPoint.getX(), closestPoint.getY(), bd);
+	   }
+	   return null;
+  }
+
+   private BouncePoint calculateBouncePointWall() {
+	  double x1 = currentBallX;
+	   double y1 = currentBallY;
+	   double x2 = currentBallX + ballDirectionX;
+	   double y2 = currentBallY + ballDirectionY;
+	   Line2D ballPath = new Line2D.Double(x1,y1,x2,y2);
+	   double r = Ball.BALL_DIAMETER/2;
+	   double side = Game.PLAY_AREA_SIDE;
+	   Point2D closestPoint = null;
+	   BouncePoint.BounceDirection bd = null;
+	   double closestDist = Double.MAX_VALUE;
+	   Line2D a = new Line2D.Double(r,r,r,side-r);
+	   Line2D b = new Line2D.Double(r,r,side-r,r);
+	   Line2D c = new Line2D.Double(side-r,r,side-r,side-r);
+	   
+	   if(ballPath.intersectsLine(a) || ballPath.intersectsLine(b) || ballPath.intersectsLine(c)){
+		   //System.out.println("Intersect with the walls");
+		   for (Line2D line : new Line2D[] {a,b,c}) {
+			   Point2D intersectionPoint = getIntersectionPoint(line, ballPath);
+			   //System.out.println(" Intersect Point:"+ intersectionPoint);
+			   if (intersectionPoint != null && intersectionPoint.distance(x1, y1) < closestDist) {
+				   closestDist = getIntersectionPoint(line, ballPath).distance(x1, y1);
+				   closestPoint = getIntersectionPoint(line, ballPath);
+				   //System.out.println("Closest Point:" + closestPoint);
+				   if (closestPoint.getY()==r && r<closestPoint.getX() && closestPoint.getX()<side-r) {
+					   //System.out.println("PING PING");
+					   bd = BouncePoint.BounceDirection.FLIP_Y;
+				   }if((closestPoint.getX()==r || closestPoint.getX()==(side-r)) && r<closestPoint.getY() && closestPoint.getY()<(side-r)) {
+					   //System.out.println("DING DING");
+					   bd = BouncePoint.BounceDirection.FLIP_X;
+				   }if((closestPoint.getX()==r && closestPoint.getY()==r) || (closestPoint.getX()==(side-r) && closestPoint.getY()==r)) {
+					   //System.out.println("RING RING");
+					   bd = BouncePoint.BounceDirection.FLIP_BOTH;
+				   }
+			   }
+		   }
+		   if (bd == null) return null;
+			return new BouncePoint(closestPoint.getX(), closestPoint.getY(), bd);
+	   }
+	   return null;
+	   }
+   
+   private static Point2D getIntersection(final Line2D.Double line1, final Line2D.Double line2) {
+       final double x1,y1, x2,y2, x3,y3, x4,y4;
+       x1 = line1.x1; y1 = line1.y1; x2 = line1.x2; y2 = line1.y2;
+       x3 = line2.x1; y3 = line2.y1; x4 = line2.x2; y4 = line2.y2;
+       final double x = (
+               (x2 - x1)*(x3*y4 - x4*y3) - (x4 - x3)*(x1*y2 - x2*y1)
+               ) /
+               (
+               (x1 - x2)*(y3 - y4) - (y1 - y2)*(x3 - x4)
+               );
+       final double y = (
+               (y3 - y4)*(x1*y2 - x2*y1) - (y1 - y2)*(x3*y4 - x4*y3)
+               ) /
+               (
+               (x1 - x2)*(y3 - y4) - (y1 - y2)*(x3 - x4)
+               );
+       return new Point2D.Double(x, y);
+	}
+	 private Point2D getIntersectionPoint(Line2D a, Line2D b) {
+		if (a.intersectsLine(b) && slope(a) != slope(b)) {
+			double x1 = a.getX1();
+			double x2 = b.getX1();
+			double y1 = a.getY1();
+			double y2 = b.getY1();
+			Double m1 = slope(a);
+			Double m2 = slope(b);
+			double x,y;
+			if (m1 == null) {
+				x = a.getX1();
+				y = m2*(x-x2) + y2;
+			} else if (m2 == null) {
+				x = b.getX1(); 
+				y = m1*(x-x1) + y1;
+			} else {
+				x  = (m1*x1 - y1 + y2-m2*x2)/(m1-m2);
+				y =  m1*(x-x1) + y1;
+			}
+		    return new Point2D.Double(x,y);
+		} else {
+			return null;
+		}
+	}
+  /**
+	 * Returns the intersections between an arc and a line segment
+	 * @param l The line
+	 * @param xc The x of the circle's center
+	 * @param yc the y of the circle's center
+	 * @param r the radius of the circle
+	 * @return a list of points of intersection
+	 */
+	private List<Point2D> getIntersectionPoints(Line2D l, double xc, double yc, double r) {
+		List<Point2D> list = new ArrayList<Point2D>();
+		Double m = slope(l);
+		double xl = l.getX1();
+		double yl = l.getY1();
+		if (m == null) {
+			List<Double> yvals = new ArrayList<Double>();
+			double x = xl;
+			double radicand = r*r - (x-xc)*(x-xc);
+			if (radicand >= 0) {
+				yvals.add(yc - Math.sqrt(radicand));
+				yvals.add(yc + Math.sqrt(radicand));
+			}
+			for (Double yval : yvals) {
+				if (yval <= Math.min(yl, l.getY2()) && yval >= Math.max(yl, l.getY2())) {
+					list.add(new Point2D.Double(x, yval));
+				}
+			}
+		} else {
+
+			List<Double> xvals = new ArrayList<Double>();
+			double a = (m*m + 1);
+			double b = 2*m*(-m*xl+yl-yc)-2*xc;
+			double c = Math.pow(-m*xl+yl-yc,2) - r*r + xc*xc;
+			if (b*b - 4*a*c >= 0) {
+				xvals.add((-b + Math.sqrt(b*b - 4*a*c) ) / (2*a));
+				xvals.add((-b - Math.sqrt(b*b - 4*a*c) ) / (2*a));
+			}
+			for (Double xval : xvals) {
+				if (xval <= Math.max(xl, l.getX2()) && xval >= Math.min(xl, l.getX2())) {
+					list.add(new Point2D.Double(xval, m*xval - m*xl + yl));
+				}
+			}
+		}
+		return list;
+	}
+  private Double slope(Line2D l) {
+		if (Math.abs(l.getX1() - l.getX2()) > 0.0001) {
+			return (l.getY1() - l.getY2())/(l.getX1() - l.getX2());
+		} else {
+			return null;
+		}
+	}
+   
+    private boolean isCloser(BouncePoint bp, BouncePoint bounce) {
+	   if(bp == null) {
+		   return false;
+	   }
+	   if(bounce == null) {
+		   return true;
+	   }
+	   double bpDist =Math.sqrt(Math.pow(Math.abs(currentBallX-bp.getX()),2)+Math.pow(Math.abs(currentBallY-bp.getY()),2));
+	   double bounceDist = Math.sqrt(Math.pow(Math.abs(currentBallX-bounce.getX()),2)+Math.pow(Math.abs(currentBallY-bounce.getY()),2));;
+	   if(bpDist<=bounceDist) {
+		   return true;
+	   }else {
+		   return false;
+	   }
+	}
+
+}
+
+class PlayedBlockAssignment {
+   // the associated block is either (a) the same as the one of the corresponding BlockAssignent or (b) randomly chosen
+   * -- 1 Block block;
+   // the position of a block is at its top right corner
+   Integer x;
+   Integer y;
+}
+
+class HallOfFameEntry {
+   Integer score;
+   playername; // added here so that it only needs to be determined once
+   * -- 1 Player player;
+   // the sorted keyword keeps the list of entries in the game automatically sorted by the score
+   * sorted {score} -- 1 Game game;
+}
+
+// this class needs to be specified but the use of it is optional; it is also not added to the persistence file
+// you may implement bounce behavior differently
+class BouncePoint {
+   Double x;
+   Double y;
+   enum BounceDirection { FLIP_X, FLIP_Y, FLIP_BOTH }
+   BounceDirection direction;
+   0..1 -> 0..1 PlayedBlockAssignment hitBlock;
+}
