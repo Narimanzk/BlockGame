@@ -615,6 +615,7 @@ public class Block223Controller {
 		aGame.play();
 		String userInputs = ui.takeInputs();
 
+		
 		while (aGame.getPlayStatus() == PlayStatus.Moving) {
 			userInputs = ui.takeInputs();
 			updatePaddlePosition(userInputs);
