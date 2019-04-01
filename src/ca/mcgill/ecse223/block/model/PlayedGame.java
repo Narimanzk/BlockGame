@@ -852,8 +852,8 @@ public class PlayedGame implements Serializable
    private BouncePoint calculateBouncePointPaddle(){
     double x1 = currentBallX;
 	   double y1 = currentBallY;
-	   double x2 = currentBallX + ballDirectionX;
-	   double y2 = currentBallY + ballDirectionY;
+	   double x2 = currentBallX+ballDirectionX;
+	   double y2 = currentBallY+ballDirectionY;
 	   Line2D ballPath = new Line2D.Double(x1,y1,x2,y2);
 	   double px = currentPaddleX;
 	   double py = currentPaddleY;
@@ -865,6 +865,7 @@ public class PlayedGame implements Serializable
 	   double closestDist = Double.MAX_VALUE;
 	   Rectangle2D fullBox = new Rectangle2D.Double(px-r,py-r,l+(2*r),r+w);
 	   if(fullBox.intersectsLine(ballPath)){
+		   //System.out.println("Intersect fullBox");
 		   Line2D A = new Line2D.Double(px,py-r,px+l,py-r);
 		   Line2D B = new Line2D.Double(px-r,py,px-r,py+w);
 		   Line2D C = new Line2D.Double(px+l+r,py,px+l+r,py+w);
@@ -874,9 +875,12 @@ public class PlayedGame implements Serializable
 			   if (intersectionPoint != null && intersectionPoint.distance(x1, y1) < closestDist) {
 				   closestDist = getIntersectionPoint(line, ballPath).distance(x1, y1);
 				   closestPoint = getIntersectionPoint(line, ballPath);
-				   if (line.equals(A)) {
+				   //System.out.println("closestPoint"+closestPoint);
+				   if ((closestPoint.getX()>=px && closestPoint.getX()<=(px+l)) && closestPoint.getY()==(py-r)) {
+					   //System.out.println("PING PING");
 					   bd = BouncePoint.BounceDirection.FLIP_Y;
 				   } else {
+					   //System.out.println("DING DING");
 					   bd = BouncePoint.BounceDirection.FLIP_X;
 				   }
 			   }
@@ -887,8 +891,10 @@ public class PlayedGame implements Serializable
 			   if (pt.getX() < px && pt.getY() < py && pt.distance(x1,x2) < closestDist) {
 				   closestPoint = pt;
 				   closestDist = pt.distance(x1,x2);
+				   //System.out.println("BOOM BOOM");
 				   bd = ballDirectionX < 0 ? BouncePoint.BounceDirection.FLIP_Y
 						   : BouncePoint.BounceDirection.FLIP_X;
+				   //System.out.println("bd is"+bd);
 			   }
 		   }
 		   for (Point2D pt : FPts) {
