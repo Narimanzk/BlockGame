@@ -112,35 +112,16 @@ class PlayedGame {
 	   }
    }
    
-  private BouncePoint calculateBouncePointBlock(PlayedBlockAssignment aBlock){
+   private BouncePoint calculateBouncePointBlock(PlayedBlockAssignment aBlock){
 	   int size = aBlock.getBlock().SIZE;
 	   int borderSize = size + Ball.BALL_DIAMETER;
 	   double leftX = aBlock.getX() - ((double)Ball.BALL_DIAMETER)/2;
 	   double bottomY = aBlock.getY() - ((double)Ball.BALL_DIAMETER)/2;
-	   //find the bottom left corner of the block's boundary and make a rectangle2D with that
-	   Rectangle2D blockBoundary = new Rectangle2D.Double(leftX,bottomY,borderSize,borderSize);
-	   Point2D ballCoords = new Point2D.Double(currentBallX, currentBallY);
-	   Point2D ballNewCoords = new Point2D.Double(currentBallX+ballDirectionX, currentBallY+ballDirectionY);
-	   //make a Line2D object that represents the ball's path in the next tick
-	   Line2D.Double ballPath = new Line2D.Double(ballCoords, ballNewCoords);
-
-	   //First, does the path of the ball intersect with the border of the block in any way?
-	   if(!blockBoundary.intersectsLine(ballPath)) {
-		   return null;//if it doesn't, screw it, just return null.
-	   }
-	   //if it does, we need to find the exact point where they intersect
 	   double rightX = leftX + borderSize;
 	   double topY = bottomY + borderSize;
-	   /*
-	   System.out.println("Ball's current coords: "+currentBallX+","+currentBallY);
-	   System.out.println("Ball's new coords: "+ballNewCoords.getX()+","+ballNewCoords.getY());
-	   System.out.println("");
-	   System.out.println("leftX= "+leftX);
-	   System.out.println("rightX= "+rightX);
-	   System.out.println("topY= "+topY);
-	   System.out.println("bottomY= "+bottomY);
-	   */
-	   //Define line segments that denote the edges of the block's border.
+
+	   Line2D.Double ballPath = new Line2D.Double(currentBallX, currentBallY, currentBallX+ballDirectionX, currentBallY+ballDirectionY);
+
 	   Line2D.Double top = new Line2D.Double(leftX,topY,rightX,topY);
 	   Line2D.Double bottom = new Line2D.Double(leftX, bottomY, rightX, bottomY);
 	   Line2D.Double right = new Line2D.Double(rightX, topY, rightX, bottomY);
@@ -148,26 +129,28 @@ class PlayedGame {
 	   
 	   ArrayList<Point2D> intersects = new ArrayList<Point2D>();
 	   //If the path of the ball intersects with ANY of those defined lines
+	   boolean found=false;
 	   if(ballPath.intersectsLine(top)) {
 		   //calculate the point of intersection and add that point to a list for processing.
 		   intersects.add(getIntersection(ballPath,top));
+		   found=true;
 	   }
-	   int test=0;
 	   if(ballPath.intersectsLine(bottom)) {
 		   intersects.add(getIntersection(ballPath,bottom));
-		   test++;
+		   found=true;
 	   }
 	   if(ballPath.intersectsLine(left)) {
 		   intersects.add(getIntersection(ballPath,left));
-		   test++;
+		   found=true;
 	   }
 	   if(ballPath.intersectsLine(right)) {
 		   intersects.add(getIntersection(ballPath,right));
-		   test++;
+		   found=true;
 	   }
-	   if(test==0) {
-		   System.out.println("Critical failure");
+	   if(!found) {
+		   return null;
 	   }
+	   Point2D ballCoords = new Point2D.Double(currentBallX, currentBallY);
 	   //With this list of points, find the one closest to the ball's current position
 	   double minDistance = ballCoords.distance(intersects.get(0));
 	   Point2D closestPoint=intersects.get(0);//set some initial values
@@ -179,11 +162,11 @@ class PlayedGame {
 		   }
 	   }//we now have the closest intersect point! So how do we flip?
 	   
-	   if(closestPoint.getX()<rightX-10 && closestPoint.getX()>leftX+10) {
+	   if(closestPoint.getX()<rightX-5 && closestPoint.getX()>leftX+5) {
 		   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_Y);
 		   finalBP.setHitBlock(aBlock);
 		   return finalBP;
-	   }else if(closestPoint.getY()<topY-10 && closestPoint.getY()>bottomY+10) {
+	   }else if(closestPoint.getY()<topY-5 && closestPoint.getY()>bottomY+5) {
 		   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_X);
 		   finalBP.setHitBlock(aBlock);
 		   return finalBP;
