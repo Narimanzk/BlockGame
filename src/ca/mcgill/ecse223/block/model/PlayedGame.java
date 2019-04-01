@@ -745,7 +745,6 @@ public class PlayedGame implements Serializable
 		   		   double newBallDirectionX=1;
 		   double newBallDirectionY=1;
 		   if(bp.hasHitBlock()) {
-			   bounce.setHitBlock(null);
 			   PlayedBlockAssignment block = bp.getHitBlock();
 			   if(bp.getX()>block.getX()) {//we are on right side
 				   //if(bp.getY()>block.getY()) {//we are in corner F
@@ -772,6 +771,7 @@ public class PlayedGame implements Serializable
 			   newBallDirectionX = ballDirectionX *-1;
 			   newBallDirectionY = ballDirectionY *-1;
 		   }
+		   bounce.setHitBlock(null);
 		   setCurrentBallY(bp.getY()+remainingY/ballDirectionY * newBallDirectionY);
 		   setCurrentBallX(bp.getX()+remainingX/ballDirectionX * newBallDirectionX);
 		   setBallDirectionX(newBallDirectionX);
