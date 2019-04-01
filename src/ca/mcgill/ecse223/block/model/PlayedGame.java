@@ -939,24 +939,28 @@ public class PlayedGame implements Serializable
 	   Point2D closestPoint = null;
 	   BouncePoint.BounceDirection bd = null;
 	   double closestDist = Double.MAX_VALUE;
-	   Point2D ab = new Point2D.Double(r,r);
-	   Point2D bc = new Point2D.Double(r,side-r);
 	   Line2D a = new Line2D.Double(r,r,r,side-r);
 	   Line2D b = new Line2D.Double(r,r,side-r,r);
 	   Line2D c = new Line2D.Double(side-r,r,side-r,side-r);
 	   
 	   if(ballPath.intersectsLine(a) || ballPath.intersectsLine(b) || ballPath.intersectsLine(c)){
-
+		   //System.out.println("Intersect with the walls");
 		   for (Line2D line : new Line2D[] {a,b,c}) {
 			   Point2D intersectionPoint = getIntersectionPoint(line, ballPath);
+			   //System.out.println(" Intersect Point:"+ intersectionPoint);
 			   if (intersectionPoint != null && intersectionPoint.distance(x1, y1) < closestDist) {
 				   closestDist = getIntersectionPoint(line, ballPath).distance(x1, y1);
 				   closestPoint = getIntersectionPoint(line, ballPath);
-				   if (line.equals(b)) {
+				   //System.out.println("Closest Point:" + closestPoint);
+				   if (closestPoint.getY()==r && r<closestPoint.getX() && closestPoint.getX()<side-r) {
+					   //System.out.println("PING PING");
 					   bd = BouncePoint.BounceDirection.FLIP_Y;
-					   if(line.equals(a) || line.equals(c)) bd = BouncePoint.BounceDirection.FLIP_X;
-				   } else {
+				   }if((closestPoint.getX()==r || closestPoint.getX()==(side-r)) && r<closestPoint.getY() && closestPoint.getY()<(side-r)) {
+					   //System.out.println("DING DING");
 					   bd = BouncePoint.BounceDirection.FLIP_X;
+				   }if((closestPoint.getX()==r && closestPoint.getY()==r) || (closestPoint.getX()==(side-r) && closestPoint.getY()==r)) {
+					   //System.out.println("RING RING");
+					   bd = BouncePoint.BounceDirection.FLIP_BOTH;
 				   }
 			   }
 		   }
