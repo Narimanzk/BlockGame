@@ -31,7 +31,10 @@ public class Block223Application {
  		return block223;
 	}
 	public static Block223 resetBlock223() {
-		return Block223Persistence.load();
+		block223.delete();
+		Block223Application.setCurrentGame(null);
+		block223 = Block223Persistence.load();
+		return block223;
 	}
 	
 	public static void setCurrentUserRole(UserRole aUserRole) {
