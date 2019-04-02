@@ -53,8 +53,6 @@ class PlayedGame {
    
    private void bounceBall(){
 	   BouncePoint bp = getBounce();
-	   System.out.println(bp.toString());
-	   System.out.println("Incoming direction: "+ballDirectionX+","+ballDirectionY);
 	   double incomingY = bp.getY()- currentBallY;
 	   double remainingY = ballDirectionY - incomingY;
 	   double incomingX = bp.getX()- currentBallX;
@@ -185,8 +183,8 @@ class PlayedGame {
 	   }else {
 		   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_BOTH);
 		   finalBP.setHitBlock(aBlock);
-		   System.out.println("Block coords: "+aBlock.getX()+","+aBlock.getY());
-		   System.out.println("Boundary coords: "+leftX+","+bottomY);
+		   //System.out.println("Block coords: "+aBlock.getX()+","+aBlock.getY());
+		   //System.out.println("Boundary coords: "+leftX+","+bottomY);
 		   return finalBP;
 	   }
   }
