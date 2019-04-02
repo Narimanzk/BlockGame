@@ -723,8 +723,7 @@ public class PlayedGame implements Serializable
   // line 55 "../../../../../Block223PlayMode.ump"
    private void bounceBall(){
 	   BouncePoint bp = getBounce();
-	   System.out.println(bp.toString());
-	   System.out.println("Incoming direction: "+ballDirectionX+","+ballDirectionY);
+	   //System.out.println("Incoming direction: "+ballDirectionX+","+ballDirectionY);
 	   double incomingY = bp.getY()- currentBallY;
 	   double remainingY = ballDirectionY - incomingY;
 	   double incomingX = bp.getX()- currentBallX;
@@ -746,38 +745,33 @@ public class PlayedGame implements Serializable
 	   }else if(bp.getDirection() == BouncePoint.BounceDirection.FLIP_BOTH) {
 		   double newBallDirectionX=1;
 		   double newBallDirectionY=1;
+		   double xVal=currentPaddleX;
 		   if(bp.hasHitBlock()) {
-			   PlayedBlockAssignment block = bp.getHitBlock();
-			   if(bp.getX()>block.getX()) {//we are on right side
-				   if(ballDirectionX<0) {//coming in from the right: FLIP_X
-					   newBallDirectionX=ballDirectionX*-1;
-					   newBallDirectionY=ballDirectionY + (Math.abs(ballDirectionX*0.1)*(ballDirectionY/Math.abs(ballDirectionY)));
-				   }else {//coming in from the left: FLIP_Y
-					   newBallDirectionY=ballDirectionY*-1;
-					   newBallDirectionX=ballDirectionX + (Math.abs(ballDirectionY*0.1)*(ballDirectionX/Math.abs(ballDirectionX)));
-				   }
-			   }else {//we are on left side
-				   if(ballDirectionX<0) {//coming in from the right: FLIP_Y
-					   newBallDirectionY=ballDirectionY*-1;
-					   newBallDirectionX=ballDirectionX + (Math.abs(ballDirectionY*0.1)*(ballDirectionX/Math.abs(ballDirectionX)));
-				   }else {//coming in from the left: FLIP_X
-					   newBallDirectionX=ballDirectionX*-1;
-					   newBallDirectionY=ballDirectionY + (Math.abs(ballDirectionX*0.1)*(ballDirectionY/Math.abs(ballDirectionY)));
-				   }
-			   }
-		   }else {
-			   newBallDirectionX = ballDirectionX *-1;
-			   newBallDirectionY = ballDirectionY *-1;
+			   xVal = bp.getHitBlock().getX();
 		   }
-		   bounce.setHitBlock(null);
+		   if(bp.getX()>xVal) {//we are on right side
+			   if(ballDirectionX<0) {//coming in from the right: FLIP_X
+				   newBallDirectionX=ballDirectionX*-1;
+				   newBallDirectionY=ballDirectionY + (Math.abs(ballDirectionX*0.1)*(ballDirectionY/Math.abs(ballDirectionY)));
+			   }else {//coming in from the left: FLIP_Y
+				   newBallDirectionY=ballDirectionY*-1;
+				   newBallDirectionX=ballDirectionX + (Math.abs(ballDirectionY*0.1)*(ballDirectionX/Math.abs(ballDirectionX)));
+			   }
+		   }else {//we are on left side
+			   if(ballDirectionX<0) {//coming in from the right: FLIP_Y
+				   newBallDirectionY=ballDirectionY*-1;
+				   newBallDirectionX=ballDirectionX + (Math.abs(ballDirectionY*0.1)*(ballDirectionX/Math.abs(ballDirectionX)));
+			   }else {//coming in from the left: FLIP_X
+				   newBallDirectionX=ballDirectionX*-1;
+				   newBallDirectionY=ballDirectionY + (Math.abs(ballDirectionX*0.1)*(ballDirectionY/Math.abs(ballDirectionY)));
+			   }
+		   }
 		   setCurrentBallY(bp.getY()+remainingY/ballDirectionY * newBallDirectionY);
 		   setCurrentBallX(bp.getX()+remainingX/ballDirectionX * newBallDirectionX);
 		   setBallDirectionX(newBallDirectionX);
 		   setBallDirectionY(newBallDirectionY);
 	   }
-	   if(bp.hasHitBlock()) {
-		   bounce.setHitBlock(null);
-	   }
+	   this.bounce=null;
   }
 
   // line 116 "../../../../../Block223PlayMode.ump"
@@ -857,8 +851,7 @@ public class PlayedGame implements Serializable
 	   }else {
 		   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_BOTH);
 		   finalBP.setHitBlock(aBlock);
-		   System.out.println("Block coords: "+aBlock.getX()+","+aBlock.getY());
-		   System.out.println("Boundary coords: "+leftX+","+bottomY);
+		   System.out.println("Bouncepoint coords: "+finalBP.getX()+","+finalBP.getY());
 		   return finalBP;
 	   }
   }
