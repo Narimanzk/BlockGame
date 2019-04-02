@@ -494,7 +494,7 @@ public class Block223Controller {
 		if (userRole != null)
 			throw new InvalidInputException("Cannot register a new user while a user is logged in.".trim());
 
-		if (playerPassword == null || "" == playerPassword.trim()) {
+		if (playerPassword == null || "".equals(playerPassword.trim())) {
 			throw new InvalidInputException("The player password needs to be specified.");
 		}
 		
@@ -503,7 +503,7 @@ public class Block223Controller {
 
 		Block223 block223 = Block223Application.getBlock223();
 		
-		if (username == null || "" == username.trim()) {
+		if (username == null || "".equals(username.trim())) {
 			throw new InvalidInputException("The username must be specified.");
 		}
 
@@ -541,10 +541,10 @@ public class Block223Controller {
 		UserRole userRole = Block223Application.getCurrentUserRole();
 		if (userRole != null)
 			throw new InvalidInputException("Cannot login a user while a user is already logged in.".trim());
+
 		if (User.getWithUsername(username) == null)
 			throw new InvalidInputException("The username and password do not match.".trim());
-		
-		
+
 		
 		User user = User.getWithUsername(username);
 		List<UserRole> roles = user.getRoles();
@@ -559,6 +559,13 @@ public class Block223Controller {
 		if (Block223Application.getCurrentUserRole() == null)
 			throw new InvalidInputException("The username and password do not match.");
 		
+		if (username.trim().equals("")) {
+			throw new InvalidInputException("The username must be specified.".trim());
+		}
+		
+		if (password.trim().equals("")) {
+			throw new InvalidInputException("The password must be specified.".trim());
+		}
 	}
 
 	public static void logout() {
@@ -591,8 +598,6 @@ public class Block223Controller {
 			throw new InvalidInputException("The game does not exist.");
 		if(game == null && player != pgame.getPlayer()) 
 			throw new InvalidInputException("Only the player that started a game can continue the game.");
-
-
 		Block223Application.setCurrentPlayableGame(pgame);
 	}
 
@@ -643,15 +648,13 @@ public class Block223Controller {
 
 	public static void testGame(Block223PlayModeInterface ui) throws InvalidInputException {
 		if(!(Block223Application.getCurrentUserRole() instanceof Admin))
-			throw new InvalidInputException("Admin privileges are required to publish a game\n");
+			throw new InvalidInputException("Admin privileges are required to test a game.");
 		if(Block223Application.getCurrentGame() == null)
-			throw new InvalidInputException("A game must be selected to publish it\n");
+			throw new InvalidInputException("A game must be selected to test it.");
 		if(!Block223Application.getCurrentUserRole().equals(Block223Application.getCurrentGame().getAdmin()))
-			throw new InvalidInputException("Only the admin who created the game can publish it\n");
+			throw new InvalidInputException("Only the admin who created the game can test it.");
 		if(Block223Application.getCurrentGame().getBlocks().size()<1)
-			throw new InvalidInputException("At least one block must be defined for a game to be published\n");
-
-		
+			throw new InvalidInputException("At least one block must be defined for a game to be published.");
 		
 
 		Game game = Block223Application.getCurrentGame();
@@ -671,13 +674,13 @@ public class Block223Controller {
 	public static void publishGame() throws InvalidInputException {
 
 		if(!(Block223Application.getCurrentUserRole() instanceof Admin))
-			throw new InvalidInputException("Admin privileges are required to publish a game\n");
+			throw new InvalidInputException("Admin privileges are required to publish a game.");
 		if(Block223Application.getCurrentGame() == null)
-			throw new InvalidInputException("A game must be selected to publish it\n");
+			throw new InvalidInputException("A game must be selected to publish it.");
 		if(!Block223Application.getCurrentUserRole().equals(Block223Application.getCurrentGame().getAdmin()))
-			throw new InvalidInputException("Only the admin who created the game can publish it\n");
+			throw new InvalidInputException("Only the admin who created the game can publish it.");
 		if(Block223Application.getCurrentGame().getBlocks().size()<1)
-			throw new InvalidInputException("At least one block must be defined for a game to be published\n");
+			throw new InvalidInputException("At least one block must be defined for a game to be published.");
 
 		
 		

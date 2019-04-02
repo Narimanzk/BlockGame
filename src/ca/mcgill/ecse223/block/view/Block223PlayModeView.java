@@ -89,6 +89,10 @@ public class Block223PlayModeView extends JFrame implements Block223PlayModeInte
 			}
 		});
 	}
+	
+	private void gamePlay() {
+		
+	}
 
 	@Override
 	public String takeInputs() {
