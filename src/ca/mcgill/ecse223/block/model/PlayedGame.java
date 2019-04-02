@@ -722,7 +722,7 @@ public class PlayedGame implements Serializable
 
   // line 55 "../../../../../Block223PlayMode.ump"
    private void bounceBall(){
-	   BouncePoint bp = getBounce();
+    BouncePoint bp = getBounce();
 	   //System.out.println("Incoming direction: "+ballDirectionX+","+ballDirectionY);
 	   double incomingY = bp.getY()- currentBallY;
 	   double remainingY = ballDirectionY - incomingY;
@@ -774,9 +774,9 @@ public class PlayedGame implements Serializable
 	   this.bounce=null;
   }
 
-  // line 116 "../../../../../Block223PlayMode.ump"
+  // line 107 "../../../../../Block223PlayMode.ump"
    private BouncePoint calculateBouncePointBlock(PlayedBlockAssignment aBlock){
-	   //For anyone reading, I've inverted the Y interpretation of the blocks, since
+    //For anyone reading, I've inverted the Y interpretation of the blocks, since
 	   //the interpretation of 0,0 being in the top left corner makes things confusing.
 	   //So when I say things like bottom and top, I mean relative to 0,0 being in the
 	   //bottom left corner - you know, like a normal person. The math still works out.
@@ -851,17 +851,18 @@ public class PlayedGame implements Serializable
 	   }else {
 		   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_BOTH);
 		   finalBP.setHitBlock(aBlock);
-		   System.out.println("Bouncepoint coords: "+finalBP.getX()+","+finalBP.getY());
+		   //System.out.println("Block coords: "+aBlock.getX()+","+aBlock.getY());
+		   //System.out.println("Boundary coords: "+leftX+","+bottomY);
 		   return finalBP;
 	   }
   }
 
-  // line 181 "../../../../../Block223PlayMode.ump"
+  // line 188 "../../../../../Block223PlayMode.ump"
    private BouncePoint calculateBouncePointPaddle(){
     double x1 = currentBallX;
 	   double y1 = currentBallY;
-	   double x2 = currentBallX+ballDirectionX;
-	   double y2 = currentBallY+ballDirectionY;
+	   double x2 = currentBallX + ballDirectionX;
+	   double y2 = currentBallY + ballDirectionY;
 	   Line2D ballPath = new Line2D.Double(x1,y1,x2,y2);
 	   double px = currentPaddleX;
 	   double py = currentPaddleY;
@@ -873,7 +874,6 @@ public class PlayedGame implements Serializable
 	   double closestDist = Double.MAX_VALUE;
 	   Rectangle2D fullBox = new Rectangle2D.Double(px-r,py-r,l+(2*r),r+w);
 	   if(fullBox.intersectsLine(ballPath)){
-		   //System.out.println("Intersect fullBox");
 		   Line2D A = new Line2D.Double(px,py-r,px+l,py-r);
 		   Line2D B = new Line2D.Double(px-r,py,px-r,py+w);
 		   Line2D C = new Line2D.Double(px+l+r,py,px+l+r,py+w);
@@ -883,12 +883,9 @@ public class PlayedGame implements Serializable
 			   if (intersectionPoint != null && intersectionPoint.distance(x1, y1) < closestDist) {
 				   closestDist = getIntersectionPoint(line, ballPath).distance(x1, y1);
 				   closestPoint = getIntersectionPoint(line, ballPath);
-				   //System.out.println("closestPoint"+closestPoint);
-				   if ((closestPoint.getX()>=px && closestPoint.getX()<=(px+l)) && closestPoint.getY()==(py-r)) {
-					   //System.out.println("PING PING");
+				   if (line.equals(A)) {
 					   bd = BouncePoint.BounceDirection.FLIP_Y;
 				   } else {
-					   //System.out.println("DING DING");
 					   bd = BouncePoint.BounceDirection.FLIP_X;
 				   }
 			   }
@@ -899,10 +896,8 @@ public class PlayedGame implements Serializable
 			   if (pt.getX() < px && pt.getY() < py && pt.distance(x1,x2) < closestDist) {
 				   closestPoint = pt;
 				   closestDist = pt.distance(x1,x2);
-				   //System.out.println("BOOM BOOM");
 				   bd = ballDirectionX < 0 ? BouncePoint.BounceDirection.FLIP_Y
 						   : BouncePoint.BounceDirection.FLIP_X;
-				   //System.out.println("bd is"+bd);
 			   }
 		   }
 		   for (Point2D pt : FPts) {
@@ -919,7 +914,7 @@ public class PlayedGame implements Serializable
 	   return null;
   }
 
-  // line 237 "../../../../../Block223PlayMode.ump"
+  // line 244 "../../../../../Block223PlayMode.ump"
    private BouncePoint calculateBouncePointWall(){
     double x1 = currentBallX;
 	   double y1 = currentBallY;
@@ -962,7 +957,7 @@ public class PlayedGame implements Serializable
 	   return null;
   }
 
-  // line 297 "../../../../../Block223PlayMode.ump"
+  // line 304 "../../../../../Block223PlayMode.ump"
    private Point2D getIntersectionPoint(Line2D a, Line2D b){
     if (a.intersectsLine(b) && slope(a) != slope(b)) {
 			double x1 = a.getX1();
@@ -998,7 +993,7 @@ public class PlayedGame implements Serializable
    * @param r the radius of the circle
    * @return a list of points of intersection
    */
-  // line 329 "../../../../../Block223PlayMode.ump"
+  // line 336 "../../../../../Block223PlayMode.ump"
    private List<Point2D> getIntersectionPoints(Line2D l, double xc, double yc, double r){
     List<Point2D> list = new ArrayList<Point2D>();
 		Double m = slope(l);
@@ -1036,7 +1031,7 @@ public class PlayedGame implements Serializable
 		return list;
   }
 
-  // line 365 "../../../../../Block223PlayMode.ump"
+  // line 372 "../../../../../Block223PlayMode.ump"
    private Double slope(Line2D l){
     if (Math.abs(l.getX1() - l.getX2()) > 0.0001) {
 			return (l.getY1() - l.getY2())/(l.getX1() - l.getX2());
@@ -1045,7 +1040,7 @@ public class PlayedGame implements Serializable
 		}
   }
 
-  // line 373 "../../../../../Block223PlayMode.ump"
+  // line 380 "../../../../../Block223PlayMode.ump"
    private boolean isCloser(BouncePoint bp, BouncePoint bounce){
     if(bp == null) {
 		   return false;
@@ -1269,7 +1264,7 @@ public class PlayedGame implements Serializable
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 278 "../../../../../Block223PlayMode.ump"
+  // line 285 "../../../../../Block223PlayMode.ump"
   private static Point2D getIntersection (final Line2D.Double line1, final Line2D.Double line2) 
   {
     final double x1,y1, x2,y2, x3,y3, x4,y4;
