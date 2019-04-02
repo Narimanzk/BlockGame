@@ -859,10 +859,10 @@ public class PlayedGame implements Serializable
 
   // line 188 "../../../../../Block223PlayMode.ump"
    private BouncePoint calculateBouncePointPaddle(){
-    double x1 = currentBallX;
+	   double x1 = currentBallX;
 	   double y1 = currentBallY;
-	   double x2 = currentBallX + ballDirectionX;
-	   double y2 = currentBallY + ballDirectionY;
+	   double x2 = x1+ballDirectionX;
+	   double y2 = y1+ballDirectionY;
 	   Line2D ballPath = new Line2D.Double(x1,y1,x2,y2);
 	   double px = currentPaddleX;
 	   double py = currentPaddleY;
@@ -874,6 +874,7 @@ public class PlayedGame implements Serializable
 	   double closestDist = Double.MAX_VALUE;
 	   Rectangle2D fullBox = new Rectangle2D.Double(px-r,py-r,l+(2*r),r+w);
 	   if(fullBox.intersectsLine(ballPath)){
+		   //System.out.println("Intersect fullBox");
 		   Line2D A = new Line2D.Double(px,py-r,px+l,py-r);
 		   Line2D B = new Line2D.Double(px-r,py,px-r,py+w);
 		   Line2D C = new Line2D.Double(px+l+r,py,px+l+r,py+w);
@@ -883,12 +884,17 @@ public class PlayedGame implements Serializable
 			   if (intersectionPoint != null && intersectionPoint.distance(x1, y1) < closestDist) {
 				   closestDist = getIntersectionPoint(line, ballPath).distance(x1, y1);
 				   closestPoint = getIntersectionPoint(line, ballPath);
-				   if (line.equals(A)) {
+				   if(closestDist==0) return null;
+				   //System.out.println("closestPoint"+closestPoint);
+				   if ((closestPoint.getX()>=px && closestPoint.getX()<=(px+l)) && closestPoint.getY()==(py-r)) {
+					   //System.out.println("PING PING");
 					   bd = BouncePoint.BounceDirection.FLIP_Y;
 				   } else {
+					   //System.out.println("DING DING");
 					   bd = BouncePoint.BounceDirection.FLIP_X;
 				   }
 			   }
+			   
 		   }
 		   List<Point2D> EPts = getIntersectionPoints(ballPath, px,py,r);
 		   List<Point2D> FPts = getIntersectionPoints(ballPath, px+l, py, r);
@@ -896,17 +902,23 @@ public class PlayedGame implements Serializable
 			   if (pt.getX() < px && pt.getY() < py && pt.distance(x1,x2) < closestDist) {
 				   closestPoint = pt;
 				   closestDist = pt.distance(x1,x2);
+				   if(closestDist==0) return null;
+				   //System.out.println("BOOM BOOM");
 				   bd = ballDirectionX < 0 ? BouncePoint.BounceDirection.FLIP_Y
 						   : BouncePoint.BounceDirection.FLIP_X;
+				   //System.out.println("bd is"+bd);
 			   }
+			   
 		   }
 		   for (Point2D pt : FPts) {
 			   if (pt.getX() > px+l && pt.getY() < py && pt.distance(x1,x2) < closestDist) {
 				   closestPoint = pt;
 				   closestDist = pt.distance(x1,x2);
+				   if(closestDist==0) return null;
 				   bd = ballDirectionX < 0 ? BouncePoint.BounceDirection.FLIP_X
 						   : BouncePoint.BounceDirection.FLIP_Y;
 			   }
+			   
 		   }
 		   if (bd == null) return null;
 		   return new BouncePoint(closestPoint.getX(), closestPoint.getY(), bd);
@@ -918,8 +930,8 @@ public class PlayedGame implements Serializable
    private BouncePoint calculateBouncePointWall(){
     double x1 = currentBallX;
 	   double y1 = currentBallY;
-	   double x2 = currentBallX + ballDirectionX;
-	   double y2 = currentBallY + ballDirectionY;
+	   double x2 = x1+ballDirectionX;
+	   double y2 = y1+ballDirectionY;
 	   Line2D ballPath = new Line2D.Double(x1,y1,x2,y2);
 	   double r = Ball.BALL_DIAMETER/2;
 	   double side = Game.PLAY_AREA_SIDE;
@@ -939,6 +951,8 @@ public class PlayedGame implements Serializable
 				   closestDist = getIntersectionPoint(line, ballPath).distance(x1, y1);
 				   closestPoint = getIntersectionPoint(line, ballPath);
 				   //System.out.println("Closest Point:" + closestPoint);
+				   //System.out.println("Closest distance" + closestDist);
+				   if(closestDist==0) return null;
 				   if (closestPoint.getY()==r && r<closestPoint.getX() && closestPoint.getX()<side-r) {
 					   //System.out.println("PING PING");
 					   bd = BouncePoint.BounceDirection.FLIP_Y;
@@ -950,6 +964,7 @@ public class PlayedGame implements Serializable
 					   bd = BouncePoint.BounceDirection.FLIP_BOTH;
 				   }
 			   }
+			   
 		   }
 		   if (bd == null) return null;
 			return new BouncePoint(closestPoint.getX(), closestPoint.getY(), bd);
