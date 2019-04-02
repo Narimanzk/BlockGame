@@ -747,19 +747,11 @@ public class PlayedGame implements Serializable
 		   if(bp.hasHitBlock()) {
 			   PlayedBlockAssignment block = bp.getHitBlock();
 			   if(bp.getX()>block.getX()) {//we are on right side
-				   //if(bp.getY()>block.getY()) {//we are in corner F
-					   if(ballDirectionX<0) {
-						   newBallDirectionX=ballDirectionX*-1;
-					   }else {
-						   newBallDirectionY=ballDirectionY*-1;
-					   }
-				   /*}else {//we are in corner H
-					   if(ballDirectionX<0) {
-						   newBallDirectionX=ballDirectionX*-1;
-					   }else {
-						   newBallDirectionY=ballDirectionY*-1;
-					   }
-				   }*/
+				   if(ballDirectionX<0) {
+					   newBallDirectionX=ballDirectionX*-1;
+				   }else {
+					   newBallDirectionY=ballDirectionY*-1;
+				   }
 			   }else {//we are on left side
 				   if(ballDirectionX<0) {
 					   newBallDirectionY=ballDirectionY*-1;
@@ -832,6 +824,11 @@ public class PlayedGame implements Serializable
 			   minDistance = distance;
 		   }
 	   }//we now have the closest intersect point! So how do we flip?
+	   if(closestPoint.getX()==ballPath.getX2() && closestPoint.getY()==ballPath.getY2()) {
+		   //If the bouncepoint is exactly the endpoint of the ball's trajectory
+		   //DO NOT BOUNCE
+		   return null;
+	   }
 	   
 	   if(closestPoint.getX()<rightX-5 && closestPoint.getX()>leftX+5) {
 		   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_Y);
@@ -1148,8 +1145,8 @@ public class PlayedGame implements Serializable
 		List<BlockAssignment> assignments = level.getBlockAssignments();
 		for(BlockAssignment a : assignments) {
 			PlayedBlockAssignment pblock = new PlayedBlockAssignment(
-					(Game.WALL_PADDING+Block.SIZE+Game.COLUMNS_PADDING) *(a.getGridHorizontalPosition()-1),
-					(Game.WALL_PADDING+Block.SIZE+Game.ROW_PADDING) *(a.getGridVerticalPosition()-1), a.getBlock(), this);
+					(Game.WALL_PADDING+(Block.SIZE+Game.COLUMNS_PADDING) *(a.getGridHorizontalPosition()-1)),
+					(Game.WALL_PADDING+(Block.SIZE+Game.ROW_PADDING) *(a.getGridVerticalPosition()-1)), a.getBlock(), this);
 		}
 		while(numberOfBlocks() < game.getNrBlocksPerLevel()) {
 

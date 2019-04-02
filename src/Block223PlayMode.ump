@@ -51,8 +51,8 @@ class PlayedGame {
       }
    }
    
-   private void bounceBall() {
-	   BouncePoint bp = getBounce();
+   private void bounceBall(){
+       BouncePoint bp = getBounce();
 	   double incomingY = bp.getY()- currentBallY;
 	   double remainingY = ballDirectionY - incomingY;
 	   double incomingX = bp.getX()- currentBallX;
@@ -75,22 +75,13 @@ class PlayedGame {
 		   		   double newBallDirectionX=1;
 		   double newBallDirectionY=1;
 		   if(bp.hasHitBlock()) {
-			   bounce.setHitBlock(null);
 			   PlayedBlockAssignment block = bp.getHitBlock();
 			   if(bp.getX()>block.getX()) {//we are on right side
-				   //if(bp.getY()>block.getY()) {//we are in corner F
-					   if(ballDirectionX<0) {
-						   newBallDirectionX=ballDirectionX*-1;
-					   }else {
-						   newBallDirectionY=ballDirectionY*-1;
-					   }
-				   /*}else {//we are in corner H
-					   if(ballDirectionX<0) {
-						   newBallDirectionX=ballDirectionX*-1;
-					   }else {
-						   newBallDirectionY=ballDirectionY*-1;
-					   }
-				   }*/
+				   if(ballDirectionX<0) {
+					   newBallDirectionX=ballDirectionX*-1;
+				   }else {
+					   newBallDirectionY=ballDirectionY*-1;
+				   }
 			   }else {//we are on left side
 				   if(ballDirectionX<0) {
 					   newBallDirectionY=ballDirectionY*-1;
@@ -102,6 +93,7 @@ class PlayedGame {
 			   newBallDirectionX = ballDirectionX *-1;
 			   newBallDirectionY = ballDirectionY *-1;
 		   }
+		   bounce.setHitBlock(null);
 		   setCurrentBallY(bp.getY()+remainingY/ballDirectionY * newBallDirectionY);
 		   setCurrentBallX(bp.getX()+remainingX/ballDirectionX * newBallDirectionX);
 		   setBallDirectionX(newBallDirectionX);
@@ -110,10 +102,9 @@ class PlayedGame {
 	   if(bp.hasHitBlock()) {
 		   bounce.setHitBlock(null);
 	   }
-   }
-   
+  }   
    private BouncePoint calculateBouncePointBlock(PlayedBlockAssignment aBlock){
-	   int size = aBlock.getBlock().SIZE;
+    int size = aBlock.getBlock().SIZE;
 	   int borderSize = size + Ball.BALL_DIAMETER;
 	   double leftX = aBlock.getX() - ((double)Ball.BALL_DIAMETER)/2;
 	   double bottomY = aBlock.getY() - ((double)Ball.BALL_DIAMETER)/2;
@@ -161,6 +152,11 @@ class PlayedGame {
 			   minDistance = distance;
 		   }
 	   }//we now have the closest intersect point! So how do we flip?
+	   if(closestPoint.getX()==ballPath.getX2() && closestPoint.getY()==ballPath.getY2()) {
+		   //If the bouncepoint is exactly the endpoint of the ball's trajectory
+		   //DO NOT BOUNCE
+		   return null;
+	   }
 	   
 	   if(closestPoint.getX()<rightX-5 && closestPoint.getX()>leftX+5) {
 		   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_Y);
@@ -175,8 +171,7 @@ class PlayedGame {
 		   finalBP.setHitBlock(aBlock);
 		   return finalBP;
 	   }
-  }
-  
+  }  
 private BouncePoint calculateBouncePointPaddle(){
 	  double x1 = currentBallX;
 	   double y1 = currentBallY;
