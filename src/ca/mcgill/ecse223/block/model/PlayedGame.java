@@ -727,17 +727,20 @@ public class PlayedGame implements Serializable
 	    double remX = ballDirectionX - inX;
 	    double remY = ballDirectionY - inY;
 
-		if (bounce.getDirection() == BouncePoint.BounceDirection.FLIP_Y
-				|| bounce.getDirection() == BouncePoint.BounceDirection.FLIP_BOTH) {
+		if (bounce.getDirection() == BouncePoint.BounceDirection.FLIP_Y) {
 			ballDirectionX = ballDirectionX + 
 					(ballDirectionX >= 0? 1:-1)*.1*Math.abs(ballDirectionY);
 			ballDirectionY = -ballDirectionY;
+			
 		}
-		if (bounce.getDirection() == BouncePoint.BounceDirection.FLIP_X
-				|| bounce.getDirection() == BouncePoint.BounceDirection.FLIP_BOTH) {
+		if (bounce.getDirection() == BouncePoint.BounceDirection.FLIP_X) {
 			ballDirectionY = ballDirectionY + 
 					(ballDirectionY >= 0? 1:-1)*.1*Math.abs(ballDirectionX);
 			ballDirectionX = ballDirectionX *-1;
+		}
+		if(bounce.getDirection() == BouncePoint.BounceDirection.FLIP_BOTH) {
+			ballDirectionX = ballDirectionX * -1;
+			ballDirectionY = ballDirectionY * -1;
 		}
 		currentBallX = bounce.getX() + remX;
 		currentBallY = bounce.getY() + remY;
