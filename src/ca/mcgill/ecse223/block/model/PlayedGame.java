@@ -721,9 +721,9 @@ public class PlayedGame implements Serializable
   }
 
   // line 55 "../../../../../Block223PlayMode.ump"
+  
    private void bounceBall(){
-    BouncePoint bp = getBounce();
-	   //System.out.println("Incoming direction: "+ballDirectionX+","+ballDirectionY);
+	   BouncePoint bp = getBounce();
 	   double incomingY = bp.getY()- currentBallY;
 	   double remainingY = ballDirectionY - incomingY;
 	   double incomingX = bp.getX()- currentBallX;
@@ -773,24 +773,23 @@ public class PlayedGame implements Serializable
 	   }
 	   this.bounce=null;
   }
-
-  // line 107 "../../../../../Block223PlayMode.ump"
+    // line 107 "../../../../../Block223PlayMode.ump"
    private BouncePoint calculateBouncePointBlock(PlayedBlockAssignment aBlock){
     //For anyone reading, I've inverted the Y interpretation of the blocks, since
 	   //the interpretation of 0,0 being in the top left corner makes things confusing.
 	   //So when I say things like bottom and top, I mean relative to 0,0 being in the
 	   //bottom left corner - you know, like a normal person. The math still works out.
 	   
-	   int size = aBlock.getBlock().SIZE;
-	   int borderSize = size + Ball.BALL_DIAMETER;
+	   double size = (double) aBlock.getBlock().SIZE;
+	   double borderSize = size + Ball.BALL_DIAMETER;
 	   double leftX = aBlock.getX() - ((double)Ball.BALL_DIAMETER)/2;
 	   double bottomY = aBlock.getY() - ((double)Ball.BALL_DIAMETER)/2;
 	   double rightX = leftX + borderSize;
 	   double topY = bottomY + borderSize;
-	   Point2D blockLowerLeft = new Point2D.Double(aBlock.getX(),aBlock.getY());
-	   Point2D blockLowerRight = new Point2D.Double(aBlock.getX()+size,aBlock.getY());
-	   Point2D blockTopLeft = new Point2D.Double(aBlock.getX(),aBlock.getY()+size);
-	   Point2D blockTopRight = new Point2D.Double(aBlock.getX()+size,aBlock.getY()+size);
+	   Point2D blockLowerLeft = new Point2D.Double((double)aBlock.getX(),(double)aBlock.getY());
+	   Point2D blockLowerRight = new Point2D.Double((double)aBlock.getX()+size,(double)aBlock.getY());
+	   Point2D blockTopLeft = new Point2D.Double((double)aBlock.getX(),(double)aBlock.getY()+size);
+	   Point2D blockTopRight = new Point2D.Double((double)aBlock.getX()+size,(double)aBlock.getY()+size);
 	   Point2D[] points = {blockLowerLeft,blockLowerRight,blockTopLeft,blockTopRight};
 	   
 	   Line2D.Double ballPath = new Line2D.Double(currentBallX, currentBallY, currentBallX+ballDirectionX, currentBallY+ballDirectionY);
@@ -840,6 +839,32 @@ public class PlayedGame implements Serializable
 		   return null;
 	   }
 	   
+	   if(closestPoint.getX()<aBlock.getX()) {//BP left of block origin corner
+		   if(ballDirectionX<=0) {//traveling from right
+			   //FLIP_Y
+			   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_Y);
+			   finalBP.setHitBlock(aBlock);
+			   return finalBP;
+		   }else {//FLIP_X
+			   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_X);
+			   finalBP.setHitBlock(aBlock);
+			   return finalBP;			   
+		   }
+	   }else {//flip_x
+		   if(ballDirectionX<=0 && closestPoint.getX()>aBlock.getX()+size) {
+			   //coming from right beyond edge of block
+			   //FLIP_X
+			   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_X);
+			   finalBP.setHitBlock(aBlock);
+			   return finalBP;
+		   }else {//coming from the left anywhere right of origin
+			   //FLIP_Y
+			   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_Y);
+			   finalBP.setHitBlock(aBlock);
+			   return finalBP;
+		   }
+	   }
+	   /*
 	   if(closestPoint.getX()<rightX-5 && closestPoint.getX()>leftX+5) {
 		   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_Y);
 		   finalBP.setHitBlock(aBlock);
@@ -851,10 +876,8 @@ public class PlayedGame implements Serializable
 	   }else {
 		   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_BOTH);
 		   finalBP.setHitBlock(aBlock);
-		   //System.out.println("Block coords: "+aBlock.getX()+","+aBlock.getY());
-		   //System.out.println("Boundary coords: "+leftX+","+bottomY);
 		   return finalBP;
-	   }
+	   }*/
   }
 
   // line 188 "../../../../../Block223PlayMode.ump"
@@ -1195,7 +1218,7 @@ public class PlayedGame implements Serializable
 
   // line 153 "../../../../../Block223States.ump"
    private void doHitBlock(){
-    int score = getScore();
+	   int score = getScore();
 	   BouncePoint bounce = getBounce();
 	   PlayedBlockAssignment pBlock = bounce.getHitBlock();
 	   Block block = pBlock.getBlock();
