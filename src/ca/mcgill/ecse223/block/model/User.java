@@ -256,10 +256,9 @@ public class User implements Serializable
     }
   }
 
-  // line 27 "../../../../../Block223.ump"
+  // line 28 "../../../../../Block223.ump"
    public static  String findUsername(UserRole player){
-   
-	   ArrayList <User> u = new ArrayList<User>();
+    ArrayList <User> u = new ArrayList<User>();
 	
 	   for(Entry<String, User> entry : usersByUsername.entrySet()) {
 		  u.add(entry.getValue());

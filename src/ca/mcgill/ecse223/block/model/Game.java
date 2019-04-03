@@ -7,7 +7,7 @@ import java.util.*;
 
 // line 6 "../../../../../Block223PlayMode.ump"
 // line 48 "../../../../../Block223Persistence.ump"
-// line 51 "../../../../../Block223.ump"
+// line 56 "../../../../../Block223.ump"
 public class Game implements Serializable
 {
 
@@ -878,7 +878,7 @@ public class Game implements Serializable
     }
   }
 
-  // line 67 "../../../../../Block223.ump"
+  // line 72 "../../../../../Block223.ump"
    public Block getRandomBlock(){
     int max = this.getBlocks().size();
    	Random rand = new Random();

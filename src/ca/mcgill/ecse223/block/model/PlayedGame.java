@@ -35,12 +35,12 @@ public class PlayedGame implements Serializable
    * no direct link to Paddle, because the paddle can be found by navigating to PlayedGame, Game, and then Paddle
    * pixels moved when right arrow key is pressed
    */
-  public static final int PADDLE_MOVE_RIGHT = 1;
+  public static final int PADDLE_MOVE_RIGHT = 5;
 
   /**
    * pixels moved when left arrow key is pressed
    */
-  public static final int PADDLE_MOVE_LEFT = -1;
+  public static final int PADDLE_MOVE_LEFT = -5;
 
   //------------------------
   // MEMBER VARIABLES
@@ -721,9 +721,8 @@ public class PlayedGame implements Serializable
   }
 
   // line 55 "../../../../../Block223PlayMode.ump"
-  
    private void bounceBall(){
-	    double inX = bounce.getX()-currentBallX; 
+    double inX = bounce.getX()-currentBallX; 
 	    double  inY = bounce.getY()-currentBallY;
 	    double remX = ballDirectionX - inX;
 	    double remY = ballDirectionY - inY;
@@ -743,7 +742,8 @@ public class PlayedGame implements Serializable
 		currentBallX = bounce.getX() + remX;
 		currentBallY = bounce.getY() + remY;
   }
-    // line 107 "../../../../../Block223PlayMode.ump"
+
+  // line 76 "../../../../../Block223PlayMode.ump"
    private BouncePoint calculateBouncePointBlock(PlayedBlockAssignment aBlock){
     //For anyone reading, I've inverted the Y interpretation of the blocks, since
 	   //the interpretation of 0,0 being in the top left corner makes things confusing.
@@ -850,9 +850,9 @@ public class PlayedGame implements Serializable
 	   }*/
   }
 
-  // line 188 "../../../../../Block223PlayMode.ump"
+  // line 181 "../../../../../Block223PlayMode.ump"
    private BouncePoint calculateBouncePointPaddle(){
-	   double x1 = currentBallX;
+    double x1 = currentBallX;
 	   double y1 = currentBallY;
 	   double x2 = x1+ballDirectionX;
 	   double y2 = y1+ballDirectionY;
@@ -919,7 +919,7 @@ public class PlayedGame implements Serializable
 	   return null;
   }
 
-  // line 244 "../../../../../Block223PlayMode.ump"
+  // line 249 "../../../../../Block223PlayMode.ump"
    private BouncePoint calculateBouncePointWall(){
     double x1 = currentBallX;
 	   double y1 = currentBallY;
@@ -965,7 +965,7 @@ public class PlayedGame implements Serializable
 	   return null;
   }
 
-  // line 304 "../../../../../Block223PlayMode.ump"
+  // line 312 "../../../../../Block223PlayMode.ump"
    private Point2D getIntersectionPoint(Line2D a, Line2D b){
     if (a.intersectsLine(b) && slope(a) != slope(b)) {
 			double x1 = a.getX1();
@@ -1001,7 +1001,7 @@ public class PlayedGame implements Serializable
    * @param r the radius of the circle
    * @return a list of points of intersection
    */
-  // line 336 "../../../../../Block223PlayMode.ump"
+  // line 344 "../../../../../Block223PlayMode.ump"
    private List<Point2D> getIntersectionPoints(Line2D l, double xc, double yc, double r){
     List<Point2D> list = new ArrayList<Point2D>();
 		Double m = slope(l);
@@ -1039,7 +1039,7 @@ public class PlayedGame implements Serializable
 		return list;
   }
 
-  // line 372 "../../../../../Block223PlayMode.ump"
+  // line 380 "../../../../../Block223PlayMode.ump"
    private Double slope(Line2D l){
     if (Math.abs(l.getX1() - l.getX2()) > 0.0001) {
 			return (l.getY1() - l.getY2())/(l.getX1() - l.getX2());
@@ -1048,7 +1048,7 @@ public class PlayedGame implements Serializable
 		}
   }
 
-  // line 380 "../../../../../Block223PlayMode.ump"
+  // line 388 "../../../../../Block223PlayMode.ump"
    private boolean isCloser(BouncePoint bp, BouncePoint bounce){
     if(bp == null) {
 		   return false;
@@ -1203,7 +1203,7 @@ public class PlayedGame implements Serializable
 
   // line 153 "../../../../../Block223States.ump"
    private void doHitBlock(){
-	   int score = getScore();
+    int score = getScore();
 	   BouncePoint bounce = getBounce();
 	   PlayedBlockAssignment pBlock = bounce.getHitBlock();
 	   Block block = pBlock.getBlock();
@@ -1272,7 +1272,7 @@ public class PlayedGame implements Serializable
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 285 "../../../../../Block223PlayMode.ump"
+  // line 293 "../../../../../Block223PlayMode.ump"
   private static Point2D getIntersection (final Line2D.Double line1, final Line2D.Double line2) 
   {
     final double x1,y1, x2,y2, x3,y3, x4,y4;
