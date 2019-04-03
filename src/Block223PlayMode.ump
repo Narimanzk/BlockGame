@@ -52,55 +52,25 @@ class PlayedGame {
    }
    
    private void bounceBall(){
-	   BouncePoint bp = getBounce();
-	   double incomingY = bp.getY()- currentBallY;
-	   double remainingY = ballDirectionY - incomingY;
-	   double incomingX = bp.getX()- currentBallX;
-	   double remainingX = ballDirectionX - incomingX;
-	   if(bp.getDirection() == BouncePoint.BounceDirection.FLIP_Y) {
-		   double newBallDirectionY = ballDirectionY *-1;
-		   double newBallDirectionX = ballDirectionX + (Math.abs(ballDirectionY*0.1)*(ballDirectionX/Math.abs(ballDirectionX)));
-		   setCurrentBallY(bp.getY()+remainingY/ballDirectionY * newBallDirectionY);
-		   setCurrentBallX(bp.getX()+remainingX/ballDirectionX * newBallDirectionX);
-		   setBallDirectionX(newBallDirectionX);
-		   setBallDirectionY(newBallDirectionY);
-	   }else if(bp.getDirection() == BouncePoint.BounceDirection.FLIP_X) {
-		   double newBallDirectionX = ballDirectionX *-1;
-		   double newBallDirectionY = ballDirectionY + (Math.abs(ballDirectionX*0.1)*(ballDirectionY/Math.abs(ballDirectionY)));
-		   setCurrentBallY(bp.getY()+remainingY/ballDirectionY * newBallDirectionY);
-		   setCurrentBallX(bp.getX()+remainingX/ballDirectionX * newBallDirectionX);
-		   setBallDirectionX(newBallDirectionX);
-		   setBallDirectionY(newBallDirectionY);
-	   }else if(bp.getDirection() == BouncePoint.BounceDirection.FLIP_BOTH) {
-		   double newBallDirectionX=1;
-		   double newBallDirectionY=1;
-		   double xVal=currentPaddleX;
-		   if(bp.hasHitBlock()) {
-			   xVal = bp.getHitBlock().getX();
-		   }
-		   if(bp.getX()>xVal) {//we are on right side
-			   if(ballDirectionX<0) {//coming in from the right: FLIP_X
-				   newBallDirectionX=ballDirectionX*-1;
-				   newBallDirectionY=ballDirectionY + (Math.abs(ballDirectionX*0.1)*(ballDirectionY/Math.abs(ballDirectionY)));
-			   }else {//coming in from the left: FLIP_Y
-				   newBallDirectionY=ballDirectionY*-1;
-				   newBallDirectionX=ballDirectionX + (Math.abs(ballDirectionY*0.1)*(ballDirectionX/Math.abs(ballDirectionX)));
-			   }
-		   }else {//we are on left side
-			   if(ballDirectionX<0) {//coming in from the right: FLIP_Y
-				   newBallDirectionY=ballDirectionY*-1;
-				   newBallDirectionX=ballDirectionX + (Math.abs(ballDirectionY*0.1)*(ballDirectionX/Math.abs(ballDirectionX)));
-			   }else {//coming in from the left: FLIP_X
-				   newBallDirectionX=ballDirectionX*-1;
-				   newBallDirectionY=ballDirectionY + (Math.abs(ballDirectionX*0.1)*(ballDirectionY/Math.abs(ballDirectionY)));
-			   }
-		   }
-		   setCurrentBallY(bp.getY()+remainingY/ballDirectionY * newBallDirectionY);
-		   setCurrentBallX(bp.getX()+remainingX/ballDirectionX * newBallDirectionX);
-		   setBallDirectionX(newBallDirectionX);
-		   setBallDirectionY(newBallDirectionY);
-	   }
-	   this.bounce=null;
+	  	    double inX = bounce.getX()-currentBallX; 
+	    double  inY = bounce.getY()-currentBallY;
+	    double remX = ballDirectionX - inX;
+	    double remY = ballDirectionY - inY;
+
+		if (bounce.getDirection() == BouncePoint.BounceDirection.FLIP_Y
+				|| bounce.getDirection() == BouncePoint.BounceDirection.FLIP_BOTH) {
+			ballDirectionX = ballDirectionX + 
+					(ballDirectionX >= 0? 1:-1)*.1*Math.abs(ballDirectionY);
+			ballDirectionY = -ballDirectionY;
+		}
+		if (bounce.getDirection() == BouncePoint.BounceDirection.FLIP_X
+				|| bounce.getDirection() == BouncePoint.BounceDirection.FLIP_BOTH) {
+			ballDirectionY = ballDirectionY + 
+					(ballDirectionY >= 0? 1:-1)*.1*Math.abs(ballDirectionX);
+			ballDirectionX = ballDirectionX *-1;
+		}
+		currentBallX = bounce.getX() + remX;
+		currentBallY = bounce.getY() + remY;
   }
    private BouncePoint calculateBouncePointBlock(PlayedBlockAssignment aBlock){
     //For anyone reading, I've inverted the Y interpretation of the blocks, since
