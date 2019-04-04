@@ -726,24 +726,29 @@ public class PlayedGame implements Serializable
 	    double  inY = bounce.getY()-currentBallY;
 	    double remX = ballDirectionX - inX;
 	    double remY = ballDirectionY - inY;
-
+	    double newBallDirectionY = ballDirectionY;
+	    double newBallDirectionX = ballDirectionX;
 		if (bounce.getDirection() == BouncePoint.BounceDirection.FLIP_Y) {
-			ballDirectionX = ballDirectionX + 
-					(ballDirectionX >= 0? 1:-1)*.1*Math.abs(ballDirectionY);
-			ballDirectionY = -ballDirectionY;
-			
-		}
-		if (bounce.getDirection() == BouncePoint.BounceDirection.FLIP_X) {
-			ballDirectionY = ballDirectionY + 
-					(ballDirectionY >= 0? 1:-1)*.1*Math.abs(ballDirectionX);
-			ballDirectionX = ballDirectionX *-1;
-		}
-		if(bounce.getDirection() == BouncePoint.BounceDirection.FLIP_BOTH) {
+		   newBallDirectionY = ballDirectionY *-1;
+		   newBallDirectionX = ballDirectionX + (Math.abs(ballDirectionY*0.1)*(ballDirectionX/Math.abs(ballDirectionX)));
+		   setCurrentBallY(bounce.getY()+remY/ballDirectionY * newBallDirectionY);
+		   setCurrentBallX(bounce.getX()+remX/ballDirectionX * newBallDirectionX);
+		   setBallDirectionX(newBallDirectionX);
+		   setBallDirectionY(newBallDirectionY);
+		}else if (bounce.getDirection() == BouncePoint.BounceDirection.FLIP_X) {
+		   newBallDirectionX = ballDirectionX *-1;
+		   newBallDirectionY = ballDirectionY + (Math.abs(ballDirectionX*0.1)*(ballDirectionY/Math.abs(ballDirectionY)));
+		   setCurrentBallY(bounce.getY()+remY/ballDirectionY * newBallDirectionY);
+		   setCurrentBallX(bounce.getX()+remX/ballDirectionX * newBallDirectionX);
+		   setBallDirectionX(newBallDirectionX);
+		   setBallDirectionY(newBallDirectionY);   
+		}else if(bounce.getDirection() == BouncePoint.BounceDirection.FLIP_BOTH) {
 			ballDirectionX = ballDirectionX * -1;
 			ballDirectionY = ballDirectionY * -1;
+			currentBallX = bounce.getX() + remX;
+			currentBallY = bounce.getY() + remY;
 		}
-		currentBallX = bounce.getX() + remX;
-		currentBallY = bounce.getY() + remY;
+
   }
 
   // line 76 "../../../../../Block223PlayMode.ump"
@@ -817,10 +822,12 @@ public class PlayedGame implements Serializable
 			   //FLIP_Y
 			   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_Y);
 			   finalBP.setHitBlock(aBlock);
+			   System.out.println("BP: "+finalBP.getX()+","+finalBP.getY());
 			   return finalBP;
 		   }else {//FLIP_X
 			   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_X);
 			   finalBP.setHitBlock(aBlock);
+			   System.out.println("BP: "+finalBP.getX()+","+finalBP.getY());
 			   return finalBP;			   
 		   }
 	   }else {//flip_x
@@ -829,11 +836,13 @@ public class PlayedGame implements Serializable
 			   //FLIP_X
 			   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_X);
 			   finalBP.setHitBlock(aBlock);
+			   System.out.println("BP: "+finalBP.getX()+","+finalBP.getY());
 			   return finalBP;
 		   }else {//coming from the left anywhere right of origin
 			   //FLIP_Y
 			   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_Y);
 			   finalBP.setHitBlock(aBlock);
+			   System.out.println("BP: "+finalBP.getX()+","+finalBP.getY());
 			   return finalBP;
 		   }
 	   }
