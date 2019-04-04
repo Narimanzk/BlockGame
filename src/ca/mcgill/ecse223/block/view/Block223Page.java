@@ -217,32 +217,36 @@ public class Block223Page{
 		errorMessage.setVisible(true);
 
 		JButton btnUpdateGameDtails = new JButton("Update Game");
-		btnUpdateGameDtails.setBounds(160, 70, 214, 29);
+		btnUpdateGameDtails.setBounds(160, 110, 214, 29);
 		GeneralGameMenu.add(btnUpdateGameDtails);
 
 		JButton btnChangeBlocksInGame = new JButton("Add/Delete/Update a Block");
 
 
-		btnChangeBlocksInGame.setBounds(160, 100, 214, 29);
+		btnChangeBlocksInGame.setBounds(160, 140, 214, 29);
 		GeneralGameMenu.add(btnChangeBlocksInGame);
 
 
 		//Edit blocks in a level. 
 		//This will bring to a new menu, that will allow us to select level, and then position,move,remove blocks.
 		JButton btnEditBlocksWithin = new JButton("Edit Blocks Within a Level");
-		btnEditBlocksWithin.setBounds(160, 130, 214, 29);
+		btnEditBlocksWithin.setBounds(160, 170, 214, 29);
 		GeneralGameMenu.add(btnEditBlocksWithin);
 
 
 		//Save Changes ( Call the save method)
 		JButton btnSaveChanges = new JButton("Save Changes");
-		btnSaveChanges.setBounds(160, 160, 214, 29);
+		btnSaveChanges.setBounds(160, 200, 214, 29);
 		GeneralGameMenu.add(btnSaveChanges);
 		
 		JLabel lblSpecificGame = new JLabel("Specific Game");
 		lblSpecificGame.setFont(new Font("Mshtakan", Font.BOLD | Font.ITALIC, 27));
-		lblSpecificGame.setBounds(178, 0, 179, 78);
+		lblSpecificGame.setBounds(175, 6, 270, 78);
 		GeneralGameMenu.add(lblSpecificGame);
+		
+		JButton btnPlay = new JButton("PLAY");
+		btnPlay.setBounds(160, 63, 214, 47);
+		GeneralGameMenu.add(btnPlay);
 
 
 		JButton backGenGamePage = new JButton("Back");
@@ -881,6 +885,15 @@ public class Block223Page{
 					loginPanel.setVisible(false);
 					mainMenu.setVisible(true);
 				}
+			}
+		});
+		//Bring us to the play paeg:
+		btnPlay.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				error = "";
+				errorMessage.setText("");
+				GeneralGameMenu.setVisible(false);
+				Block223PlayModeView bpmv = new Block223PlayModeView();
 			}
 		});
 
