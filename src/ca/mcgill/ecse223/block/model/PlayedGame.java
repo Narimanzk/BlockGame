@@ -728,30 +728,34 @@ public class PlayedGame implements Serializable
 	    double remY = ballDirectionY - inY;
 	    double newBallDirectionY = ballDirectionY;
 	    double newBallDirectionX = ballDirectionX;
+	    //newBallDirectionX = ballDirectionX + Math.copySign((Math.abs(ballDirectionY*0.1)), ballDirectionX);
 		if (bounce.getDirection() == BouncePoint.BounceDirection.FLIP_Y) {
-		   newBallDirectionY = ballDirectionY *-1;
-		   newBallDirectionX = ballDirectionX + (Math.abs(ballDirectionY*0.1)*(ballDirectionX/Math.abs(ballDirectionX)));
-		   setCurrentBallY(bounce.getY()+remY/ballDirectionY * newBallDirectionY);
-		   setCurrentBallX(bounce.getX()+remX/ballDirectionX * newBallDirectionX);
-		   setBallDirectionX(newBallDirectionX);
-		   setBallDirectionY(newBallDirectionY);
+ 		    newBallDirectionY = ballDirectionY *-1;
+ 		    newBallDirectionX = ballDirectionX + Math.copySign((Math.abs(ballDirectionY*0.1)), ballDirectionX);
 		}else if (bounce.getDirection() == BouncePoint.BounceDirection.FLIP_X) {
-		   newBallDirectionX = ballDirectionX *-1;
-		   newBallDirectionY = ballDirectionY + (Math.abs(ballDirectionX*0.1)*(ballDirectionY/Math.abs(ballDirectionY)));
-		   setCurrentBallY(bounce.getY()+remY/ballDirectionY * newBallDirectionY);
-		   setCurrentBallX(bounce.getX()+remX/ballDirectionX * newBallDirectionX);
-		   setBallDirectionX(newBallDirectionX);
-		   setBallDirectionY(newBallDirectionY);   
+			newBallDirectionX = ballDirectionX *-1;
+		    newBallDirectionY = ballDirectionY + Math.copySign((Math.abs(ballDirectionX*0.1)), ballDirectionY); 
 		}else if(bounce.getDirection() == BouncePoint.BounceDirection.FLIP_BOTH) {
-			ballDirectionX = ballDirectionX * -1;
-			ballDirectionY = ballDirectionY * -1;
+			newBallDirectionX = ballDirectionX * -1;
+			newBallDirectionY = ballDirectionY * -1;
 			currentBallX = bounce.getX() + remX;
 			currentBallY = bounce.getY() + remY;
 		}
-
+		if(ballDirectionX==0) {
+			setCurrentBallX(bounce.getX() + newBallDirectionX);
+		}else {
+			setCurrentBallX(bounce.getX() + ((remX/ballDirectionX) * newBallDirectionX));
+		}
+		if(ballDirectionY==0) {
+			setCurrentBallY(bounce.getY() + newBallDirectionY);
+		}else {
+			setCurrentBallY(bounce.getY() + ((remY/ballDirectionY) * newBallDirectionY));
+		}
+		setBallDirectionX(newBallDirectionX);
+		setBallDirectionY(newBallDirectionY);
   }
 
-  // line 76 "../../../../../Block223PlayMode.ump"
+  // line 88 "../../../../../Block223PlayMode.ump"
    private BouncePoint calculateBouncePointBlock(PlayedBlockAssignment aBlock){
     //For anyone reading, I've inverted the Y interpretation of the blocks, since
 	   //the interpretation of 0,0 being in the top left corner makes things confusing.
@@ -822,12 +826,10 @@ public class PlayedGame implements Serializable
 			   //FLIP_Y
 			   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_Y);
 			   finalBP.setHitBlock(aBlock);
-			   System.out.println("BP: "+finalBP.getX()+","+finalBP.getY());
 			   return finalBP;
 		   }else {//FLIP_X
 			   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_X);
 			   finalBP.setHitBlock(aBlock);
-			   System.out.println("BP: "+finalBP.getX()+","+finalBP.getY());
 			   return finalBP;			   
 		   }
 	   }else {//flip_x
@@ -836,102 +838,100 @@ public class PlayedGame implements Serializable
 			   //FLIP_X
 			   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_X);
 			   finalBP.setHitBlock(aBlock);
-			   System.out.println("BP: "+finalBP.getX()+","+finalBP.getY());
 			   return finalBP;
 		   }else {//coming from the left anywhere right of origin
 			   //FLIP_Y
 			   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_Y);
 			   finalBP.setHitBlock(aBlock);
-			   System.out.println("BP: "+finalBP.getX()+","+finalBP.getY());
 			   return finalBP;
 		   }
 	   }
-	   /*
-	   if(closestPoint.getX()<rightX-5 && closestPoint.getX()>leftX+5) {
-		   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_Y);
-		   finalBP.setHitBlock(aBlock);
-		   return finalBP;
-	   }else if(closestPoint.getY()<topY-5 && closestPoint.getY()>bottomY+5) {
-		   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_X);
-		   finalBP.setHitBlock(aBlock);
-		   return finalBP;
-	   }else {
-		   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_BOTH);
-		   finalBP.setHitBlock(aBlock);
-		   return finalBP;
-	   }*/
   }
 
-  // line 181 "../../../../../Block223PlayMode.ump"
+  // line 179 "../../../../../Block223PlayMode.ump"
    private BouncePoint calculateBouncePointPaddle(){
-    double x1 = currentBallX;
-	   double y1 = currentBallY;
-	   double x2 = x1+ballDirectionX;
-	   double y2 = y1+ballDirectionY;
-	   Line2D ballPath = new Line2D.Double(x1,y1,x2,y2);
-	   double px = currentPaddleX;
-	   double py = currentPaddleY;
-	   double l = currentPaddleLength;
-	   double w = Paddle.PADDLE_WIDTH;
-	   double r = Ball.BALL_DIAMETER/2;
-	   Point2D closestPoint = null;
-	   BouncePoint.BounceDirection bd = null;
-	   double closestDist = Double.MAX_VALUE;
-	   Rectangle2D fullBox = new Rectangle2D.Double(px-r,py-r,l+(2*r),r+w);
-	   if(fullBox.intersectsLine(ballPath)){
-		   //System.out.println("Intersect fullBox");
-		   Line2D A = new Line2D.Double(px,py-r,px+l,py-r);
-		   Line2D B = new Line2D.Double(px-r,py,px-r,py+w);
-		   Line2D C = new Line2D.Double(px+l+r,py,px+l+r,py+w);
-
-		   for (Line2D line : new Line2D[] {A,B,C}) {
-			   Point2D intersectionPoint = getIntersectionPoint(line, ballPath);
-			   if (intersectionPoint != null && intersectionPoint.distance(x1, y1) < closestDist) {
-				   closestDist = getIntersectionPoint(line, ballPath).distance(x1, y1);
-				   closestPoint = getIntersectionPoint(line, ballPath);
-				   if(closestDist==0) return null;
-				   //System.out.println("closestPoint"+closestPoint);
-				   if ((closestPoint.getX()>=px && closestPoint.getX()<=(px+l)) && closestPoint.getY()==(py-r)) {
-					   //System.out.println("PING PING");
-					   bd = BouncePoint.BounceDirection.FLIP_Y;
-				   } else {
-					   //System.out.println("DING DING");
-					   bd = BouncePoint.BounceDirection.FLIP_X;
-				   }
-			   }
-			   
-		   }
-		   List<Point2D> EPts = getIntersectionPoints(ballPath, px,py,r);
-		   List<Point2D> FPts = getIntersectionPoints(ballPath, px+l, py, r);
-		   for (Point2D pt : EPts) {
-			   if (pt.getX() < px && pt.getY() < py && pt.distance(x1,x2) < closestDist) {
-				   closestPoint = pt;
-				   closestDist = pt.distance(x1,x2);
-				   if(closestDist==0) return null;
-				   //System.out.println("BOOM BOOM");
-				   bd = ballDirectionX < 0 ? BouncePoint.BounceDirection.FLIP_Y
-						   : BouncePoint.BounceDirection.FLIP_X;
-				   //System.out.println("bd is"+bd);
-			   }
-			   
-		   }
-		   for (Point2D pt : FPts) {
-			   if (pt.getX() > px+l && pt.getY() < py && pt.distance(x1,x2) < closestDist) {
-				   closestPoint = pt;
-				   closestDist = pt.distance(x1,x2);
-				   if(closestDist==0) return null;
-				   bd = ballDirectionX < 0 ? BouncePoint.BounceDirection.FLIP_X
-						   : BouncePoint.BounceDirection.FLIP_Y;
-			   }
-			   
-		   }
-		   if (bd == null) return null;
-		   return new BouncePoint(closestPoint.getX(), closestPoint.getY(), bd);
+    //For anyone reading, I've inverted the Y interpretation of the blocks, since
+	   //the interpretation of 0,0 being in the top left corner makes things confusing.
+	   //So when I say things like bottom and top, I mean relative to 0,0 being in the
+	   //bottom left corner - you know, like a normal person. The math still works out.
+		   
+	   double length = currentPaddleLength;
+	   double width = Paddle.PADDLE_WIDTH;
+	   double leftX = currentPaddleX - ((double)Ball.BALL_DIAMETER)/2;
+	   double bottomY = currentPaddleY - ((double)Ball.BALL_DIAMETER)/2;
+	   double rightX = leftX + length + Ball.BALL_DIAMETER;
+	   Point2D paddleLowerLeft = new Point2D.Double(currentPaddleX,currentPaddleY);
+	   Point2D paddleLowerRight = new Point2D.Double(currentPaddleX+length,currentPaddleY);
+	   Point2D paddleTopLeft = new Point2D.Double(currentPaddleX,currentPaddleY+width);
+	   Point2D paddleTopRight = new Point2D.Double(currentPaddleX+length,currentPaddleY+width);
+	   Point2D[] points = {paddleLowerLeft,paddleLowerRight,paddleTopLeft,paddleTopRight};
+		   
+	   Line2D.Double ballPath = new Line2D.Double(currentBallX, currentBallY, currentBallX+ballDirectionX, currentBallY+ballDirectionY);
+	   Line2D.Double bottom = new Line2D.Double(paddleLowerLeft.getX(), bottomY, paddleLowerRight.getX(), bottomY);
+	   Line2D.Double right = new Line2D.Double(rightX, paddleTopRight.getY(), rightX, paddleLowerRight.getY());
+	   Line2D.Double left = new Line2D.Double(leftX, paddleTopLeft.getY(), leftX, paddleLowerLeft.getY());
+		   
+	   ArrayList<Point2D> intersects = new ArrayList<Point2D>();
+	   for(int i=0;i<points.length;i++) {
+		   intersects.addAll(getIntersectionPoints(ballPath, points[i].getX(), points[i].getY(), (double)Ball.BALL_DIAMETER/2));
 	   }
-	   return null;
+	   //If the path of the ball intersects with ANY of those defined lines
+	   if(ballPath.intersectsLine(bottom)) {
+		   //calculate the point of intersection and add that point to a list for processing.
+		   intersects.add(getIntersection(ballPath,bottom));
+	   }
+	   if(ballPath.intersectsLine(left)) {
+		   intersects.add(getIntersection(ballPath,left));
+	   }
+	   if(ballPath.intersectsLine(right)) {
+		   intersects.add(getIntersection(ballPath,right));
+	   }
+	   if(intersects.isEmpty()) {
+		   return null;
+	   }
+		   
+	   //With this list of points, find the one closest to the ball's current position
+	   Point2D ballCoords = new Point2D.Double(currentBallX, currentBallY);
+	   double minDistance = ballCoords.distance(intersects.get(0));
+	   Point2D closestPoint=intersects.get(0);//set some initial values
+	   for(int i=1;i<intersects.size();i++) {//and iterate through the rest of the list
+		   double distance = ballCoords.distance(intersects.get(i));
+		   if(distance<minDistance) {
+			   closestPoint = intersects.get(i);
+			   minDistance = distance;
+		   }
+	   }//we now have the closest intersect point! So how do we flip?
+		   
+	   if(closestPoint.getX()==ballPath.getX2() && closestPoint.getY()==ballPath.getY2()) {
+		   //If the bouncepoint is exactly the endpoint of the ball's trajectory
+		   //ABORT: DO NOT BOUNCE
+		   return null;
+	   }
+
+	   if(closestPoint.getX()<currentPaddleX) {//BP left of paddle origin corner
+		   if(ballDirectionX<=0) {//traveling from right
+			   //FLIP_Y
+			   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_Y);
+			   return finalBP;
+		   }else {//FLIP_X
+			   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_X);
+			   return finalBP;			   
+		   }
+	   }else {//flip_x
+		   if(ballDirectionX<=0 && closestPoint.getX()>currentPaddleX+length) {
+			   //coming from right beyond edge of block
+			   //FLIP_X
+			   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_X);
+			   return finalBP;
+		   }else {//coming from the left anywhere right of origin
+			   //FLIP_Y
+			   BouncePoint finalBP = new BouncePoint(closestPoint.getX(),closestPoint.getY(),BouncePoint.BounceDirection.FLIP_Y);
+			   return finalBP;
+		   }
+	   }
   }
 
-  // line 249 "../../../../../Block223PlayMode.ump"
+  // line 260 "../../../../../Block223PlayMode.ump"
    private BouncePoint calculateBouncePointWall(){
     double x1 = currentBallX;
 	   double y1 = currentBallY;
@@ -977,7 +977,7 @@ public class PlayedGame implements Serializable
 	   return null;
   }
 
-  // line 312 "../../../../../Block223PlayMode.ump"
+  // line 323 "../../../../../Block223PlayMode.ump"
    private Point2D getIntersectionPoint(Line2D a, Line2D b){
     if (a.intersectsLine(b) && slope(a) != slope(b)) {
 			double x1 = a.getX1();
@@ -1013,7 +1013,7 @@ public class PlayedGame implements Serializable
    * @param r the radius of the circle
    * @return a list of points of intersection
    */
-  // line 344 "../../../../../Block223PlayMode.ump"
+  // line 355 "../../../../../Block223PlayMode.ump"
    private List<Point2D> getIntersectionPoints(Line2D l, double xc, double yc, double r){
     List<Point2D> list = new ArrayList<Point2D>();
 		Double m = slope(l);
@@ -1051,7 +1051,7 @@ public class PlayedGame implements Serializable
 		return list;
   }
 
-  // line 380 "../../../../../Block223PlayMode.ump"
+  // line 391 "../../../../../Block223PlayMode.ump"
    private Double slope(Line2D l){
     if (Math.abs(l.getX1() - l.getX2()) > 0.0001) {
 			return (l.getY1() - l.getY2())/(l.getX1() - l.getX2());
@@ -1060,7 +1060,7 @@ public class PlayedGame implements Serializable
 		}
   }
 
-  // line 388 "../../../../../Block223PlayMode.ump"
+  // line 399 "../../../../../Block223PlayMode.ump"
    private boolean isCloser(BouncePoint bp, BouncePoint bounce){
     if(bp == null) {
 		   return false;
@@ -1284,7 +1284,7 @@ public class PlayedGame implements Serializable
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 293 "../../../../../Block223PlayMode.ump"
+  // line 304 "../../../../../Block223PlayMode.ump"
   private static Point2D getIntersection (final Line2D.Double line1, final Line2D.Double line2) 
   {
     final double x1,y1, x2,y2, x3,y3, x4,y4;
