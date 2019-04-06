@@ -6,10 +6,12 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.LayoutManager;
 import java.awt.geom.Rectangle2D;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
@@ -19,14 +21,12 @@ import ca.mcgill.ecse223.block.controller.InvalidInputException;
 
 
 public class Block223PlayModeView extends JFrame implements Block223PlayModeInterface {
-	private Rectangle2D paddle;
 	private static final long serialVersionUID = -613534727974834342L;
-	JTextArea gameArea;
-	Block223PlayModeListener bp;
 	private static final int GAMEWIDTH = 390;
 	private static final int GAMEHEIGHT = 390;
-	  public static final int PADDLE_WIDTH = 5;
-	  public static final int VERTICAL_DISTANCE = 30;
+	JTextArea gameArea;
+	Block223PlayModeListener bp;
+	private Block223PlayModeVisualiser block223PlayModeVisualiser;
 
 	public Block223PlayModeView() {
 		createAndShowGUI();
@@ -36,6 +36,8 @@ public class Block223PlayModeView extends JFrame implements Block223PlayModeInte
 	 * Creating GUI
 	 */
 	private void createAndShowGUI() {
+		//tudor's new ui
+
 		// Create and set up the window.
 		this.setTitle("Block223 PlayMode Example");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -54,10 +56,12 @@ public class Block223PlayModeView extends JFrame implements Block223PlayModeInte
 
 		gameArea = new JTextArea();
 		gameArea.setEditable(false);
-		JScrollPane scrollPane = new JScrollPane(gameArea);
-		scrollPane.setPreferredSize(new Dimension(GAMEWIDTH, GAMEHEIGHT));
+//		JScrollPane scrollPane = new JScrollPane(gameArea);
+		block223PlayModeVisualiser = new Block223PlayModeVisualiser(gameArea);
 
-		getContentPane().add(scrollPane, BorderLayout.CENTER);
+		block223PlayModeVisualiser.setPreferredSize(new Dimension(GAMEWIDTH, GAMEHEIGHT));
+		
+		getContentPane().add(block223PlayModeVisualiser, BorderLayout.CENTER);
 		getContentPane().add(button, BorderLayout.PAGE_END);
 
 		button.addActionListener(new java.awt.event.ActionListener() {
@@ -98,31 +102,7 @@ public class Block223PlayModeView extends JFrame implements Block223PlayModeInte
 		});
 	}
 	
-	private void gamePlay() {
-		
-	}
 	
-	private void doDrawing(Graphics g) {
-		Graphics2D g2d = (Graphics2D) g.create();
-		double paddleX = 0;
-		double paddleLength = 0;
-		try {
-			paddleX = Block223Controller.getCurrentPlayableGame().getCurrentPaddleX();
-			paddleLength = Block223Controller.getCurrentPlayableGame().getCurrentPaddleLength();
-			
-		} catch (InvalidInputException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		paddle.setRect(paddleX, GAMEHEIGHT-VERTICAL_DISTANCE, paddleLength, PADDLE_WIDTH);
-		g2d.setColor(Color.BLACK);
-		g2d.fill(paddle);
-		g2d.draw(paddle);
-		
-	}
-	public void paintComponent(Graphics g) {
-		doDrawing(g);
-	}
 
 	@Override
 	public String takeInputs() {
@@ -135,6 +115,6 @@ public class Block223PlayModeView extends JFrame implements Block223PlayModeInte
 	@Override
 	public void refresh() {
 		System.out.println("UI is refreshing now...");
-		repaint();
-	}
+		block223PlayModeVisualiser.paintComponent(getGraphics());
+		}
 }

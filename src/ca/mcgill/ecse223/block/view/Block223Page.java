@@ -54,6 +54,7 @@ public class Block223Page{
 
 
 
+
 	// data elements
 	private String error = null;
 
@@ -63,6 +64,7 @@ public class Block223Page{
 	}
 
 	private void initialize() {
+		
 		// elements for error message
 		errorMessage = new JLabel();
 		errorMessage.setVerticalAlignment(SwingConstants.BOTTOM);
@@ -180,7 +182,7 @@ public class Block223Page{
 
 		//Select game button, should take the name from the combo box^.
 		JButton btnSelectGame = new JButton("Select Game");
-		btnSelectGame.setBounds(266, 178, 157, 29);
+		btnSelectGame.setBounds(-62, 85, 157, 29);
 		AddEditGameMenu.add(btnSelectGame);
 
 		JButton btnDeleteGame = new JButton("Delete Game");
@@ -466,6 +468,10 @@ public class Block223Page{
 		playableGamesListLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		playableGamesListLabel.setBounds(276, 122, 146, 16);
 		PlayMenu.add(playableGamesListLabel);
+		
+		JButton btnSelectPlayableGame = new JButton("Select Game");
+		btnSelectPlayableGame.setBounds(276, 183, 146, 29);
+		PlayMenu.add(btnSelectPlayableGame);
 
 		/////////////////////////////////////////////////////////////////
 
@@ -1052,6 +1058,18 @@ public class Block223Page{
 					AddEditGameMenu.setVisible(false);
 					GeneralGameMenu.setVisible(true);
 				}
+			}
+		});
+		//select playable game button
+		btnSelectPlayableGame.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				error = "";
+				try {//idk how to use id so we'll go by name
+					Block223Controller.selectPlayableGame(playableGameList.getSelectedItem().toString(), -1);
+				} catch (InvalidInputException e1) {
+					error+= e1.getMessage();
+				}
+				refreshData();
 			}
 		});
 
