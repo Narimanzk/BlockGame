@@ -182,7 +182,7 @@ public class Block223Page{
 
 		//Select game button, should take the name from the combo box^.
 		JButton btnSelectGame = new JButton("Select Game");
-		btnSelectGame.setBounds(-62, 85, 157, 29);
+		btnSelectGame.setBounds(265, 185, 157, 29);
 		AddEditGameMenu.add(btnSelectGame);
 
 		JButton btnDeleteGame = new JButton("Delete Game");
