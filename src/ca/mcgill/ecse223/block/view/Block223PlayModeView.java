@@ -52,7 +52,7 @@ public class Block223PlayModeView extends JFrame implements Block223PlayModeInte
 
 	private void addComponentsToPane() {
 
-		JButton button = new JButton("Start Game");
+		JButton btnGame = new JButton("Start Game");
 
 		gameArea = new JTextArea();
 		gameArea.setEditable(false);
@@ -62,11 +62,11 @@ public class Block223PlayModeView extends JFrame implements Block223PlayModeInte
 		block223PlayModeVisualiser.setPreferredSize(new Dimension(GAMEWIDTH, GAMEHEIGHT));
 		
 		getContentPane().add(block223PlayModeVisualiser, BorderLayout.CENTER);
-		getContentPane().add(button, BorderLayout.PAGE_END);
+		getContentPane().add(btnGame, BorderLayout.PAGE_END);
 
-		button.addActionListener(new java.awt.event.ActionListener() {
+		btnGame.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				button.setVisible(false);
+				btnGame.setVisible(false);
 				// initiating a thread to start listening to keyboard inputs
 				bp = new Block223PlayModeListener();
 				Runnable r1 = new Runnable() {
@@ -91,7 +91,8 @@ public class Block223PlayModeView extends JFrame implements Block223PlayModeInte
 					public void run() {
 						try {
 							Block223Controller.startGame(Block223PlayModeView.this);
-							button.setVisible(true);
+							btnGame.setText("Resume");
+							btnGame.setVisible(true);
 						} catch (InvalidInputException e) {
 						}
 					}
@@ -114,7 +115,6 @@ public class Block223PlayModeView extends JFrame implements Block223PlayModeInte
 
 	@Override
 	public void refresh() {
-		System.out.println("UI is refreshing now...");
 		block223PlayModeVisualiser.paintComponent(getGraphics());
 		}
 }

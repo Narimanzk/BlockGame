@@ -629,10 +629,10 @@ public class Block223Controller {
 				aGame.pause();
 			}
 
-			System.out.println("Input received by CONTROLLER: " + userInputs);
+//			System.out.println("Input received by CONTROLLER: " + userInputs);
 
 			try {
-				Thread.sleep(500);
+				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -641,6 +641,7 @@ public class Block223Controller {
 			ui.refresh();
 		}
 		if (aGame.getPlayStatus() == PlayStatus.GameOver) {
+
 			Block223Application.setCurrentPlayableGame(null);
 		} else {
 			if(aGame.getPlayer() != null) {
