@@ -604,7 +604,7 @@ public class Block223Controller {
 	// TUDZ
 	public static void startGame(Block223PlayModeInterface ui) throws InvalidInputException {
 		PlayedGame aGame = Block223Application.getCurrentPlayableGame();
-
+		System.out.println("we started a game");
 		UserRole userRole = Block223Application.getCurrentUserRole();
 		if (userRole == null)
 			throw new InvalidInputException("Player privileges are required to play a game.");
@@ -616,12 +616,15 @@ public class Block223Controller {
 			throw new InvalidInputException("Only the admin of a game can test the game.");
 		if (userRole instanceof Player && aGame.getPlayer() == null)
 			throw new InvalidInputException("Admin privileges are required to test a game.");
+		System.out.println("nothing crashed");
 
 		aGame.play();
 		String userInputs = ui.takeInputs();
 
 		
 		while (aGame.getPlayStatus() == PlayStatus.Moving) {
+			System.out.println("game loop");
+
 			userInputs = ui.takeInputs();
 			updatePaddlePosition(userInputs);
 			aGame.move();
@@ -699,6 +702,7 @@ public class Block223Controller {
 				
 		Game game = Block223Application.getCurrentGame();
 		game.setPublished(true);
+		
 		
 	}
 
@@ -865,8 +869,10 @@ public class Block223Controller {
 			throw new InvalidInputException("Player privileges are required to play a game.");
 
 		for (Game game : games) {
+
 			boolean published = game.isPublished();
 			if (published) {
+
 				TOPlayableGame to = new TOPlayableGame(game.getName(), -1, 0);
 				result.add(to);
 			}

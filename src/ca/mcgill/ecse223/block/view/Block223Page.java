@@ -16,11 +16,9 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
 import ca.mcgill.ecse223.block.application.Block223Application;
-import ca.mcgill.ecse223.block.controller.Block223Controller;
-import ca.mcgill.ecse223.block.controller.InvalidInputException;
-import ca.mcgill.ecse223.block.controller.TOBlock;
-import ca.mcgill.ecse223.block.controller.TOGame;
-import ca.mcgill.ecse223.block.controller.TOUserMode;
+import ca.mcgill.ecse223.block.controller.*;
+import ca.mcgill.ecse223.block.model.Admin;
+import ca.mcgill.ecse223.block.model.Player;
 
 import javax.swing.JFormattedTextField;
 import javax.swing.SwingConstants;
@@ -32,6 +30,7 @@ public class Block223Page{
 	private JTextArea txtrNewGameName;
 	private JTextArea NrLevels;
 	private JComboBox<String> gameList;
+	private JComboBox<String> playableGameList;
 	private JComboBox<Integer> blockList;
 	private JComboBox<Integer> blockList2;
 	private JLabel errorMessage;
@@ -70,6 +69,7 @@ public class Block223Page{
 		errorMessage.setForeground(Color.RED);
 		blockList2 = new JComboBox<Integer>();
 		gameList = new JComboBox<String>();
+		playableGameList = new JComboBox<String>();
 		frame = new JFrame();
 		frame.getContentPane().setForeground(Color.BLACK);
 		frame.setBounds(100, 100, 527, 361);
@@ -179,13 +179,14 @@ public class Block223Page{
 		AddEditGameMenu.add(gameList);
 
 		//Select game button, should take the name from the combo box^.
-		JButton SelectGame = new JButton("Select Game");
-		SelectGame.setBounds(266, 178, 157, 29);
-		AddEditGameMenu.add(SelectGame);
+		JButton btnSelectGame = new JButton("Select Game");
+		btnSelectGame.setBounds(266, 178, 157, 29);
+		AddEditGameMenu.add(btnSelectGame);
 
 		JButton btnDeleteGame = new JButton("Delete Game");
 		btnDeleteGame.setBounds(265, 219, 157, 29);
 		AddEditGameMenu.add(btnDeleteGame);
+
 
 		JButton backAEGamePage = new JButton("Back");
 		backAEGamePage.addActionListener(new ActionListener() {
@@ -244,9 +245,10 @@ public class Block223Page{
 		lblSpecificGame.setBounds(175, 6, 270, 78);
 		GeneralGameMenu.add(lblSpecificGame);
 		
-		JButton btnPlay = new JButton("PLAY");
-		btnPlay.setBounds(160, 63, 214, 47);
-		GeneralGameMenu.add(btnPlay);
+		JButton btnPublishGame = new JButton("Publish");
+		btnPublishGame.setBounds(160, 232, 214, 29);
+		GeneralGameMenu.add(btnPublishGame);
+		
 
 
 		JButton backGenGamePage = new JButton("Back");
@@ -275,6 +277,7 @@ public class Block223Page{
 		lblAvailableGames.setFont(new Font("Mshtakan", Font.PLAIN, 16));
 		lblAvailableGames.setBounds(289, 122, 133, 16);
 		AddEditGameMenu.add(lblAvailableGames);
+		
 		/////////////////////////////////////////////////////////////////
 
 		/////////////////////////////////////////////////////////////////
@@ -442,6 +445,28 @@ public class Block223Page{
 		UpdateGameMenu.add(backUpdateMenu);
 
 		blockList = new JComboBox<Integer>();
+		/////////////////////////////////////////////////////////////////
+
+		/////////////////////////////////////////////////////////////////
+		//Play menu
+		//has play button
+		JPanel PlayMenu = new JPanel();
+		PlayMenu.setLayout(null);
+		PlayMenu.setBackground(new Color(255, 228, 225));
+		frame.getContentPane().add(PlayMenu, "name_138462746885867");
+
+		playableGameList.setBounds(276, 146, 146, 27);
+		PlayMenu.add(playableGameList);
+
+		JButton btnPlay = new JButton("PLAY");
+		btnPlay.setBounds(160, 63, 214, 47);
+		PlayMenu.add(btnPlay);
+		
+		JLabel playableGamesListLabel = new JLabel("Playable Games");
+		playableGamesListLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		playableGamesListLabel.setBounds(276, 122, 146, 16);
+		PlayMenu.add(playableGamesListLabel);
+
 		/////////////////////////////////////////////////////////////////
 
 		/////////////////////////////////////////////////////////////////
@@ -849,6 +874,8 @@ public class Block223Page{
 		label_6.setFont(new Font("Mshtakan", Font.PLAIN, 16));
 		label_6.setBounds(40, 222, 84, 16);
 		EditBlockWithinLevel.add(label_6);
+		
+
 		////////////////////////////////////////////////////////////////////////////////
 		//ALL BUTTONS:
 
@@ -882,8 +909,16 @@ public class Block223Page{
 				txtrUsername.setText("");
 				txtrPassword.setText("");
 				if (error == null || error.length() == 0) {
-					loginPanel.setVisible(false);
-					mainMenu.setVisible(true);
+					if(Block223Application.getCurrentUserRole() instanceof Admin) {
+						loginPanel.setVisible(false);
+						mainMenu.setVisible(true);
+
+					}
+					else {
+						loginPanel.setVisible(false);
+						PlayMenu.setVisible(true);
+
+					}
 				}
 			}
 		});
@@ -937,6 +972,7 @@ public class Block223Page{
 					Block223Controller.setGameDetails(Integer.valueOf(txtrNumberOfLevels.getText()), Integer.valueOf(txtrNumBlocksPerLvl.getText()), 
 							Integer.valueOf(txtrMinBallSpdX.getText()), Integer.valueOf(txtrMinimumBallSpeedY.getText()), Double.valueOf(txtrBallSpeedIncrease.getText())
 							, Integer.valueOf(txtrMaxPaddleLength.getText()), Integer.valueOf(txtrMinimumPaddleLength.getText()));
+
 				} catch (NumberFormatException e1) {
 					// 
 					error+=e1.getMessage();
@@ -1002,7 +1038,7 @@ public class Block223Page{
 		});
 
 		//When you click select game, this happens
-		SelectGame.addActionListener(new ActionListener() {
+		btnSelectGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				error = "";
 				try {
@@ -1077,6 +1113,24 @@ public class Block223Page{
 				}
 			}
 		});
+		//publish a game
+		btnPublishGame.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				error = "";
+				try {
+					Block223Controller.publishGame();
+					Block223Controller.saveGame();
+
+				} catch (InvalidInputException e1) {
+					error+= e1.getMessage();
+				}
+				refreshData();
+				if (error.length() == 0) {
+					GeneralGameMenu.setVisible(false);
+					mainMenu.setVisible(true);
+				}
+			}
+		});
 
 		//Position a block
 		btnPositionBlock.addActionListener(new ActionListener() {
@@ -1132,7 +1186,8 @@ public class Block223Page{
 	protected void refreshData() {
 		errorMessage.setText(error);
 		if (error == null || error.length() == 0) {
-			System.out.println(Block223Controller.getUserMode().getMode().toString());
+			System.out.println("User mode: " + Block223Controller.getUserMode().getMode().toString());
+			//games list
 			if (Block223Controller.getUserMode().getMode() == TOUserMode.Mode.Design){
 
 				gameList.removeAllItems();
@@ -1172,6 +1227,22 @@ public class Block223Page{
 					blockList2.setSelectedIndex(-1);
 				}
 			}
+			//playable games list
+			if (Block223Controller.getUserMode().getMode() == TOUserMode.Mode.Play){
+				playableGameList.removeAllItems();
+				try {
+					for (TOPlayableGame playableGame : Block223Controller.getPlayableGames()) {
+						System.out.println(playableGame.getName());
+						playableGameList.addItem(playableGame.getName());
+					}
+				} catch (InvalidInputException e) {
+					e.printStackTrace();
+				}
+				gameList.setSelectedIndex(-1);
+
+
+			}
+
 		}
 
 	}

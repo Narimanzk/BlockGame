@@ -2,7 +2,11 @@ package ca.mcgill.ecse223.block.view;
 
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -15,10 +19,14 @@ import ca.mcgill.ecse223.block.controller.InvalidInputException;
 
 
 public class Block223PlayModeView extends JFrame implements Block223PlayModeInterface {
-
+	private Rectangle2D paddle;
 	private static final long serialVersionUID = -613534727974834342L;
 	JTextArea gameArea;
 	Block223PlayModeListener bp;
+	private static final int GAMEWIDTH = 390;
+	private static final int GAMEHEIGHT = 390;
+	  public static final int PADDLE_WIDTH = 5;
+	  public static final int VERTICAL_DISTANCE = 30;
 
 	public Block223PlayModeView() {
 		createAndShowGUI();
@@ -47,7 +55,7 @@ public class Block223PlayModeView extends JFrame implements Block223PlayModeInte
 		gameArea = new JTextArea();
 		gameArea.setEditable(false);
 		JScrollPane scrollPane = new JScrollPane(gameArea);
-		scrollPane.setPreferredSize(new Dimension(375, 125));
+		scrollPane.setPreferredSize(new Dimension(GAMEWIDTH, GAMEHEIGHT));
 
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 		getContentPane().add(button, BorderLayout.PAGE_END);
@@ -93,6 +101,28 @@ public class Block223PlayModeView extends JFrame implements Block223PlayModeInte
 	private void gamePlay() {
 		
 	}
+	
+	private void doDrawing(Graphics g) {
+		Graphics2D g2d = (Graphics2D) g.create();
+		double paddleX = 0;
+		double paddleLength = 0;
+		try {
+			paddleX = Block223Controller.getCurrentPlayableGame().getCurrentPaddleX();
+			paddleLength = Block223Controller.getCurrentPlayableGame().getCurrentPaddleLength();
+			
+		} catch (InvalidInputException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		paddle.setRect(paddleX, GAMEHEIGHT-VERTICAL_DISTANCE, paddleLength, PADDLE_WIDTH);
+		g2d.setColor(Color.BLACK);
+		g2d.fill(paddle);
+		g2d.draw(paddle);
+		
+	}
+	public void paintComponent(Graphics g) {
+		doDrawing(g);
+	}
 
 	@Override
 	public String takeInputs() {
@@ -105,5 +135,6 @@ public class Block223PlayModeView extends JFrame implements Block223PlayModeInte
 	@Override
 	public void refresh() {
 		System.out.println("UI is refreshing now...");
+		repaint();
 	}
 }
