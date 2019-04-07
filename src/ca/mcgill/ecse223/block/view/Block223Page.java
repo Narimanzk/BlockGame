@@ -2,29 +2,34 @@ package ca.mcgill.ecse223.block.view;
 
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.JLabel;
-import javax.swing.JSpinner;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableModel;
 
 import ca.mcgill.ecse223.block.application.Block223Application;
-import ca.mcgill.ecse223.block.controller.*;
+import ca.mcgill.ecse223.block.controller.Block223Controller;
+import ca.mcgill.ecse223.block.controller.InvalidInputException;
+import ca.mcgill.ecse223.block.controller.TOBlock;
+import ca.mcgill.ecse223.block.controller.TOGame;
+import ca.mcgill.ecse223.block.controller.TOHallOfFame;
+import ca.mcgill.ecse223.block.controller.TOHallOfFameEntry;
+import ca.mcgill.ecse223.block.controller.TOPlayableGame;
+import ca.mcgill.ecse223.block.controller.TOUserMode;
 import ca.mcgill.ecse223.block.model.Admin;
-import ca.mcgill.ecse223.block.model.Player;
 
-import javax.swing.JFormattedTextField;
-import javax.swing.SwingConstants;
-import java.awt.Font;
-
-public class Block223Page{
+public class Block223Page {
 	public JFrame frame;
 	// UI elements
 	private JTextArea txtrNewGameName;
@@ -51,20 +56,21 @@ public class Block223Page{
 	private JTextField txtNewVerticalGrid;
 	private JTextField txtHorGridPos;
 	private JTextField txtVerGridPos;
-
-
-
+	private int start;
+	private int end;
+	private boolean overcount = true;
 
 	// data elements
 	private String error = null;
+	private JTable table;
 
 	public Block223Page() {
 		initialize();
-		//refreshData();
+		// refreshData();
 	}
 
 	private void initialize() {
-		
+
 		// elements for error message
 		errorMessage = new JLabel();
 		errorMessage.setVerticalAlignment(SwingConstants.BOTTOM);
@@ -81,7 +87,7 @@ public class Block223Page{
 		frame.getContentPane().add(errorMessage);
 
 		/////////////////////////////////////////////////////////////////
-		//Login page:
+		// Login page:
 		JPanel loginPanel = new JPanel();
 		loginPanel.setBackground(new Color(255, 228, 225));
 		frame.getContentPane().add(loginPanel, "name_26471782456177");
@@ -104,7 +110,7 @@ public class Block223Page{
 		loginPanel.setLayout(null);
 		loginPanel.add(btnLogin);
 
-		//Should bring us to the register page.
+		// Should bring us to the register page.
 		JButton btnRegister = new JButton("Register");
 		btnRegister.setBounds(222, 236, 81, 32);
 		loginPanel.add(btnRegister);
@@ -124,31 +130,30 @@ public class Block223Page{
 		/////////////////////////////////////////////////////////////////
 
 		/////////////////////////////////////////////////////////////////
-		//Main Menu page
+		// Main Menu page
 		JPanel mainMenu = new JPanel();
 		mainMenu.setBackground(new Color(255, 228, 225));
 		frame.getContentPane().add(mainMenu, "name_33113224405399");
 
-		//////Add/Edit game button////////////
+		////// Add/Edit game button////////////
 		JButton btnAddEditGame = new JButton("Game Menu");
 		btnAddEditGame.setBounds(160, 128, 170, 29);
 		mainMenu.setLayout(null);
 		mainMenu.add(btnAddEditGame);
 
-
-		//////Load Game button//////
+		////// Load Game button//////
 		JButton btnLoad = new JButton("Load Game");
-		//When you click the Add game button, this happens
+		// When you click the Add game button, this happens
 		btnLoad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//LOAD DOES NOTHING AS OF DELIVERABLE 3
+				// LOAD DOES NOTHING AS OF DELIVERABLE 3
 			}
 		});
 
 		btnLoad.setBounds(160, 158, 170, 29);
 		mainMenu.add(btnLoad);
 
-		//////Logout button//////
+		////// Logout button//////
 		JButton btnLogout = new JButton("Logout");
 		btnLogout.setBounds(160, 188, 170, 29);
 		mainMenu.add(btnLogout);
@@ -160,27 +165,27 @@ public class Block223Page{
 		/////////////////////////////////////////////////////////////////
 
 		/////////////////////////////////////////////////////////////////
-		//Add/Edit Game page:
+		// Add/Edit Game page:
 		JPanel AddEditGameMenu = new JPanel();
 		AddEditGameMenu.setBackground(new Color(255, 228, 225));
 		frame.getContentPane().add(AddEditGameMenu, "name_34257085377978");
 		AddEditGameMenu.setLayout(null);
 
-		//Text field for the game name.
+		// Text field for the game name.
 		JTextArea NewGameName = new JTextArea();
 		NewGameName.setBounds(55, 150, 134, 16);
 		AddEditGameMenu.add(NewGameName);
 
-		//Button to create a game. Should take the name from the NewGameName text Area.
-		//This will ALSO CALL: selectGame(name from NewGameName text Area)
+		// Button to create a game. Should take the name from the NewGameName text Area.
+		// This will ALSO CALL: selectGame(name from NewGameName text Area)
 		JButton btnCreateGame = new JButton("Create Game");
 		btnCreateGame.setBounds(45, 178, 157, 29);
 		AddEditGameMenu.add(btnCreateGame);
-		//JComboBox, should have all the game names!
+		// JComboBox, should have all the game names!
 		gameList.setBounds(276, 146, 146, 27);
 		AddEditGameMenu.add(gameList);
 
-		//Select game button, should take the name from the combo box^.
+		// Select game button, should take the name from the combo box^.
 		JButton btnSelectGame = new JButton("Select Game");
 		btnSelectGame.setBounds(265, 185, 157, 29);
 		AddEditGameMenu.add(btnSelectGame);
@@ -188,7 +193,6 @@ public class Block223Page{
 		JButton btnDeleteGame = new JButton("Delete Game");
 		btnDeleteGame.setBounds(265, 219, 157, 29);
 		AddEditGameMenu.add(btnDeleteGame);
-
 
 		JButton backAEGamePage = new JButton("Back");
 		backAEGamePage.addActionListener(new ActionListener() {
@@ -203,15 +207,14 @@ public class Block223Page{
 		AddEditGameMenu.add(backAEGamePage);
 		/////////////////////////////////////////////////////////////////
 
-
 		/////////////////////////////////////////////////////////////////
 
-		//General game menu
-		//This menu should have the buttons to: 
-		//1. update game details
-		//2. Affect blocks within a game
-		//3. Affect blocks within a level
-		//4. Save changes.
+		// General game menu
+		// This menu should have the buttons to:
+		// 1. update game details
+		// 2. Affect blocks within a game
+		// 3. Affect blocks within a level
+		// 4. Save changes.
 
 		JPanel GeneralGameMenu = new JPanel();
 		GeneralGameMenu.setBackground(new Color(255, 228, 225));
@@ -225,33 +228,29 @@ public class Block223Page{
 
 		JButton btnChangeBlocksInGame = new JButton("Add/Delete/Update a Block");
 
-
 		btnChangeBlocksInGame.setBounds(160, 140, 214, 29);
 		GeneralGameMenu.add(btnChangeBlocksInGame);
 
-
-		//Edit blocks in a level. 
-		//This will bring to a new menu, that will allow us to select level, and then position,move,remove blocks.
+		// Edit blocks in a level.
+		// This will bring to a new menu, that will allow us to select level, and then
+		// position,move,remove blocks.
 		JButton btnEditBlocksWithin = new JButton("Edit Blocks Within a Level");
 		btnEditBlocksWithin.setBounds(160, 170, 214, 29);
 		GeneralGameMenu.add(btnEditBlocksWithin);
 
-
-		//Save Changes ( Call the save method)
+		// Save Changes ( Call the save method)
 		JButton btnSaveChanges = new JButton("Save Changes");
 		btnSaveChanges.setBounds(160, 200, 214, 29);
 		GeneralGameMenu.add(btnSaveChanges);
-		
+
 		JLabel lblSpecificGame = new JLabel("Specific Game");
 		lblSpecificGame.setFont(new Font("Mshtakan", Font.BOLD | Font.ITALIC, 27));
 		lblSpecificGame.setBounds(175, 6, 270, 78);
 		GeneralGameMenu.add(lblSpecificGame);
-		
+
 		JButton btnPublishGame = new JButton("Publish");
 		btnPublishGame.setBounds(160, 232, 214, 29);
 		GeneralGameMenu.add(btnPublishGame);
-		
-
 
 		JButton backGenGamePage = new JButton("Back");
 		backGenGamePage.addActionListener(new ActionListener() {
@@ -269,21 +268,21 @@ public class Block223Page{
 		lblNewLabel.setFont(new Font("Mshtakan", Font.PLAIN, 16));
 		lblNewLabel.setBounds(55, 122, 133, 16);
 		AddEditGameMenu.add(lblNewLabel);
-		
+
 		JLabel lblGameMenu = new JLabel("Game Menu");
 		lblGameMenu.setFont(new Font("Mshtakan", Font.BOLD | Font.ITALIC, 27));
 		lblGameMenu.setBounds(172, 20, 146, 78);
 		AddEditGameMenu.add(lblGameMenu);
-		
+
 		JLabel lblAvailableGames = new JLabel("Available Games:");
 		lblAvailableGames.setFont(new Font("Mshtakan", Font.PLAIN, 16));
 		lblAvailableGames.setBounds(289, 122, 133, 16);
 		AddEditGameMenu.add(lblAvailableGames);
-		
+
 		/////////////////////////////////////////////////////////////////
 
 		/////////////////////////////////////////////////////////////////
-		//Add Game menu:
+		// Add Game menu:
 		JPanel AddGameSpecifyDetails = new JPanel();
 		AddGameSpecifyDetails.setBackground(new Color(255, 228, 225));
 		frame.getContentPane().add(AddGameSpecifyDetails, "name_35765440027354");
@@ -333,42 +332,43 @@ public class Block223Page{
 		});
 		backSpecDetailsPage.setBounds(6, 13, 100, 29);
 		AddGameSpecifyDetails.add(backSpecDetailsPage);
-		//First need to call selectGame with the game name
-		//Should take all these guys^ as parameters, and then call tudor's method:  setGameDetails
+		// First need to call selectGame with the game name
+		// Should take all these guys^ as parameters, and then call tudor's method:
+		// setGameDetails
 		JButton btnDefine = new JButton("Define");
 		btnDefine.setBounds(197, 248, 117, 29);
 		AddGameSpecifyDetails.add(btnDefine);
-		
+
 		JLabel lblNewLabel_2 = new JLabel("Number of Levels:");
 		lblNewLabel_2.setFont(new Font("Mshtakan", Font.PLAIN, 13));
 		lblNewLabel_2.setBounds(67, 45, 140, 16);
 		AddGameSpecifyDetails.add(lblNewLabel_2);
-		
+
 		JLabel lblNumberOfBlocks = new JLabel("Number of Blocks Per Level:");
 		lblNumberOfBlocks.setFont(new Font("Mshtakan", Font.PLAIN, 13));
 		lblNumberOfBlocks.setBounds(67, 75, 194, 16);
 		AddGameSpecifyDetails.add(lblNumberOfBlocks);
-		
+
 		JLabel lblMinimumBallSpeed = new JLabel("Minimum Ball Speed X:");
 		lblMinimumBallSpeed.setFont(new Font("Mshtakan", Font.PLAIN, 13));
 		lblMinimumBallSpeed.setBounds(67, 104, 194, 16);
 		AddGameSpecifyDetails.add(lblMinimumBallSpeed);
-		
+
 		JLabel lblMinimumBallSpeed_1 = new JLabel("Minimum Ball Speed Y:");
 		lblMinimumBallSpeed_1.setFont(new Font("Mshtakan", Font.PLAIN, 13));
 		lblMinimumBallSpeed_1.setBounds(67, 135, 194, 16);
 		AddGameSpecifyDetails.add(lblMinimumBallSpeed_1);
-		
+
 		JLabel lblBallSpeedIncrease = new JLabel("Ball Speed Increase Factor:");
 		lblBallSpeedIncrease.setFont(new Font("Mshtakan", Font.PLAIN, 13));
 		lblBallSpeedIncrease.setBounds(67, 165, 194, 16);
 		AddGameSpecifyDetails.add(lblBallSpeedIncrease);
-		
+
 		JLabel lblMaxPaddleLength = new JLabel("Max Paddle Length");
 		lblMaxPaddleLength.setFont(new Font("Mshtakan", Font.PLAIN, 13));
 		lblMaxPaddleLength.setBounds(67, 195, 194, 16);
 		AddGameSpecifyDetails.add(lblMaxPaddleLength);
-		
+
 		JLabel lblMinimumPaddleLength = new JLabel("Minimum Paddle Length: ");
 		lblMinimumPaddleLength.setFont(new Font("Mshtakan", Font.PLAIN, 13));
 		lblMinimumPaddleLength.setBounds(67, 225, 194, 16);
@@ -378,7 +378,7 @@ public class Block223Page{
 
 		/////////////////////////////////////////////////////////////////
 
-		//Update Game Menu//
+		// Update Game Menu//
 		JPanel UpdateGameMenu = new JPanel();
 		UpdateGameMenu.setBackground(new Color(255, 228, 225));
 		frame.getContentPane().add(UpdateGameMenu, "name_44591434156371");
@@ -428,8 +428,7 @@ public class Block223Page{
 		lblUpdateAGame.setBounds(209, 17, 185, 16);
 		UpdateGameMenu.add(lblUpdateAGame);
 
-
-		//Should take all these parameters^ and then update the game using UpdateGame
+		// Should take all these parameters^ and then update the game using UpdateGame
 		JButton btnUpdate = new JButton("Update");
 		btnUpdate.setBounds(197, 283, 117, 29);
 		UpdateGameMenu.add(btnUpdate);
@@ -450,8 +449,8 @@ public class Block223Page{
 		/////////////////////////////////////////////////////////////////
 
 		/////////////////////////////////////////////////////////////////
-		//Play menu
-		//has play button
+		// Play menu
+		// has play button
 		JPanel PlayMenu = new JPanel();
 		PlayMenu.setLayout(null);
 		PlayMenu.setBackground(new Color(255, 228, 225));
@@ -463,22 +462,30 @@ public class Block223Page{
 		JButton btnPlay = new JButton("PLAY");
 		btnPlay.setBounds(160, 63, 214, 47);
 		PlayMenu.add(btnPlay);
-		
+
 		JLabel playableGamesListLabel = new JLabel("Playable Games");
 		playableGamesListLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		playableGamesListLabel.setBounds(276, 122, 146, 16);
 		PlayMenu.add(playableGamesListLabel);
-		
+
+		JButton btnViewHallOfFame = new JButton("View Hall of Fame");
+		btnViewHallOfFame.setBounds(70, 146, 146, 65);
+		PlayMenu.add(btnViewHallOfFame);
+
 		JButton btnSelectPlayableGame = new JButton("Select Game");
 		btnSelectPlayableGame.setBounds(276, 183, 146, 29);
 		PlayMenu.add(btnSelectPlayableGame);
 
-		/////////////////////////////////////////////////////////////////
+		JButton btnLogout_1 = new JButton("Logout");
+		btnLogout_1.setBounds(189, 238, 154, 47);
+		PlayMenu.add(btnLogout_1);
 
 		/////////////////////////////////////////////////////////////////
 
-		//Edit Block in game
-		//We want to have add block, remove block, and update block
+		/////////////////////////////////////////////////////////////////
+
+		// Edit Block in game
+		// We want to have add block, remove block, and update block
 		JPanel EditBlockInGame = new JPanel();
 		EditBlockInGame.setBackground(new Color(255, 228, 225));
 		frame.getContentPane().add(EditBlockInGame, "name_45874181750810");
@@ -518,8 +525,7 @@ public class Block223Page{
 		lblBlockId.setBounds(229, 70, 27, 16);
 		EditBlockInGame.add(lblBlockId);
 
-
-		//Call delete block on the id from the spinner.
+		// Call delete block on the id from the spinner.
 		JButton btnDeleteBlock = new JButton("Delete Block");
 		btnDeleteBlock.setBounds(360, 65, 103, 29);
 		EditBlockInGame.add(btnDeleteBlock);
@@ -555,7 +561,6 @@ public class Block223Page{
 
 		blockList.setBounds(275, 66, 79, 27);
 		EditBlockInGame.add(blockList);
-
 
 		JButton backEditBlock = new JButton("Back");
 		backEditBlock.addActionListener(new ActionListener() {
@@ -607,16 +612,16 @@ public class Block223Page{
 		label_3.setBounds(229, 192, 34, 16);
 		EditBlockInGame.add(label_3);
 
-		//Delete Block
+		// Delete Block
 		btnDeleteBlock.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				error = "";
 				try {
 					Block223Controller.deleteBlock(Integer.valueOf(blockList.getSelectedItem().toString()));
 				} catch (NumberFormatException e1) {
-					error+=e1.getMessage();
+					error += e1.getMessage();
 				} catch (InvalidInputException e1) {
-					error+=e1.getMessage();
+					error += e1.getMessage();
 				}
 				refreshData();
 				if (error.length() == 0) {
@@ -626,17 +631,18 @@ public class Block223Page{
 			}
 		});
 
-		//EditBlock
+		// EditBlock
 		btnUpdateBlock.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				error = "";
 				try {
-					Block223Controller.updateBlock(Integer.valueOf(blockList.getSelectedItem().toString()), Integer.valueOf(txtRedValue.getText()), Integer.valueOf(txtGreenValue.getText()),
+					Block223Controller.updateBlock(Integer.valueOf(blockList.getSelectedItem().toString()),
+							Integer.valueOf(txtRedValue.getText()), Integer.valueOf(txtGreenValue.getText()),
 							Integer.valueOf(txtBlueValue.getText()), Integer.valueOf(txtPoints.getText()));
 				} catch (NumberFormatException e1) {
-					error+=e1.getMessage();
+					error += e1.getMessage();
 				} catch (InvalidInputException e1) {
-					error+=e1.getMessage();
+					error += e1.getMessage();
 				}
 				refreshData();
 				if (error.length() == 0) {
@@ -646,17 +652,18 @@ public class Block223Page{
 			}
 		});
 
-		//Add a block.
+		// Add a block.
 		btnAddBlock.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				error = "";
 				try {
-					Block223Controller.addBlock(Integer.valueOf(txtRedValue.getText()), Integer.valueOf(txtGreenValue.getText()),
-							Integer.valueOf(txtBlueValue.getText()), Integer.valueOf(txtPoints.getText()));
+					Block223Controller.addBlock(Integer.valueOf(txtRedValue.getText()),
+							Integer.valueOf(txtGreenValue.getText()), Integer.valueOf(txtBlueValue.getText()),
+							Integer.valueOf(txtPoints.getText()));
 				} catch (NumberFormatException e1) {
-					error+= e1.getMessage();
+					error += e1.getMessage();
 				} catch (InvalidInputException e1) {
-					error+= e1.getMessage();
+					error += e1.getMessage();
 				}
 				refreshData();
 				if (error.length() == 0) {
@@ -667,9 +674,42 @@ public class Block223Page{
 		});
 		/////////////////////////////////////////////////////////////////
 
+		/////////////////////////////////////////////////////////////////
+		// View Hall of Fame page
+		JPanel ViewHallofFame = new JPanel();
+		frame.getContentPane().add(ViewHallofFame, "name_1268496858814052");
+		ViewHallofFame.setLayout(null);
+		ViewHallofFame.setBackground(new Color(255, 228, 225));
+
+		JLabel lblViewHallOf = new JLabel("View Hall of Fame");
+		lblViewHallOf.setFont(new Font("Dialog", Font.BOLD | Font.ITALIC, 27));
+		lblViewHallOf.setBounds(137, 0, 247, 69);
+		ViewHallofFame.add(lblViewHallOf);
+
+		JButton btnBack = new JButton("Back");
+		btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				error = "";
+				errorMessage.setText("");
+				ViewHallofFame.setVisible(false);
+				PlayMenu.setVisible(true);
+			}
+		});
+		btnBack.setBounds(12, 13, 97, 25);
+		ViewHallofFame.add(btnBack);
+
+		JButton btnFront = new JButton("Front");
+		btnFront.setBounds(66, 276, 97, 25);
+		ViewHallofFame.add(btnFront);
+
+		JButton btnNext = new JButton("Next");
+		btnNext.setBounds(340, 276, 97, 25);
+		ViewHallofFame.add(btnNext);
+
+		////////////////////////////////////////////////////////////////////////////////
 
 		/////////////////////////////////////////////////////////////////
-		//Register Menu
+		// Register Menu
 		JPanel RegisterMenu = new JPanel();
 		RegisterMenu.setBackground(new Color(255, 228, 225));
 		frame.getContentPane().add(RegisterMenu, "name_46244369728357");
@@ -688,7 +728,8 @@ public class Block223Page{
 		txtrAdminPassword.setBounds(207, 150, 105, 16);
 		RegisterMenu.add(txtrAdminPassword);
 
-		// Clicking this button should call register, using the username/normal pass/admin pass
+		// Clicking this button should call register, using the username/normal
+		// pass/admin pass
 		JButton btnRegistration = new JButton("Register");
 		btnRegistration.setBounds(207, 180, 105, 29);
 		RegisterMenu.add(btnRegistration);
@@ -726,10 +767,9 @@ public class Block223Page{
 		RegisterMenu.add(lblNewLabel_1);
 		/////////////////////////////////////////////////////////////////
 
+		/////////////////////////////////////////////////////////////////
 
-		/////////////////////////////////////////////////////////////////	
-
-		//Edit block within level Menu
+		// Edit block within level Menu
 		JPanel EditBlockWithinLevel = new JPanel();
 		EditBlockWithinLevel.setBackground(new Color(255, 228, 225));
 		frame.getContentPane().add(EditBlockWithinLevel, "name_48329674973804");
@@ -757,7 +797,6 @@ public class Block223Page{
 		EditBlockWithinLevel.add(txtVerticalGridPosition);
 
 		JButton btnPositionBlock = new JButton("Position Block");
-
 
 		btnPositionBlock.setBounds(56, 123, 117, 29);
 		EditBlockWithinLevel.add(btnPositionBlock);
@@ -796,7 +835,7 @@ public class Block223Page{
 		txtVerGridPos.setBounds(116, 217, 78, 26);
 		EditBlockWithinLevel.add(txtVerGridPos);
 
-		JButton btnRemoveBlock= new JButton("Remove Block");
+		JButton btnRemoveBlock = new JButton("Remove Block");
 
 		btnRemoveBlock.setBounds(56, 248, 117, 29);
 		EditBlockWithinLevel.add(btnRemoveBlock);
@@ -825,74 +864,74 @@ public class Block223Page{
 		});
 		backEditBlockInLvl.setBounds(6, 6, 100, 29);
 		EditBlockWithinLevel.add(backEditBlockInLvl);
-		
+
 		JLabel lblMoveABlock = new JLabel("Move a Block:");
 		lblMoveABlock.setFont(new Font("Mshtakan", Font.PLAIN, 16));
 		lblMoveABlock.setBounds(347, 54, 133, 16);
 		EditBlockWithinLevel.add(lblMoveABlock);
-		
+
 		JLabel lblPositionABlock = new JLabel("Position a Block:");
 		lblPositionABlock.setFont(new Font("Mshtakan", Font.PLAIN, 16));
 		lblPositionABlock.setBounds(40, 32, 133, 16);
 		EditBlockWithinLevel.add(lblPositionABlock);
-		
+
 		JLabel lblCurrXPosition = new JLabel("Curr X Position:");
 		lblCurrXPosition.setFont(new Font("Mshtakan", Font.PLAIN, 16));
 		lblCurrXPosition.setBounds(296, 79, 117, 16);
 		EditBlockWithinLevel.add(lblCurrXPosition);
-		
+
 		JLabel lblCurrYPosition = new JLabel("Curr Y Position:");
 		lblCurrYPosition.setFont(new Font("Mshtakan", Font.PLAIN, 16));
 		lblCurrYPosition.setBounds(296, 104, 133, 16);
 		EditBlockWithinLevel.add(lblCurrYPosition);
-		
+
 		JLabel lblNewXPosition = new JLabel("New X Position:");
 		lblNewXPosition.setFont(new Font("Mshtakan", Font.PLAIN, 16));
 		lblNewXPosition.setBounds(296, 127, 133, 16);
 		EditBlockWithinLevel.add(lblNewXPosition);
-		
+
 		JLabel lblNewYPosition = new JLabel("New Y Position:");
 		lblNewYPosition.setFont(new Font("Mshtakan", Font.PLAIN, 16));
 		lblNewYPosition.setBounds(296, 152, 133, 16);
 		EditBlockWithinLevel.add(lblNewYPosition);
-		
+
 		JLabel lblRemoveABlock = new JLabel("Remove a Block:");
 		lblRemoveABlock.setFont(new Font("Mshtakan", Font.PLAIN, 16));
 		lblRemoveABlock.setBounds(40, 168, 133, 16);
 		EditBlockWithinLevel.add(lblRemoveABlock);
-		
+
 		JLabel lblXPosition = new JLabel("X Position:");
 		lblXPosition.setFont(new Font("Mshtakan", Font.PLAIN, 16));
 		lblXPosition.setBounds(40, 82, 117, 16);
 		EditBlockWithinLevel.add(lblXPosition);
-		
+
 		JLabel lblYPosition = new JLabel("Y Position:");
 		lblYPosition.setFont(new Font("Mshtakan", Font.PLAIN, 16));
 		lblYPosition.setBounds(40, 104, 84, 16);
 		EditBlockWithinLevel.add(lblYPosition);
-		
+
 		JLabel label_5 = new JLabel("X Position:");
 		label_5.setFont(new Font("Mshtakan", Font.PLAIN, 16));
 		label_5.setBounds(40, 198, 117, 16);
 		EditBlockWithinLevel.add(label_5);
-		
+
 		JLabel label_6 = new JLabel("Y Position:");
 		label_6.setFont(new Font("Mshtakan", Font.PLAIN, 16));
 		label_6.setBounds(40, 222, 84, 16);
 		EditBlockWithinLevel.add(label_6);
-		
 
 		////////////////////////////////////////////////////////////////////////////////
-		//ALL BUTTONS:
+		// ALL BUTTONS:
 
-		//To register:
+		// To register:
 		btnRegistration.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				error = "";
 				try {
-					Block223Controller.register(txtrNewUsername.getText(), txtrNewPassword.getText(), txtrAdminPassword.getText());
+					Block223Controller.register(txtrNewUsername.getText(), txtrNewPassword.getText(),
+							txtrAdminPassword.getText());
 				} catch (InvalidInputException e1) {
-					error+=e1.getMessage();
+					error += e1.getMessage();
 				}
 				refreshData();
 				if (error.length() == 0) {
@@ -902,25 +941,24 @@ public class Block223Page{
 			}
 		});
 
-		//When you click the login button, this happens.
+		// When you click the login button, this happens.
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				error = null;
 				try {
-					Block223Controller.login(txtrUsername.getText(),txtrPassword.getText());
-				}	catch (InvalidInputException err) {
+					Block223Controller.login(txtrUsername.getText(), txtrPassword.getText());
+				} catch (InvalidInputException err) {
 					error = err.getMessage();
 				}
 				refreshData();
 				txtrUsername.setText("");
 				txtrPassword.setText("");
 				if (error == null || error.length() == 0) {
-					if(Block223Application.getCurrentUserRole() instanceof Admin) {
+					if (Block223Application.getCurrentUserRole() instanceof Admin) {
 						loginPanel.setVisible(false);
 						mainMenu.setVisible(true);
 
-					}
-					else {
+					} else {
 						loginPanel.setVisible(false);
 						PlayMenu.setVisible(true);
 
@@ -928,7 +966,7 @@ public class Block223Page{
 				}
 			}
 		});
-		//Bring us to the play paeg:
+		// Bring us to the play paeg:
 		btnPlay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				error = "";
@@ -938,7 +976,26 @@ public class Block223Page{
 			}
 		});
 
-		//Bring us to the registration page:
+		// Bring us to the hall of fame page
+		btnViewHallOfFame.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				error = "";
+				errorMessage.setText(error);
+				PlayMenu.setVisible(false);
+				ViewHallofFame.setVisible(true);
+
+				overcount = true;
+				start = 1;
+				end = 10;
+				refreshHallOfFame(start, end);
+
+				JScrollPane scrollPane = new JScrollPane(table);
+				scrollPane.setBounds(51, 61, 413, 192);
+				ViewHallofFame.add(scrollPane);
+			}
+		});
+
+		// Bring us to the registration page:
 		btnRegister.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				error = "";
@@ -948,7 +1005,7 @@ public class Block223Page{
 			}
 		});
 
-		//When you click the Edit game button, this happens
+		// When you click the Edit game button, this happens
 		btnAddEditGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				error = "";
@@ -958,7 +1015,7 @@ public class Block223Page{
 			}
 		});
 
-		//When you click the Logout button, this happens
+		// When you click the Logout button, this happens
 		btnLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Block223Controller.logout();
@@ -970,20 +1027,34 @@ public class Block223Page{
 			}
 		});
 
-		//Button to define a game
+		btnLogout_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Block223Controller.logout();
+				Block223Application.resetBlock223();
+				error = "";
+				errorMessage.setText(error);
+				PlayMenu.setVisible(false);
+				loginPanel.setVisible(true);
+			}
+		});
+
+		// Button to define a game
 		btnDefine.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				error = "";
 				try {
-					Block223Controller.setGameDetails(Integer.valueOf(txtrNumberOfLevels.getText()), Integer.valueOf(txtrNumBlocksPerLvl.getText()), 
-							Integer.valueOf(txtrMinBallSpdX.getText()), Integer.valueOf(txtrMinimumBallSpeedY.getText()), Double.valueOf(txtrBallSpeedIncrease.getText())
-							, Integer.valueOf(txtrMaxPaddleLength.getText()), Integer.valueOf(txtrMinimumPaddleLength.getText()));
+					Block223Controller.setGameDetails(Integer.valueOf(txtrNumberOfLevels.getText()),
+							Integer.valueOf(txtrNumBlocksPerLvl.getText()), Integer.valueOf(txtrMinBallSpdX.getText()),
+							Integer.valueOf(txtrMinimumBallSpeedY.getText()),
+							Double.valueOf(txtrBallSpeedIncrease.getText()),
+							Integer.valueOf(txtrMaxPaddleLength.getText()),
+							Integer.valueOf(txtrMinimumPaddleLength.getText()));
 
 				} catch (NumberFormatException e1) {
-					// 
-					error+=e1.getMessage();
+					//
+					error += e1.getMessage();
 				} catch (InvalidInputException e1) {
-					error+=e1.getMessage();
+					error += e1.getMessage();
 				}
 				refreshData();
 				if (error.length() == 0) {
@@ -993,18 +1064,19 @@ public class Block223Page{
 			}
 		});
 
-		//Update a game
+		// Update a game
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				error = "";
 				try {
-					Block223Controller.updateGame(txtrNewGameName.getText(),Integer.valueOf(NrLevels.getText()), Integer.valueOf(NrBlocksPerLvl.getText()), 
-							Integer.valueOf(MinBallSpdX.getText()), Integer.valueOf(MinBallSpdY.getText()), Double.valueOf(BallSpdIncFactor.getText())
-							, Integer.valueOf(MaxPaddleLngth.getText()), Integer.valueOf(MinPaddleLngth.getText()));
+					Block223Controller.updateGame(txtrNewGameName.getText(), Integer.valueOf(NrLevels.getText()),
+							Integer.valueOf(NrBlocksPerLvl.getText()), Integer.valueOf(MinBallSpdX.getText()),
+							Integer.valueOf(MinBallSpdY.getText()), Double.valueOf(BallSpdIncFactor.getText()),
+							Integer.valueOf(MaxPaddleLngth.getText()), Integer.valueOf(MinPaddleLngth.getText()));
 				} catch (NumberFormatException e1) {
-					error+=e1.getMessage();
+					error += e1.getMessage();
 				} catch (InvalidInputException e1) {
-					error+=e1.getMessage();
+					error += e1.getMessage();
 				}
 				refreshData();
 				if (error.length() == 0) {
@@ -1014,17 +1086,16 @@ public class Block223Page{
 			}
 		});
 
-
-		//When you click "create game", this happens
+		// When you click "create game", this happens
 		btnCreateGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				error = "";
 				try {
 					Block223Controller.createGame(NewGameName.getText());
 				} catch (InvalidInputException e1) {
-					error=e1.getMessage();
+					error = e1.getMessage();
 				} catch (RuntimeException e1) {
-					error=e1.getMessage();
+					error = e1.getMessage();
 				}
 				refreshData();
 				if (error.length() == 0) {
@@ -1032,7 +1103,7 @@ public class Block223Page{
 					try {
 						Block223Controller.selectGame(NewGameName.getText());
 					} catch (InvalidInputException e1) {
-						error=e1.getMessage();
+						error = e1.getMessage();
 					}
 				}
 				refreshData();
@@ -1043,37 +1114,74 @@ public class Block223Page{
 			}
 		});
 
-		//When you click select game, this happens
+		// When you click select game, this happens
 		btnSelectGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				error = "";
 				try {
 					Block223Controller.selectGame(gameList.getSelectedItem().toString());
 				} catch (InvalidInputException e1) {
-					error+= e1.getMessage();
+					error += e1.getMessage();
 				}
 				refreshData();
-				//If this went in smoothly:
+				// If this went in smoothly:
 				if (error.length() == 0) {
 					AddEditGameMenu.setVisible(false);
 					GeneralGameMenu.setVisible(true);
 				}
 			}
 		});
-		//select playable game button
+		// select playable game button
 		btnSelectPlayableGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				error = "";
-				try {//idk how to use id so we'll go by name
+				try {// idk how to use id so we'll go by name
 					Block223Controller.selectPlayableGame(playableGameList.getSelectedItem().toString(), -1);
 				} catch (InvalidInputException e1) {
-					error+= e1.getMessage();
+					error += e1.getMessage();
 				}
 				refreshData();
 			}
 		});
 
-		//Travel to the edit block within a level menu.
+		// View the next 10 hall of fame
+		btnNext.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				// System.out.println("here");
+				if (overcount) {
+					start = start + 10;
+					end = end + 10;
+				}
+
+				refreshHallOfFame(start, end);
+				JScrollPane scrollPane = new JScrollPane(table);
+				scrollPane.setBounds(51, 61, 413, 192);
+				ViewHallofFame.add(scrollPane);
+				// scrollPane.setViewportView(table);
+			}
+		});
+
+		// View the previous 10 hall of fame
+		btnFront.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// System.out.println("there");
+				overcount = true;
+				start = start - 10;
+				end = end - 10;
+				if (start < 1) {
+					start = 1;
+					end = 10;
+				}
+				refreshHallOfFame(start, end);
+				JScrollPane scrollPane = new JScrollPane(table);
+				scrollPane.setBounds(51, 61, 413, 192);
+				ViewHallofFame.add(scrollPane);
+
+			}
+		});
+
+		// Travel to the edit block within a level menu.
 		btnEditBlocksWithin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				error = "";
@@ -1083,7 +1191,7 @@ public class Block223Page{
 			}
 		});
 
-		//Travel to the update game menu
+		// Travel to the update game menu
 		btnUpdateGameDtails.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				error = "";
@@ -1093,7 +1201,7 @@ public class Block223Page{
 			}
 		});
 
-		//Travel to the edit block within a game menu.
+		// Travel to the edit block within a game menu.
 		btnChangeBlocksInGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				error = "";
@@ -1102,7 +1210,7 @@ public class Block223Page{
 				EditBlockInGame.setVisible(true);
 			}
 		});
-		//Delete a game
+		// Delete a game
 		btnDeleteGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				error = "";
@@ -1115,14 +1223,14 @@ public class Block223Page{
 			}
 		});
 
-		//Save changes made during the session.
+		// Save changes made during the session.
 		btnSaveChanges.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				error = "";
 				try {
 					Block223Controller.saveGame();
 				} catch (InvalidInputException e1) {
-					error+= e1.getMessage();
+					error += e1.getMessage();
 				}
 				refreshData();
 				if (error.length() == 0) {
@@ -1131,7 +1239,7 @@ public class Block223Page{
 				}
 			}
 		});
-		//publish a game
+		// publish a game
 		btnPublishGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				error = "";
@@ -1140,7 +1248,7 @@ public class Block223Page{
 					Block223Controller.saveGame();
 
 				} catch (InvalidInputException e1) {
-					error+= e1.getMessage();
+					error += e1.getMessage();
 				}
 				refreshData();
 				if (error.length() == 0) {
@@ -1150,13 +1258,14 @@ public class Block223Page{
 			}
 		});
 
-		//Position a block
+		// Position a block
 		btnPositionBlock.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				error = "";
 				try {
-					Block223Controller.positionBlock(Integer.valueOf(blockList2.getSelectedItem().toString()), Integer.valueOf(txtLevel.getText()),
-							Integer.valueOf(txtHorizontalGridPosition.getText()), Integer.valueOf(txtVerticalGridPosition.getText()));
+					Block223Controller.positionBlock(Integer.valueOf(blockList2.getSelectedItem().toString()),
+							Integer.valueOf(txtLevel.getText()), Integer.valueOf(txtHorizontalGridPosition.getText()),
+							Integer.valueOf(txtVerticalGridPosition.getText()));
 				} catch (NumberFormatException e1) {
 					error = e1.getMessage();
 				} catch (InvalidInputException e1) {
@@ -1166,15 +1275,15 @@ public class Block223Page{
 			}
 		});
 
-		//Move a block
+		// Move a block
 		btnMoveBlock.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				error = "";
 				try {
-					Block223Controller.moveBlock(Integer.valueOf(txtLevel.getText()), 
-							Integer.valueOf(txtCurrentHorizontalGrid.getText()), 
-							Integer.valueOf(txtCurrentVerticalGrid.getText()), 
-							Integer.valueOf(txtNewHorizontalGrid.getText()), 
+					Block223Controller.moveBlock(Integer.valueOf(txtLevel.getText()),
+							Integer.valueOf(txtCurrentHorizontalGrid.getText()),
+							Integer.valueOf(txtCurrentVerticalGrid.getText()),
+							Integer.valueOf(txtNewHorizontalGrid.getText()),
 							Integer.valueOf(txtNewVerticalGrid.getText()));
 				} catch (NumberFormatException e1) {
 					error += e1.getMessage();
@@ -1185,12 +1294,13 @@ public class Block223Page{
 			}
 		});
 
-		//Remove a block
+		// Remove a block
 		btnRemoveBlock.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				error = "";
 				try {
-					Block223Controller.removeBlock(Integer.valueOf(txtLevel.getText()), Integer.valueOf(txtHorGridPos.getText()), Integer.valueOf(txtVerGridPos.getText()));
+					Block223Controller.removeBlock(Integer.valueOf(txtLevel.getText()),
+							Integer.valueOf(txtHorGridPos.getText()), Integer.valueOf(txtVerGridPos.getText()));
 				} catch (NumberFormatException e1) {
 					error += e1.getMessage();
 				} catch (InvalidInputException e1) {
@@ -1205,8 +1315,8 @@ public class Block223Page{
 		errorMessage.setText(error);
 		if (error == null || error.length() == 0) {
 			System.out.println("User mode: " + Block223Controller.getUserMode().getMode().toString());
-			//games list
-			if (Block223Controller.getUserMode().getMode() == TOUserMode.Mode.Design){
+			// games list
+			if (Block223Controller.getUserMode().getMode() == TOUserMode.Mode.Design) {
 
 				gameList.removeAllItems();
 				try {
@@ -1216,12 +1326,13 @@ public class Block223Page{
 					}
 				} catch (InvalidInputException e) {
 					e.printStackTrace();
-				};
+				}
+				;
 
 				gameList.setSelectedIndex(-1);
 
 				blockList.removeAllItems();
-				//Make the exact same list twice, to be used in two different parents.
+				// Make the exact same list twice, to be used in two different parents.
 				blockList2.removeAllItems();
 
 				if (Block223Application.getCurrentGame() != null) {
@@ -1231,9 +1342,9 @@ public class Block223Page{
 						}
 					} catch (InvalidInputException e) {
 						e.printStackTrace();
-					};
+					}
+					;
 					blockList.setSelectedIndex(-1);
-
 
 					try {
 						for (TOBlock block : Block223Controller.getBlocksOfCurrentDesignableGame()) {
@@ -1241,12 +1352,13 @@ public class Block223Page{
 						}
 					} catch (InvalidInputException e) {
 						e.printStackTrace();
-					};
+					}
+					;
 					blockList2.setSelectedIndex(-1);
 				}
 			}
-			//playable games list
-			if (Block223Controller.getUserMode().getMode() == TOUserMode.Mode.Play){
+			// playable games list
+			if (Block223Controller.getUserMode().getMode() == TOUserMode.Mode.Play) {
 				playableGameList.removeAllItems();
 				try {
 					for (TOPlayableGame playableGame : Block223Controller.getPlayableGames()) {
@@ -1257,13 +1369,61 @@ public class Block223Page{
 				}
 				gameList.setSelectedIndex(-1);
 
-
 			}
 
 		}
 
 	}
+
+	protected void refreshHallOfFame(int start, int end) {
+		// Block223Controller.getUserMode().setMode(TOUserMode.Mode.Play);
+		errorMessage.setText(error);
+		if (error == null || error.length() == 0) {
+			if (Block223Controller.getUserMode().getMode() == TOUserMode.Mode.Play) {
+
+				DefaultTableModel model = new DefaultTableModel();
+				table = new JTable(model);
+//				table.setFocusable(false);
+//
+
+				table.setGridColor(Color.red);
+				table.setShowGrid(false);
+				table.setCellSelectionEnabled(false);
+				// table = new JTable();
+				model.addColumn("Ranking");
+				model.addColumn("Player Name");
+				model.addColumn("Score");
+				model.setRowCount(0);
+
+				try {
+					Block223Controller.selectPlayableGame(playableGameList.getSelectedItem().toString(), -1);
+				} catch (InvalidInputException e1) {
+					error += e1.getMessage();
+				}
+
+				int index = start;
+
+				try {
+					TOHallOfFame hof = Block223Controller.getHallOfFame(start, end);
+					if (start > hof.numberOfEntries()) {
+						start = hof.numberOfEntries() - hof.numberOfEntries() % 10 + 1;
+						overcount = false;
+					}
+					for (TOHallOfFameEntry entry : hof.getEntries()) {
+
+						model.addRow(new Object[] { index, entry.getPlayername(), entry.getScore() });
+						index++;
+
+					}
+
+				} catch (InvalidInputException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+				;
+
+			}
+		}
+
+	}
 }
-
-
-
