@@ -1189,7 +1189,7 @@ public class PlayedGame implements Serializable
 						}
 					}
 					if(canPlace) {
-						PlayedBlockAssignment pblock = new PlayedBlockAssignment(j, i, game.getRandomBlock(), this);
+						PlayedBlockAssignment pblock = new PlayedBlockAssignment(j*(Block.SIZE+Game.COLUMNS_PADDING), i*(Block.SIZE+Game.ROW_PADDING), game.getRandomBlock(), this);
 						canPlace = false;
 
 					}	

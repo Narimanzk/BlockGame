@@ -1250,7 +1250,6 @@ public class Block223Page{
 				playableGameList.removeAllItems();
 				try {
 					for (TOPlayableGame playableGame : Block223Controller.getPlayableGames()) {
-						System.out.println(playableGame.getName());
 						playableGameList.addItem(playableGame.getName());
 					}
 				} catch (InvalidInputException e) {

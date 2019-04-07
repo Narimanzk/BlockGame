@@ -10,7 +10,10 @@ import java.awt.LayoutManager;
 import java.awt.geom.Rectangle2D;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -91,6 +94,7 @@ public class Block223PlayModeView extends JFrame implements Block223PlayModeInte
 					public void run() {
 						try {
 							Block223Controller.startGame(Block223PlayModeView.this);
+		
 							btnGame.setText("Resume");
 							btnGame.setVisible(true);
 						} catch (InvalidInputException e) {
