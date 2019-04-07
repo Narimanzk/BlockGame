@@ -970,9 +970,17 @@ public class Block223Page {
 		btnPlay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				error = "";
-				errorMessage.setText("");
-				GeneralGameMenu.setVisible(false);
-				Block223PlayModeView bpmv = new Block223PlayModeView();
+				try {// idk how to use id so we'll go by name
+					Block223Controller.selectPlayableGame(playableGameList.getSelectedItem().toString(), -1);
+				} catch (InvalidInputException e1) {
+					error += e1.getMessage();
+				}
+				refreshData();
+				
+				if (error.equals("")) {
+					GeneralGameMenu.setVisible(false);
+					Block223PlayModeView bpmv = new Block223PlayModeView();
+				}
 			}
 		});
 
@@ -1383,8 +1391,8 @@ public class Block223Page {
 
 				DefaultTableModel model = new DefaultTableModel();
 				table = new JTable(model);
-//				table.setFocusable(false);
-//
+				//				table.setFocusable(false);
+				//
 
 				table.setGridColor(Color.red);
 				table.setShowGrid(false);

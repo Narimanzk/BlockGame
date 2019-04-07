@@ -637,11 +637,9 @@ public class Block223Controller {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
 			ui.refresh();
 		}
 		if (aGame.getPlayStatus() == PlayStatus.GameOver) {
-
 			Block223Application.setCurrentPlayableGame(null);
 		} else {
 			if(aGame.getPlayer() != null) {

@@ -18,8 +18,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import ca.mcgill.ecse223.block.application.Block223Application;
 import ca.mcgill.ecse223.block.controller.Block223Controller;
 import ca.mcgill.ecse223.block.controller.InvalidInputException;
+import ca.mcgill.ecse223.block.model.PlayedGame.PlayStatus;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 
 
@@ -30,6 +34,7 @@ public class Block223PlayModeView extends JFrame implements Block223PlayModeInte
 	JTextArea gameArea;
 	Block223PlayModeListener bp;
 	private Block223PlayModeVisualiser block223PlayModeVisualiser;
+	private JButton btnQuit;
 
 	public Block223PlayModeView() {
 		createAndShowGUI();
@@ -42,7 +47,7 @@ public class Block223PlayModeView extends JFrame implements Block223PlayModeInte
 		//tudor's new ui
 
 		// Create and set up the window.
-		this.setTitle("Block223 PlayMode Example");
+		this.setTitle("Block223 PlayMode");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// Add components to window pane
@@ -52,6 +57,15 @@ public class Block223PlayModeView extends JFrame implements Block223PlayModeInte
 		this.pack();
 		this.setVisible(true);
 	}
+	/**
+	 * Hide the GUI
+	 */
+	private void hideGUI() {
+		Block223Application.setCurrentGame(null);
+		Block223Application.setCurrentPlayableGame(null);
+		Block223Application.setCurrentUserRole(null);
+		this.setVisible(false);
+	}
 
 	private void addComponentsToPane() {
 
@@ -59,13 +73,17 @@ public class Block223PlayModeView extends JFrame implements Block223PlayModeInte
 
 		gameArea = new JTextArea();
 		gameArea.setEditable(false);
-//		JScrollPane scrollPane = new JScrollPane(gameArea);
+		//		JScrollPane scrollPane = new JScrollPane(gameArea);
 		block223PlayModeVisualiser = new Block223PlayModeVisualiser(gameArea);
 
 		block223PlayModeVisualiser.setPreferredSize(new Dimension(GAMEWIDTH, GAMEHEIGHT));
-		
+
 		getContentPane().add(block223PlayModeVisualiser, BorderLayout.CENTER);
+
+		btnQuit = new JButton("Quit");
+		block223PlayModeVisualiser.setColumnHeaderView(btnQuit);
 		getContentPane().add(btnGame, BorderLayout.PAGE_END);
+		btnQuit.setVisible(false);
 
 		btnGame.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -94,9 +112,11 @@ public class Block223PlayModeView extends JFrame implements Block223PlayModeInte
 					public void run() {
 						try {
 							Block223Controller.startGame(Block223PlayModeView.this);
-		
-							btnGame.setText("Resume");
-							btnGame.setVisible(true);
+							btnQuit.setVisible(true);
+							if (Block223Application.getCurrentPlayableGame() != null) {
+								btnGame.setText("Resume");
+								btnGame.setVisible(true);
+							}
 						} catch (InvalidInputException e) {
 						}
 					}
@@ -105,9 +125,18 @@ public class Block223PlayModeView extends JFrame implements Block223PlayModeInte
 				t2.start();
 			}
 		});
+
+		btnQuit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				hideGUI();
+				Block223Page window = new Block223Page();
+				window.frame.setVisible(true);
+			}
+		});
+
 	}
-	
-	
+
+
 
 	@Override
 	public String takeInputs() {
@@ -120,5 +149,5 @@ public class Block223PlayModeView extends JFrame implements Block223PlayModeInte
 	@Override
 	public void refresh() {
 		block223PlayModeVisualiser.paintComponent(getGraphics());
-		}
+	}
 }
