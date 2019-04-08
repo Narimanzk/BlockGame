@@ -221,6 +221,10 @@ public class Block223Page {
 		frame.getContentPane().add(GeneralGameMenu, "name_46221789659840");
 		GeneralGameMenu.setLayout(null);
 		errorMessage.setVisible(true);
+		
+		JButton testGame = new JButton("Test Game");
+		testGame.setBounds(160, 80, 214, 29);
+		GeneralGameMenu.add(testGame);
 
 		JButton btnUpdateGameDtails = new JButton("Update Game");
 		btnUpdateGameDtails.setBounds(160, 110, 214, 29);
@@ -983,7 +987,23 @@ public class Block223Page {
 				}
 			}
 		});
-
+		// Bring us to the play paeg:
+				testGame.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						error = "";
+						try {// idk how to use id so we'll go by name
+							Block223Controller.selectTestGame(Block223Controller.currGame().getName(), -1);
+						} catch (InvalidInputException e1) {
+							error += e1.getMessage();
+						}
+						refreshData();
+						
+						if (error.equals("")) {
+							GeneralGameMenu.setVisible(false);
+							Block223PlayModeView bpmv = new Block223PlayModeView();
+						}
+					}
+				});
 		// Bring us to the hall of fame page
 		btnViewHallOfFame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

@@ -187,6 +187,10 @@ public class Block223Controller {
 		Block223Application.setCurrentGame(game);
 
 	}
+	public static Game currGame()
+	{
+		return Block223Application.getCurrentGame();
+	}
 
 	public static void updateGame(String name, int nrLevels, int nrBlocksPerLevel, int minBallSpeedX, int minBallSpeedY,
 			Double ballSpeedIncreaseFactor, int maxPaddleLength, int minPaddleLength) throws InvalidInputException {
@@ -599,6 +603,30 @@ public class Block223Controller {
 		Block223Application.setCurrentPlayableGame(pgame);
 	}
 
+	public static void selectTestGame(String name, int id) throws InvalidInputException  {
+
+		Game game = findGame(name);
+		Block223 block223 = Block223Application.getBlock223();
+		UserRole player = Block223Application.getCurrentUserRole();
+		PlayedGame pgame = null;
+		String username = User.findUsername(player);
+
+		
+
+		if(game != null) {
+			pgame = new PlayedGame(username, game, block223);
+			pgame.setPlayer( null);
+		}
+		else {
+			pgame = block223.findPlayableGame(id);
+
+		}
+		if(pgame == null && game == null)
+			throw new InvalidInputException("The game does not exist.");
+		if(game == null && player != pgame.getPlayer()) 
+			throw new InvalidInputException("Only the player that started a game can continue the game.");
+		Block223Application.setCurrentPlayableGame(pgame);
+	}
 	// TUDZ
 	public static void startGame(Block223PlayModeInterface ui) throws InvalidInputException {
 		PlayedGame aGame = Block223Application.getCurrentPlayableGame();
