@@ -686,8 +686,7 @@ public class Block223Controller {
 			throw new InvalidInputException("A game must be selected to test it.");
 		if(!Block223Application.getCurrentUserRole().equals(Block223Application.getCurrentGame().getAdmin()))
 			throw new InvalidInputException("Only the admin who created the game can test it.");
-		if(Block223Application.getCurrentGame().getBlocks().size()<1)
-			throw new InvalidInputException("At least one block must be defined for a game to be published.");
+
 		
 
 		Game game = Block223Application.getCurrentGame();
