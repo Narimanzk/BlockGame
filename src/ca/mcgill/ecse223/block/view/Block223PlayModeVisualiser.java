@@ -43,7 +43,6 @@ public class Block223PlayModeVisualiser extends JScrollPane{
 		double ballY = 0;
 
 		try {
-			
 			//get paddle info
 			paddleX = Block223Controller.getCurrentPlayableGame().getCurrentPaddleX();
 			paddleLength = Block223Controller.getCurrentPlayableGame().getCurrentPaddleLength();
@@ -58,7 +57,6 @@ public class Block223PlayModeVisualiser extends JScrollPane{
 				g2d.draw(screenBlock);
 			}
 		} catch (InvalidInputException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		//set paddle

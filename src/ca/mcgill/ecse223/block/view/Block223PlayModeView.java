@@ -60,7 +60,7 @@ public class Block223PlayModeView extends JFrame implements Block223PlayModeInte
 	/**
 	 * Hide the GUI
 	 */
-	private void hideGUI() {
+	public void hideGUI() {
 		Block223Application.setCurrentGame(null);
 		Block223Application.setCurrentPlayableGame(null);
 		Block223Application.setCurrentUserRole(null);
@@ -70,8 +70,10 @@ public class Block223PlayModeView extends JFrame implements Block223PlayModeInte
 	private void addComponentsToPane() {
 
 		JButton btnGame = new JButton("Start Game");
+		btnGame.setBackground(Color.PINK);
 
 		gameArea = new JTextArea();
+		gameArea.setBackground(Color.PINK);
 		gameArea.setEditable(false);
 		//		JScrollPane scrollPane = new JScrollPane(gameArea);
 		block223PlayModeVisualiser = new Block223PlayModeVisualiser(gameArea);
@@ -148,6 +150,6 @@ public class Block223PlayModeView extends JFrame implements Block223PlayModeInte
 
 	@Override
 	public void refresh() {
-		block223PlayModeVisualiser.paintComponent(getGraphics());
+			block223PlayModeVisualiser.paintComponent(getGraphics());
 	}
 }

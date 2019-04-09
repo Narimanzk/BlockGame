@@ -389,42 +389,34 @@ public class Block223Page {
 		UpdateGameMenu.setLayout(null);
 
 		txtrNewGameName = new JTextArea();
-		txtrNewGameName.setText("New Game Name");
 		txtrNewGameName.setBounds(162, 45, 194, 16);
 		UpdateGameMenu.add(txtrNewGameName);
 
 		NrLevels = new JTextArea();
-		NrLevels.setText("Number of Levels");
 		NrLevels.setBounds(162, 75, 194, 16);
 		UpdateGameMenu.add(NrLevels);
 
 		JTextArea NrBlocksPerLvl = new JTextArea();
-		NrBlocksPerLvl.setText("Number of Blocks Per Level");
 		NrBlocksPerLvl.setBounds(162, 105, 194, 16);
 		UpdateGameMenu.add(NrBlocksPerLvl);
 
 		JTextArea MinBallSpdX = new JTextArea();
-		MinBallSpdX.setText("Minimum ball speed X");
 		MinBallSpdX.setBounds(162, 135, 194, 16);
 		UpdateGameMenu.add(MinBallSpdX);
 
 		JTextArea MinBallSpdY = new JTextArea();
-		MinBallSpdY.setText("Minimum ball speed Y");
 		MinBallSpdY.setBounds(162, 165, 194, 16);
 		UpdateGameMenu.add(MinBallSpdY);
 
 		JTextArea BallSpdIncFactor = new JTextArea();
-		BallSpdIncFactor.setText("Ball speed Increase Factor");
 		BallSpdIncFactor.setBounds(162, 195, 194, 16);
 		UpdateGameMenu.add(BallSpdIncFactor);
 
 		JTextArea MaxPaddleLngth = new JTextArea();
-		MaxPaddleLngth.setText("Max paddle length");
 		MaxPaddleLngth.setBounds(162, 225, 194, 16);
 		UpdateGameMenu.add(MaxPaddleLngth);
 
 		JTextArea MinPaddleLngth = new JTextArea();
-		MinPaddleLngth.setText("Minimum paddle length");
 		MinPaddleLngth.setBounds(162, 255, 194, 16);
 		UpdateGameMenu.add(MinPaddleLngth);
 
@@ -448,6 +440,38 @@ public class Block223Page {
 		});
 		backUpdateMenu.setBounds(6, 6, 100, 29);
 		UpdateGameMenu.add(backUpdateMenu);
+		
+		JLabel lblGameName = new JLabel("Game Name");
+		lblGameName.setBounds(16, 45, 123, 16);
+		UpdateGameMenu.add(lblGameName);
+		
+		JLabel lblNumberOfLevels = new JLabel("Number of Levels");
+		lblNumberOfLevels.setBounds(16, 73, 123, 16);
+		UpdateGameMenu.add(lblNumberOfLevels);
+		
+		JLabel lblBlocksPerLevel = new JLabel("Blocks per level");
+		lblBlocksPerLevel.setBounds(16, 105, 123, 16);
+		UpdateGameMenu.add(lblBlocksPerLevel);
+		
+		JLabel lblMinimumBallSpeed_2 = new JLabel("Min Ball X Speed");
+		lblMinimumBallSpeed_2.setBounds(16, 135, 134, 16);
+		UpdateGameMenu.add(lblMinimumBallSpeed_2);
+		
+		JLabel lblMinBallY = new JLabel("Min Ball Y Speed");
+		lblMinBallY.setBounds(16, 165, 134, 16);
+		UpdateGameMenu.add(lblMinBallY);
+		
+		JLabel lblBallSpeedInc = new JLabel("Ball Speed Inc");
+		lblBallSpeedInc.setBounds(16, 195, 134, 16);
+		UpdateGameMenu.add(lblBallSpeedInc);
+		
+		JLabel lblMaxPaddleLength_1 = new JLabel("Max Paddle Length");
+		lblMaxPaddleLength_1.setBounds(16, 225, 134, 16);
+		UpdateGameMenu.add(lblMaxPaddleLength_1);
+		
+		JLabel lblMinPaddleLength = new JLabel("Min Paddle Length");
+		lblMinPaddleLength.setBounds(16, 255, 134, 16);
+		UpdateGameMenu.add(lblMinPaddleLength);
 
 		blockList = new JComboBox<Integer>();
 		/////////////////////////////////////////////////////////////////
@@ -536,7 +560,7 @@ public class Block223Page {
 
 		txtRedEdit = new JTextField();
 		txtRedEdit.setColumns(10);
-		txtRedEdit.setBounds(275, 91, 80, 26);
+		txtRedEdit.setBounds(275, 93, 80, 26);
 		EditBlockInGame.add(txtRedEdit);
 
 		txtGreenEdit = new JTextField();
@@ -630,7 +654,7 @@ public class Block223Page {
 				refreshData();
 				if (error.length() == 0) {
 					EditBlockInGame.setVisible(false);
-					AddEditGameMenu.setVisible(true);
+					GeneralGameMenu.setVisible(true);
 				}
 			}
 		});
@@ -641,8 +665,8 @@ public class Block223Page {
 				error = "";
 				try {
 					Block223Controller.updateBlock(Integer.valueOf(blockList.getSelectedItem().toString()),
-							Integer.valueOf(txtRedValue.getText()), Integer.valueOf(txtGreenValue.getText()),
-							Integer.valueOf(txtBlueValue.getText()), Integer.valueOf(txtPoints.getText()));
+							Integer.valueOf(txtRedEdit.getText()), Integer.valueOf(txtGreenEdit.getText()),
+							Integer.valueOf(txtBlueEdit.getText()), Integer.valueOf(txtPointsEdit.getText()));
 				} catch (NumberFormatException e1) {
 					error += e1.getMessage();
 				} catch (InvalidInputException e1) {
@@ -651,7 +675,7 @@ public class Block223Page {
 				refreshData();
 				if (error.length() == 0) {
 					EditBlockInGame.setVisible(false);
-					AddEditGameMenu.setVisible(true);
+					GeneralGameMenu.setVisible(true);
 				}
 			}
 		});
@@ -672,7 +696,7 @@ public class Block223Page {
 				refreshData();
 				if (error.length() == 0) {
 					EditBlockInGame.setVisible(false);
-					AddEditGameMenu.setVisible(true);
+					GeneralGameMenu.setVisible(true);
 				}
 			}
 		});
@@ -1097,10 +1121,63 @@ public class Block223Page {
 			public void actionPerformed(ActionEvent e) {
 				error = "";
 				try {
-					Block223Controller.updateGame(txtrNewGameName.getText(), Integer.valueOf(NrLevels.getText()),
-							Integer.valueOf(NrBlocksPerLvl.getText()), Integer.valueOf(MinBallSpdX.getText()),
-							Integer.valueOf(MinBallSpdY.getText()), Double.valueOf(BallSpdIncFactor.getText()),
-							Integer.valueOf(MaxPaddleLngth.getText()), Integer.valueOf(MinPaddleLngth.getText()));
+					String newGameName = txtrNewGameName.getText();
+					if (newGameName.equals("")) {
+						 newGameName = Block223Application.getCurrentGame().getName();
+					}
+					
+					int nrLevels;
+					if (NrLevels.getText().equals("")) {
+						nrLevels = Block223Application.getCurrentGame().numberOfLevels();
+					}
+					else {
+						 nrLevels = Integer.valueOf(NrLevels.getText());
+					}
+					
+					int nrBlocksPerLvl;
+					if (NrBlocksPerLvl.getText().equals("")) {
+						nrBlocksPerLvl = Block223Application.getCurrentGame().getNrBlocksPerLevel();
+					}
+					else {
+						nrBlocksPerLvl = Integer.valueOf(NrBlocksPerLvl.getText());
+					}
+					
+					int minBallSpdX;
+					if (MinBallSpdX.getText().equals("")) {
+						minBallSpdX = Block223Application.getCurrentGame().getBall().getMinBallSpeedX();
+					}
+					else {
+						minBallSpdX = Integer.valueOf(MinBallSpdX.getText());
+					}
+					
+					
+					int minBallSpdY;
+					if (MinBallSpdY.getText().equals("")) {
+						minBallSpdY = Block223Application.getCurrentGame().getBall().getMinBallSpeedY();
+					}
+					else {
+						minBallSpdY = Integer.valueOf(MinBallSpdY.getText());
+					}
+					
+					double ballSpdIncFactor;
+					if (BallSpdIncFactor.getText().equals("")) {
+						ballSpdIncFactor = Block223Application.getCurrentGame().getBall().getBallSpeedIncreaseFactor();
+					}
+					else {
+						ballSpdIncFactor = Double.valueOf(BallSpdIncFactor.getText());
+					}
+					
+					int maxPaddleLength =  !MaxPaddleLngth.getText().equals("") ? Integer.valueOf(MaxPaddleLngth.getText()):
+						Block223Application.getCurrentGame().getPaddle().getMaxPaddleLength();
+					
+					int minPaddleLength =  !MinPaddleLngth.getText().equals("") ? Integer.valueOf(MinPaddleLngth.getText()):
+						Block223Application.getCurrentGame().getPaddle().getMinPaddleLength();
+					
+					
+					Block223Controller.updateGame(newGameName, nrLevels,
+							nrBlocksPerLvl, minBallSpdX,
+							minBallSpdY, ballSpdIncFactor,maxPaddleLength, minPaddleLength);
+					
 				} catch (NumberFormatException e1) {
 					error += e1.getMessage();
 				} catch (InvalidInputException e1) {
