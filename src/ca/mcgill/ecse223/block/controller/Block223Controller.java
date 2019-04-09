@@ -675,7 +675,7 @@ public class Block223Controller {
 		
 		else {
 			if(aGame.getPlayer() != null) {
-				aGame.getGame().addHallOfFameEntry(aGame.getScore(),aGame.getPlayername(),aGame.getPlayer(),aGame.getBlock223());
+//				aGame.getGame().addHallOfFameEntry(aGame.getScore(),aGame.getPlayername(),aGame.getPlayer(),aGame.getBlock223());
 				aGame.setBounce(null);
 				Block223 block223 = Block223Application.getBlock223();
 				Block223Persistence.save(block223);
