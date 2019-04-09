@@ -661,13 +661,13 @@ public class Block223Controller {
 			//			System.out.println("Input received by CONTROLLER: " + userInputs);
 
 			try {
-				Thread.sleep(100);
+				Thread.sleep((long) aGame.getWaitTime());
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			if (aGame.getPlayStatus() != PlayStatus.GameOver)
 				ui.refresh();
-		}
+			}
 	
 		if (aGame.getPlayStatus() == PlayStatus.GameOver) {
 			Block223Application.setCurrentPlayableGame(null);
@@ -923,10 +923,10 @@ public class Block223Controller {
 			throw new InvalidInputException("A game must be selected to play it.");
 		if (player instanceof Admin && pgame.getPlayer() != null)
 			throw new InvalidInputException("Player privileges are required to play a game.");
-		//		if (player instanceof Admin && pgame.getGame().getAdmin() != null && pgame.getGame().getAdmin() != player)
-		//			throw new InvalidInputException("Only the admin of a game can test the game.");
-		//		if (player instanceof Player && pgame.getPlayer() == null)
-		//			throw new InvalidInputException("Admin privileges are required to test a game.");
+		if (player instanceof Admin && pgame.getGame().getAdmin() != null && pgame.getGame().getAdmin() != player)
+			throw new InvalidInputException("Only the admin of a game can test the game.");
+		if (player instanceof Player && pgame.getPlayer() == null)
+			throw new InvalidInputException("Admin privileges are required to test a game.");
 
 		boolean paused = pgame.getPlayStatus() == PlayStatus.Ready || pgame.getPlayStatus() == PlayStatus.Paused;
 

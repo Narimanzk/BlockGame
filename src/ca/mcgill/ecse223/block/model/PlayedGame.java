@@ -7,7 +7,7 @@ import java.util.*;
 import java.awt.geom.*;
 
 // line 11 "../../../../../Block223PlayMode.ump"
-// line 112 "../../../../../Block223Persistence.ump"
+// line 120 "../../../../../Block223Persistence.ump"
 // line 1 "../../../../../Block223States.ump"
 public class PlayedGame implements Serializable
 {
@@ -20,7 +20,7 @@ public class PlayedGame implements Serializable
   /**
    * at design time, the initial wait time may be adjusted as seen fit
    */
-  public static final int INITIAL_WAIT_TIME = 1000;
+  public static final int INITIAL_WAIT_TIME = 30;
   private static int nextId = 1;
   public static final int NR_LIVES = 3;
 
@@ -1304,7 +1304,7 @@ public class PlayedGame implements Serializable
                );
        return new Point2D.Double(x, y);
   }
-// line 115 "../../../../../Block223Persistence.ump"
+// line 123 "../../../../../Block223Persistence.ump"
   private static final long serialVersionUID = 8597675110221231714L ;
 
   

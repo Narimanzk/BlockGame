@@ -5,7 +5,7 @@ import ca.mcgill.ecse223.block.persistence.PersistenceObjectStream;
 
 public class Block223Persistence {
 	
-	private static String filename = "data.block223";
+	private static String filename = "Block223.data";
 	
 	public static void save(Block223 block223) {
 		PersistenceObjectStream.serialize(block223);
